@@ -218,8 +218,11 @@ def get_saves(request):
     return render(request, 'saved.html', {})
 
 # to-do:
-# upvote answer
-# bookmark question
-# add answer
+# view question
+# upvote/undo answer
+# bookmark/undo question
 
 # flashcard ui
+
+# edit / delete question
+# add  / edit / delete answer/comment
