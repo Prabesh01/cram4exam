@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .leaderboard {
+        background: #ededed;
+        font-family: 'Source Sans Pro', sans-serif;
+        border-radius: 3px;
+        width: 100%;
+        max-width: 500px;
+        min-height: 60px;
+        padding: 5px;
+        margin: 5px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.25);
+      margin-left: auto;
+          margin-right: auto;
+      }
+
+      .leaderboard img {
+        width: 65px;
+        height: 65px;
+        float: right;
+
+        border-radius: 50%;
+        border: 3px solid #fff;
+       box-shadow: 0 1px 2px rgba(0,0,0,0.25);
+      }
+
+      .leaderboardname {
+        font-family: 'Zilla Slab', serif;
+        font-size: 20px;
+        text-decoration: bold;
+      }
+
+      .your-rank {
+       text-decoration: none;
+       color: #27ae60;
+        font-size: 20px;
+      font-family: 'Source Sans Pro', sans-serif;
+      text-align: center;
+      }
+      .current-user {
+        background: #27ae60;
+        color: white
+    }
+    .rank {
+      font-weight: bold;
+      min-width: 30px;
+      text-align: center;
+      color: #666;
+  }
+    </style>
+<div class="your-rank">Leaderboard</div>
+{% for stud in students %}
+<div  {% if stud.user == request.user %}
+    class="current-user leaderboard"
+  {% else %}
+    class="leaderboard"
+    {% endif %}>
+  <span class="rank">#{{ forloop.counter }}</span>
+    <img src="https://api.dicebear.com/9.x/bottts/svg?seed={{ stud.user.username }}" alt="Avatar">
+    <p class="leaderboardname">{{ stud.user.first_name }} {{ stud.user.last_name }}</p>
+    <p class="score">🔥 {{ stud.streak }} day streak</p>
+    </div>
+{% endfor %}
+{% endblock %}

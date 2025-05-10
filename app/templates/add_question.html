@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    {% if editing %}Edit{% else %}Add New{% endif %} Question
+                    {% if question %} - {{ question.module.code }}{% endif %}
+                </h4>
+            </div>
+            <div class="card-body">
+                <form method="post" id="questionForm">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="module" class="form-label">Module</label>
+                        <select class="form-select" id="module" name="module" required
+                                onchange="window.location.href='{% url 'add_question' %}?module='+this.value">
+                            <option value="">Select a module</option>
+                            {% for module in all_modules %}
+                                <option value="{{ module.code }}"
+                                    {% if selected_module and selected_module.code == module.code %}selected{% endif %}
+                                    {% if question and question.module.code == module.code %}selected{% endif %}>
+                                    {{ module.code }} - {{ module.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    {% if selected_module and not selected_module.year_long or question and not question.module.year_long %}
+                        <input type="hidden" name="sem" value="{% if question %}{{ question.sem }}{% else %}{{ selected_module.sem }}{% endif %}">
+                    {% else %}
+                        <div class="mb-3">
+                            <label for="sem" class="form-label">Semester</label>
+                            <select class="form-select" id="sem" name="sem" required>
+                                {% for sem_num, sem_lvl in semesters %}
+                                    <option value="{{ sem_num }}"
+                                        {% if selected_module and selected_module.sem == sem_num %}selected{% endif %}
+                                        {% if question and question.sem == sem_num %}selected{% endif %}>
+                                        {{ sem_lvl }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        <label for="question" class="form-label">Question</label>
+                        <textarea class="form-control" id="question" name="question" rows="3" required>{% if question %}{{ question.question }}{% endif %}</textarea>
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="is_mcq" name="is_mcq"
+                            {% if question and question.is_mcq %}checked{% endif %}>
+                        <label class="form-check-label" for="is_mcq">MCQ?</label>
+                    </div>
+
+                    <div id="answerField" class="mb-3" {% if question and question.is_mcq %}style="display: none;"{% endif %}>
+                        <label for="answer" class="form-label">Answer (optional)</label>
+                        <textarea class="form-control" id="answer" name="answer" rows="3">{% if question %}{{ question.answer }}{% endif %}</textarea>
+                    </div>
+
+                    <div id="optionsContainer" {% if not question or not question.is_mcq %}style="display: none;"{% endif %}>
+                        <h5>Options</h5>
+                        <div class="mb-3">
+                            <small class="text-muted">Check all correct answers</small>
+                        </div>
+                        <div id="optionsList">
+                            {% if question and question.is_mcq %}
+                                {% for option in question.get_options %}
+                                <div class="option-item mb-3 p-3 border rounded" id="option-{{ forloop.counter0 }}">
+                                    <div class="mb-2">
+                                        <label class="form-label">Option Text</label>
+                                        <input type="text" class="form-control" name="options[]" value="{{ option.option }}" required>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="correct_options[]"
+                                            value="{{ forloop.counter0 }}" {% if option.correct %}checked{% endif %}>
+                                        <label class="form-check-label">Correct Answer</label>
+                                    </div>
+                                    <button type="button" class="btn btn-sm btn-outline-danger mt-2 remove-option" data-id="{{ forloop.counter0 }}">
+                                        <i class="bi bi-trash"></i> Remove
+                                    </button>
+                                </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <button type="button" id="addOptionBtn" class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-plus"></i> Add Option
+                        </button>
+                    </div>
+
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary">Submit Question</button>
+                        {% if editing %}
+                        <a href="{% url 'add_question' %}" class="btn btn-outline-secondary">Cancel</a>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const isMcqCheckbox = document.getElementById('is_mcq');
+    const optionsContainer = document.getElementById('optionsContainer');
+    const answerField = document.getElementById('answerField');
+    const optionsList = document.getElementById('optionsList');
+    const addOptionBtn = document.getElementById('addOptionBtn');
+    const moduleSelect = document.getElementById('module');
+
+    // Check if module code is in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const moduleCode = urlParams.get('module');
+    if (moduleCode) {
+        moduleSelect.value = moduleCode;
+    }
+
+    // Toggle MCQ options
+    isMcqCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+            optionsContainer.style.display = 'block';
+            answerField.style.display = 'none';
+            // Add first two options by default if empty
+            if (optionsList.children.length === 0) {
+                addOption();
+                addOption();
+            }
+        } else {
+            optionsContainer.style.display = 'none';
+            answerField.style.display = 'block';
+        }
+    });
+
+    // Add option
+    addOptionBtn.addEventListener('click', addOption);
+
+    function addOption() {
+        const optionId = Date.now();
+        const optionHtml = `
+            <div class="option-item mb-3 p-3 border rounded" id="option-${optionId}">
+                <div class="mb-2">
+                    <label class="form-label">Option Text</label>
+                    <input type="text" class="form-control" name="options[]" required>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="correct_options[]" value="${optionId}">
+                    <label class="form-check-label">Correct Answer</label>
+                </div>
+                <button type="button" class="btn btn-sm btn-outline-danger mt-2 remove-option" data-id="${optionId}">
+                    <i class="bi bi-trash"></i> Remove
+                </button>
+            </div>
+        `;
+        optionsList.insertAdjacentHTML('beforeend', optionHtml);
+
+        // Add event listener to remove button
+        document.querySelector(`.remove-option[data-id="${optionId}"]`).addEventListener('click', function() {
+            document.getElementById(`option-${optionId}`).remove();
+        });
+    }
+
+    // Initialize existing remove buttons
+    document.querySelectorAll('.remove-option').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            document.getElementById(`option-${id}`).remove();
+        });
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="year-sections">
+    {% if not profile.year or not profile.sem %}
+        Please set your year and semester from the <a href="{% url 'edit_profile' %}">profile settings</a>.
+    {% else %}
+        Displaying modules only for Year: {{ profile.year }} Sem: {{ profile.sem }}.
+        <br>You can change this from your  <a href="{% url 'edit_profile' %}">profile settings</a>.
+    {% for year_num, year_label in years %}
+    <div class={% if year_num != profile.year%} "hide year-section mb-5"{% else %}"year-section mb-5"{% endif %}>
+        <h2 class="year-header mb-4">Year {{ year_num }}</h2>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for module in modules %}
+                {% if module.year == year_num %}
+                        <div class={% if not module.year_long and module.sem != profile.sem %} "hide col"{% else %}"col"{% endif %}>
+                            <div class="card module-card h-100">
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title">{{ module.code }}</h5>
+                                    <h6 class="card-subtitle mb-2 text-muted">{{ module.name }}</h6>
+                                    <div class="mt-auto">
+                                        <span class="badge bg-info text-dark mb-2">
+                                            {% if module.year_long %}
+                                                Year-long
+                                            {% else %}
+                                                Semester {{ module.sem }}
+                                            {% endif %}
+                                        </span>
+                                        <div class="action-btns mt-2">
+                                            <a href="{% url 'add_question' %}?module={{ module.code }}"
+                                               class="btn btn-sm btn-success me-1 mb-1">
+                                                <i class="bi bi-plus-circle"></i> Add Question
+                                            </a>
+                                            <a href="{% url 'qbank' %}?module={{ module.code }}"
+                                               class="btn btn-sm btn-primary mb-1">
+                                                <i class="bi bi-journal-text"></i> View Questions
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+    {% endif %}
+
+</div>
+{% endblock %}

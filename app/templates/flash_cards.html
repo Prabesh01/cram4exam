@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h3 style="text-align: center;">AI-generated Flash Cards</h3>
+<p style="text-align: center">From lecture slides</p>
+<form method="get" id="selection form">
+                    <div class="mb-3">
+                        <label for="module" class="form-label">Module</label>
+                        <select class="form-select" id="module" name="module" required>
+                            <option value="all">All modules</option>
+                            {% for module in modules %}
+                                <option value="{{ module.code }}">
+                                    {{ module.code }} - {{ module.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <label for="need_mcq" class="form-label">MCQ only?</label>
+                        <input type="checkbox" class="form-check-input" id="need_mcq" name="need_mcq"
+                    </div><br>
+                    <input type="submit" class="btn btn-primary" value="Generate Flash Cards">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const isMcqCheckbox = document.getElementById('is_mcq');
+    const optionsContainer = document.getElementById('optionsContainer');
+    const answerField = document.getElementById('answerField');
+    const optionsList = document.getElementById('optionsList');
+    const addOptionBtn = document.getElementById('addOptionBtn');
+    const moduleSelect = document.getElementById('module');
+
+    // Check if module code is in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const moduleCode = urlParams.get('code');
+    if (moduleCode) {
+        moduleSelect.value = moduleCode;
+    }
+
+    // Toggle MCQ options
+    isMcqCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+            optionsContainer.style.display = 'block';
+            answerField.style.display = 'none';
+            // Add first two options by default if empty
+            if (optionsList.children.length === 0) {
+                addOption();
+                addOption();
+            }
+        } else {
+            optionsContainer.style.display = 'none';
+            answerField.style.display = 'block';
+        }
+    });
+
+    // Add option
+    addOptionBtn.addEventListener('click', addOption);
+
+    function addOption() {
+        const optionId = Date.now();
+        const optionHtml = `
+            <div class="option-item mb-3 p-3 border rounded" id="option-${optionId}">
+                <div class="mb-2">
+                    <label class="form-label">Option Text</label>
+                    <input type="text" class="form-control" name="options[]" required>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="correct_options[]" value="${optionId}">
+                    <label class="form-check-label">Correct Answer</label>
+                </div>
+                <button type="button" class="btn btn-sm btn-outline-danger mt-2 remove-option" data-id="${optionId}">
+                    <i class="bi bi-trash"></i> Remove
+                </button>
+            </div>
+        `;
+        optionsList.insertAdjacentHTML('beforeend', optionHtml);
+
+        // Add event listener to remove button
+        document.querySelector(`.remove-option[data-id="${optionId}"]`).addEventListener('click', function() {
+            document.getElementById(`option-${optionId}`).remove();
+        });
+    }
+
+    // Initialize existing remove buttons
+    document.querySelectorAll('.remove-option').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            document.getElementById(`option-${id}`).remove();
+        });
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,212 @@
+{% extends 'base.html' %}
+    {% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="mb-0">Daily Questions</h1>
+            </div>
+            <p class="text-muted">Complete daily questions to earn streaks!</p>
+        </div>
+    </div>
+
+    <div class="kanban-board">
+        <div class="kanban-column">
+            <div class="kanban-title text-primary">
+                <i class="fas fa-tasks me-2"></i> To Do ({{ pending_questions.count }})
+            </div>
+            {% if pending_questions %}
+                {% for question_set in pending_questions %}
+                <div class="kanban-item">
+                    <p>{{ question_set.question.question|truncatechars:100 }}</p>
+                    <small>{{ question_set.question.module.code }}</small>
+                    <button class="btn btn-sm btn-primary answer-btn"
+                            data-bs-toggle="modal"
+                            data-bs-target="#answerModal"
+                            data-question-id="{{ question_set.question.qid }}"
+                            data-question-type="{{ question_set.question.is_mcq|yesno:'mcq,text' }}"
+                            data-question-text="{{ question_set.question.question }}"
+                            {% if question_set.question.is_mcq %}
+                            data-options='[
+                            {% for option in question_set.question.option_set.all %}
+                                {"text": "{{ option.option|escapejs }}", "correct": {% if option.correct %}true{% else %}false{% endif %}}{% if not forloop.last %},{% endif %}
+                            {% endfor %}
+                        ]'
+                            {% endif %}>
+                        Answer
+                    </button>
+                </div>
+                {% endfor %}
+
+    <!-- Answer Modal -->
+    <div class="modal fade" id="answerModal" tabindex="-1" aria-labelledby="answerModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="answerModalLabel">Answer Question</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="answerForm" method="post" action="">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <input type="hidden" name="question_id" id="modalQuestionId">
+                        <p id="modalQuestionText"></p>
+
+                    <!-- MCQ Options Container -->
+                    <div id="mcqOptionsContainer" style="display: none;">
+                        <div class="mb-3">
+                            <div id="mcqOptionsList" class="mb-3"></div>
+                        </div>
+
+                        <!-- Correct Answers (hidden by default) -->
+                        <details class="correct-answers-details">
+                            <summary class="btn btn-sm btn-outline-secondary">Show correct answers</summary>
+                            <div class="mt-2 p-2 bg-light rounded">
+                                <h6>Correct answers:</h6>
+                                <div id="correctAnswersList"></div>
+                            </div>
+                        </details>
+                    </div>
+
+                        <!-- Text Answer Container -->
+                        <div id="textAnswerContainer" style="display: none;">
+                            <div class="mb-3">
+                                <label for="textAnswer" class="form-label">Your Answer:</label>
+                                <textarea class="form-control" id="textAnswer" name="text_answer" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit Answer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+            {% else %}
+                <div class="text-center p-4">
+                    <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+                    <p>All questions completed for today!</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="kanban-column">
+            <div class="kanban-title text-success">
+                <i class="fas fa-check-circle me-2"></i> Completed ({{ completed_questions.count }})
+            </div>
+            {% if completed_questions %}
+                {% for question_set in completed_questions %}
+                    <div class="kanban-item">
+                        <p>{{ question_set.question.question|truncatechars:100 }}</p>
+                        <small>{{ question_set.question.module.code }}</small>
+                        <a href="{% url 'view_question' question_set.question.qid %}" class="btn btn-sm btn-outline-primary">Review</a>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="text-center p-4 text-muted">
+                    <i class="fas fa-hourglass-half fa-3x mb-3"></i>
+                    <p>No completed questions yet today</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const answerModal = document.getElementById('answerModal');
+
+        answerForm.addEventListener('submit', function(e) {
+            const questionType = document.querySelector('.answer-btn[data-question-id="' +
+                                  document.getElementById('modalQuestionId').value + '"]')
+                                  .getAttribute('data-question-type');
+
+            // Validate based on question type
+            if (questionType === 'mcq') {
+                const checkedOptions = document.querySelectorAll('input[name="correct_options"]:checked');
+                if (checkedOptions.length === 0) {
+                    e.preventDefault();
+                    alert('Please select at least one answer');
+                    return;
+                }
+            } else {
+                const textAnswer = document.getElementById('textAnswer').value.trim();
+                if (!textAnswer) {
+                    e.preventDefault();
+                    alert('Please enter your answer');
+                    return;
+                }
+            }
+        });
+
+        answerModal.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const questionId = button.getAttribute('data-question-id');
+            const questionType = button.getAttribute('data-question-type');
+            const questionText = button.getAttribute('data-question-text');
+
+            // Set the question text and ID
+            document.getElementById('modalQuestionId').value = questionId;
+            document.getElementById('modalQuestionText').textContent = questionText;
+
+            // Hide both containers initially
+            document.getElementById('mcqOptionsContainer').style.display = 'none';
+            document.getElementById('textAnswerContainer').style.display = 'none';
+
+            // Show the appropriate container based on question type
+            if (questionType === 'mcq') {
+                const mcqOptionsContainer = document.getElementById('mcqOptionsContainer');
+                const mcqOptionsList = document.getElementById('mcqOptionsList');
+
+                // Clear previous options
+                mcqOptionsList.innerHTML = '';
+
+                // Parse and display options
+                const options = JSON.parse(button.getAttribute('data-options'));
+                const correctOptions = [];
+
+                options.forEach((option, index) => {
+                    const optionDiv = document.createElement('div');
+                    optionDiv.className = 'form-check';
+
+                    optionDiv.innerHTML = `
+                        <input class="form-check-input" type="checkbox" name="correct_options"
+                               id="option-${index}" value="${index}">
+                        <label class="form-check-label" for="option-${index}">
+                            ${option.text}
+                        </label>
+                    `;
+                    mcqOptionsList.appendChild(optionDiv);
+                    if (option.correct) {
+                        if (!correctOptions.includes(option.text)) {
+                            correctOptions.push(option.text);
+                        }
+                    }
+                });
+
+                correctOptions.forEach((answer, index) => {
+                    const answerDiv = document.createElement('div');
+                    answerDiv.className = 'text-success';
+                    answerDiv.innerHTML = `✓ ${answer}`;
+                    correctAnswersList.appendChild(answerDiv);
+                });
+
+                mcqOptionsContainer.style.display = 'block';
+            } else {
+                document.getElementById('textAnswerContainer').style.display = 'block';
+            }
+        });
+
+        // Clear form when modal is hidden
+        answerModal.addEventListener('hidden.bs.modal', function() {
+            document.getElementById('answerForm').reset();
+        });
+    });
+    </script>
+
+{% endblock %}

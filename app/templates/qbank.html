@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        background-color:#fafafa;
+    }
+    .probs {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-around;
+    }
+    .prob {
+        margin: 2em; padding: 1em;
+        vertical-align: top;
+        background-color: white;
+        box-shadow:0 20px 50px rgba(0,0,0,.3);
+        h3 { margin: 0; }
+        p { font-size: .8em; }
+        dl {
+            padding-top: 1em;
+            border-top: dotted 1px #aaa;
+        }
+        dd { margin-left:0; }
+    }
+    code {
+        display: block;
+        padding: 1em;
+        background-color: #eee;
+    }
+    details > summary {
+        list-style: none;
+      }
+      details > summary::-webkit-details-marker {
+        display: none;
+      }    </style>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <p style="text-align: center;">{{ module.code }}: <strong>"{{module.name}}"</strong></p>
+
+    <div class="container">
+        <div class="row g-4">
+        {% for q in questions %}
+        <div class="col-lg-6">
+        <div class="prob">
+            <details>
+                <summary>
+            <h3>{{ q.question }}</h3>
+            <p>#{{ forloop.counter }}</p>
+            {% if q.is_mcq %}
+                {% for option in q.option_set.all %}
+                   <input type="checkbox" value="{{ option.option }}">{{ option.option }}</input><br>
+                </li>
+                {% endfor %}
+            {% endif %}
+            </summary>
+            <dl>
+                <dt class="given">
+                    <dd class="answer">
+
+                    {% if q.is_mcq %}
+                    <i>Provided Answer: </i><br>
+                    {% for option in q.option_set.all %}
+                    {% if option.correct %}
+                       <input type="checkbox" value="{{ option.option }}" checked disabled>{{ option.option }}</input><br>
+                    {% endif %}
+                    </li>
+                    {% endfor %}
+                {%else%}
+                    <i>Provided Answer: </i>
+                    <pre><code>&amp;#x202e;Code all the things!</code></pre>
+                {% endif %}
+                </dd>
+
+
+                </dt>
+                <dd class="output">
+                    <i>Top Answer: </i>
+                    <pre><code>&#x202e;Code all the things!</code></pre>
+                </dd>
+                <i>Your Answers: </i>
+                <dd class="output">
+                    <i>#1: </i>
+                    <pre><code>&#x202e;Code all the things!</code></pre>
+                </dd>
+
+            </dl>
+            <a href="{% url 'view_question' q.qid %}">
+            <button class="btn btn-primary">Add your answer</button>
+            </a>
+            </details>
+        </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

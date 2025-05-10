@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    .streak-circle {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        border: 5px solid #f90;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto;
+    }
+    .circle-number {
+        font-size: 24px;
+        font-weight: bold;
+    }
+    .circle-label {
+        font-size: 12px;
+        color: #777;
+    }
+
+</style>
+<div class="container mt-4">
+    <div class="row">
+        <!-- Left side: Profile Image -->
+        <div class="col-md-2 text-center">
+            <img src="https://api.dicebear.com/9.x/bottts/svg?seed={{ user.username }}" class="img-thumbnail rounded-circle mb-2" style="width: 120px; height: 120px;" alt="Profile Image">
+            <p><strong>{{ user.first_name }} {{ user.last_name }}</strong></p>
+        </div>
+
+        <!-- Center: Profile Form -->
+        <div class="col-md-6">
+            <h2>Edit Profile</h2>
+            <p>@{{ user.username }}</p>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </form>
+        </div>
+
+<!-- Right side: Streak Overview -->
+<div class="col-md-4 text-center">
+    <h4>Your Streak</h4>
+    <div class="streak-circle mb-2">
+        <div class="circle-number">{{ profile.streak }}</div>
+        <div class="circle-label">day streak</div>
+    </div>
+
+    {% if claimed_today %}
+        <p class="text-success">✅ Claimed today</p>
+        <p>🕒 Next claim in: <strong>{{ hours_left }}h</strong></p>
+    {% else %}
+        <p class="text-danger">⚠️ Not claimed today</p>
+        {% if hours_left > 0 %}
+        <p>🕒 Claim within <strong>{{ hours_left }}h</strong> to save your streak!</p>
+        {% endif %}
+    {% endif %}
+    <p><em>Answer daily cram questions to increase your streaks and rule the leaderboard</em></p>
+</div>
+
+    </div>
+</div>
+{% endblock %}
