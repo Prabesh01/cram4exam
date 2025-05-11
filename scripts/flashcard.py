@@ -30,7 +30,7 @@ modules=[
         "year": 2,
         "semester": 2,
         "q_sem":2,
-        "json_file": os.path.join(os.path.dirname(__file__), 'pdfs/y2/sem2/data.json')
+        "json_file": 'pdfs/y2/sem2/data.json'
     },
     {
         "module_code":"CS5054NP",
@@ -39,7 +39,7 @@ modules=[
         "year": 2,
         "semester": 2,
         "q_sem":2,
-        "json_file": os.path.join(os.path.dirname(__file__), 'pdfs/y2/sem2/apt.json')
+        "json_file": 'pdfs/y2/sem2/apt.json'
     },
     {
         "module_code":"CS5002NP",
@@ -48,7 +48,7 @@ modules=[
         "year": 2,
         "semester": 1,
         "q_sem":1,
-        "json_file": os.path.join(os.path.dirname(__file__), 'pdfs/y2/sem1/se.json')
+        "json_file": 'pdfs/y2/sem1/se.json'
     },
     {
         "module_code":"CS5002NP",
@@ -58,7 +58,7 @@ modules=[
         "semester": 1,
         "q_sem":2,
         "preserve": True,
-        "json_file": os.path.join(os.path.dirname(__file__), 'pdfs/y2/sem2/se.json')
+        "json_file": 'pdfs/y2/sem2/se.json'
     },
 ]
 
@@ -78,7 +78,7 @@ for module in modules:
     q_sem = module["q_sem"]
     preserve = module.get("preserve", False)
 
-    json_file = os.path.join(base_path, 'pdfs/y2/sem2/apt.json')
+    json_file = os.path.join(base_path, module["json_file"])
 
     with open(json_file, 'r') as file:
         json_data = json.load(file)
