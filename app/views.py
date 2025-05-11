@@ -177,21 +177,37 @@ def add_question(request):
                 module=selected_module,
                 sem=sem,
                 question=request.POST.get('question'),
-                answer=None if is_mcq else request.POST.get('answer'),
+                answer=request.POST.get('answer'),
                 is_mcq=is_mcq,
                 added_by=request.user
             )
             question.save()
 
             if is_mcq:
-                # Add new options
+                option_ids = request.POST.getlist('option_ids[]')
                 options = request.POST.getlist('options[]')
-                correct_options = request.POST.get('correct_options[]')
-                for i, option_text in enumerate(options):
+                correct_option_ids = request.POST.getlist('correct_option_ids[]')
+
+                # if option 0 is empty, its value shall be "True" by default
+                if options[0].strip() == '':
+                    options[0] = 'True'
+                if options[1].strip() == '':
+                    options[1] = 'False'
+                if len(options)>3 and options[3].strip() == '':
+                    options[3] = 'None of the above'
+                if len(options)>2:
+                    for i in range(2, len(options)-1):
+                        if options[i].strip() == '':
+                            del options[i]
+                            del option_ids[i]
+
+                options = dict(zip(option_ids,options))
+
+                for id, option_text in options.items():
                     Option.objects.create(
                         question=question,
                         option=option_text,
-                        correct=(str(i) in correct_options)
+                        correct=(id in correct_option_ids)
                     )
 
             # request.session['successMessage'] = "Question added successfully"
@@ -334,7 +350,7 @@ def edit_question(request, qid):
 
             # Update the question
             question.question = request.POST.get('question')
-            question.answer = None if is_mcq else request.POST.get('answer')
+            question.answer = request.POST.get('answer')
             question.is_mcq = is_mcq
             question.sem = sem
             question.save()
@@ -351,6 +367,7 @@ def edit_question(request, qid):
                         option=option_text,
                         correct=(str(i) in correct_options)
                     )
+            request.session['successMessage'] = "Question Updated successfully"
             return redirect('saves')
 
     return render(request, 'edit_question.html', {'question': question, 'semesters': Sem.choices})

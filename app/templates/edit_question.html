@@ -141,6 +141,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Add event listener to remove button
         document.querySelector(`.remove-option[data-id="${optionId}"]`).addEventListener('click', function() {
+            nextOptionId--;
             document.getElementById(`option-${optionId}`).remove();
         });
     }

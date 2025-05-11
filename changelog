@@ -1,0 +1,6 @@
+- when adding mcq question:
+    - allow add without correct option set
+    - dont null answer. can be used as explaination.
+    - default true false placeholder
+    - last option default: none of the above
+    - add 2 options at once

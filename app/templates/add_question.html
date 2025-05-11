@@ -126,8 +126,8 @@ document.addEventListener('DOMContentLoaded', function() {
             answerField.style.display = 'none';
             // Add first two options by default if empty
             if (optionsList.children.length === 0) {
-                addOption();
-                addOption();
+                addOption('True');
+                addOption('False');
             }
         } else {
             optionsContainer.style.display = 'none';
@@ -136,18 +136,33 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Add option
-    addOptionBtn.addEventListener('click', addOption);
+    addOptionBtn.addEventListener('click', function() {
+        var optionCount = optionsList.children.length;
+        for (let i = 0; i < 2; i++) {
+            optionCount++;
+            if (optionCount == 4) {
+                addOption("None of the above");
+            }else if (optionCount == 1) {
+                addOption("True");
+            }else if (optionCount == 2) {
+                addOption("False");
+            }else{
+                addOption();
+            }
+        }
+    });
 
-    function addOption() {
-        const optionId = Date.now();
+    function addOption(placeholderText = '') {
+        const optionId = Date.now()+Math.floor(Math.random() * 1000);
         const optionHtml = `
             <div class="option-item mb-3 p-3 border rounded" id="option-${optionId}">
                 <div class="mb-2">
                     <label class="form-label">Option Text</label>
-                    <input type="text" class="form-control" name="options[]" required>
+                    <input type="text" class="form-control" placeholder="${placeholderText}" name="options[]">
+                    <input type="hidden" name="option_ids[]" value="${optionId}">
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="correct_options[]" value="${optionId}">
+                    <input class="form-check-input" type="checkbox" name="correct_option_ids[]" value="${optionId}">
                     <label class="form-check-label">Correct Answer</label>
                 </div>
                 <button type="button" class="btn btn-sm btn-outline-danger mt-2 remove-option" data-id="${optionId}">
