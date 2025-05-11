@@ -142,6 +142,8 @@ document.addEventListener('DOMContentLoaded', function() {
         details.addEventListener('toggle', function() {
           if (this.open) {
             const questionId = this.id;
+            if (!questionId) return; // Skip if there's no question ID
+
             const topAnswerElement = this.querySelector('#top_answer');
             const selfAnswersElement = this.querySelector('#self_answers');
 
