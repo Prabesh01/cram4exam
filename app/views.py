@@ -157,7 +157,7 @@ def flash_cards(request):
     return render(request, 'flash_cards.html', {'modules': modules,'questions':questions_data, 'selected_module': selected_module})
 
 @login_required
-def add_question(request, qid=None):
+def add_question(request):
 
     selected_module=None
     all_modules = Module.objects.all()
@@ -192,6 +192,8 @@ def add_question(request, qid=None):
                         option=option_text,
                         correct=(str(i) in correct_options)
                     )
+
+            request.session['successMessage'] = "Question added successfully"
             return redirect('add_question')
 
     return render(request, 'add_question.html', {
