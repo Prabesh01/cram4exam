@@ -4,6 +4,7 @@ from .forms import ProfileForm
 from django.db.models import Q
 from django.http import JsonResponse
 from django.db.models import Count
+from django.contrib import messages
 
 from app.models import Module, Sem, Year, Question, Option, Profile, UserAnswer, DailyQuestion, Bookmark, Upvote
 from django.utils import timezone
@@ -193,8 +194,9 @@ def add_question(request):
                         correct=(str(i) in correct_options)
                     )
 
-            request.session['successMessage'] = "Question added successfully"
-            return redirect('add_question')
+            # request.session['successMessage'] = "Question added successfully"
+            # return redirect('add_question')
+            messages.add_message(request, messages.SUCCESS, "Question added successfully!")
 
     return render(request, 'add_question.html', {
         "selected_module": selected_module,
