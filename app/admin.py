@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Module, Question, Option, DailyQuestion, UserAnswer, Profile
+from .models import Module, Question, Option, DailyQuestion, UserAnswer, Profile, Bookmark, Upvote
 
 class OptionInline(admin.TabularInline):
     model = Option
@@ -21,3 +21,5 @@ admin.site.register(Question, QuestionAdmin)
 admin.site.register(DailyQuestion)
 admin.site.register(UserAnswer)
 admin.site.register(Profile)
+admin.site.register(Bookmark)
+admin.site.register(Upvote)

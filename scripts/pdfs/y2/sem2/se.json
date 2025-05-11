@@ -1,0 +1,198 @@
+[
+    {
+      "front": "What does a Use Case Diagram represent?",
+      "back": "The functionality of a system from the end user’s perspective, often using verb-noun pairs to name system processes."
+    },
+    {
+      "front": "What is an Actor in a Use Case Diagram?",
+      "back": "An external entity (user or system) that interacts with the system, typically named using nouns."
+    },
+    {
+      "front": "Differentiate between 'include' and 'extend' in a use case diagram.",
+      "back": "'Include' is used for reuse of common behavior. 'Extend' shows optional behavior extending the base use case."
+    },
+    {
+      "front": "What is Generalization in a Use Case Diagram?",
+      "back": "A relationship where a child use case or actor inherits the behavior of a parent, showing a 'is-a' relationship."
+    },
+    {
+      "front": "What does a <<include>> relationship show?",
+      "back": "That the included use case is always executed as part of the base use case."
+    },
+    {
+      "front": "When is a <<extend>> relationship used?",
+      "back": "To represent optional or conditional behavior that extends the base use case."
+    },
+    {
+      "front": "What is the purpose of an Expanded Use Case Description?",
+      "back": "To detail the sequence of interactions between actor and system including typical and alternative flows."
+    },
+    {
+      "front": "What are the key parts of a Use Case Description?",
+      "back": "Use Case name, Actors, Description, Typical Course of Events, Alternative Courses of Action."
+    },
+    {
+      "front": "What does a Sequence Diagram show?",
+      "back": "The order of messages exchanged between objects over time to accomplish a particular use case."
+    },
+    {
+      "front": "What are Lifelines in a Sequence Diagram?",
+      "back": "Vertical dashed lines representing the object's existence over time during the interaction."
+    },
+    {
+      "front": "What is an Activation Bar?",
+      "back": "A vertical rectangle on a lifeline showing when an object is active or performing an operation."
+    },
+    {
+      "front": "What is a Reflexive Message?",
+      "back": "A message that an object sends to itself."
+    },
+    {
+      "front": "What does an Activity Diagram model?",
+      "back": "The workflow of a system or business process including sequential and concurrent activities."
+    },
+    {
+      "front": "Name three key components of an Activity Diagram.",
+      "back": "Initial Node, Activity, Decision Node."
+    },
+    {
+      "front": "What is a Fork Node?",
+      "back": "A node that splits a single flow into multiple parallel flows in an activity diagram."
+    },
+    {
+      "front": "What is a State Diagram used for?",
+      "back": "To model how an object transitions from one state to another based on events."
+    },
+    {
+      "front": "What is a Composite State?",
+      "back": "A state containing other nested substates."
+    },
+    {
+      "front": "What is a Control Object in UML?",
+      "back": "An object that coordinates and controls the flow of events in a use case."
+    },
+    {
+      "front": "What is a Boundary Object in UML?",
+      "back": "An object that mediates interactions between actors and the system."
+    },
+    {
+      "front": "Define Class Diagram.",
+      "back": "A static UML diagram showing the system's classes, their attributes, methods, and relationships."
+    },
+    {
+      "front": "What is Aggregation in a Class Diagram?",
+      "back": "A 'has-a' relationship where the child can exist independently of the parent."
+    },
+    {
+      "front": "What is Composition in a Class Diagram?",
+      "back": "A strong 'part-of' relationship where if the parent is deleted, the child is also deleted."
+    },
+    {
+      "front": "What does Multiplicity in a Class Diagram indicate?",
+      "back": "The number of instances one class can be associated with another."
+    },
+    {
+      "front": "What is Agile Software Development?",
+      "back": "An iterative approach that focuses on adaptability, collaboration, and customer feedback."
+    },
+    {
+      "front": "List two core values of Agile.",
+      "back": "1. Individuals and interactions over processes and tools. 2. Working software over comprehensive documentation."
+    },
+    {
+      "front": "Name a key principle of Agile.",
+      "back": "Deliver working software frequently, with a preference for shorter timescales."
+    },
+    {
+      "front": "What is the Scrum framework?",
+      "back": "An Agile methodology with defined roles, events, and artifacts to deliver software iteratively."
+    },
+    {
+      "front": "Name the three Scrum roles.",
+      "back": "Product Owner, Scrum Master, Development Team."
+    },
+    {
+      "front": "What are the Scrum Artifacts?",
+      "back": "Product Backlog, Sprint Backlog, and Increment."
+    },
+    {
+      "front": "What is Kanban?",
+      "back": "A visual workflow model focused on limiting work in progress and enhancing flow efficiency."
+    },
+    {
+      "front": "What does XP (Extreme Programming) emphasize?",
+      "back": "Communication, feedback, simplicity, courage, respect, and continuous testing."
+    },
+    {
+      "front": "What is a Design Pattern?",
+      "back": "Reusable solutions to common software design problems, based on object-oriented principles."
+    },
+    {
+      "front": "Differentiate between Factory and Singleton Pattern.",
+      "back": "Factory creates objects without specifying the exact class; Singleton ensures a class has only one instance."
+    },
+    {
+      "front": "What does MVC stand for?",
+      "back": "Model-View-Controller – a pattern separating data, user interface, and control logic."
+    },
+    {
+      "front": "What is Software Testing?",
+      "back": "A process of executing a program with the intent to find errors before delivery."
+    },
+    {
+      "front": "Differentiate between Verification and Validation.",
+      "back": "Verification checks if the product was built right; Validation checks if the right product was built."
+    },
+    {
+      "front": "What is Black Box Testing?",
+      "back": "Testing based on input-output behavior without considering internal code structure."
+    },
+    {
+      "front": "Name two Black Box Testing techniques.",
+      "back": "Equivalence Partitioning, Boundary Value Analysis."
+    },
+    {
+      "front": "What is Regression Testing?",
+      "back": "Testing to ensure previously working features still work after code changes."
+    },
+    {
+      "front": "What is Smoke Testing?",
+      "back": "A shallow and wide approach to testing to ensure basic functionality works."
+    },
+    {
+      "front": "What is Unit Testing?",
+      "back": "Testing individual modules or components in isolation."
+    },
+    {
+      "front": "Differentiate Top-Down and Bottom-Up Integration Testing.",
+      "back": "Top-Down uses stubs to simulate lower modules; Bottom-Up uses drivers to simulate upper modules."
+    },
+    {
+      "front": "What is a Test Driver?",
+      "back": "A piece of code that calls a module to test its behavior in isolation."
+    },
+    {
+      "front": "What is a Stub in Testing?",
+      "back": "A dummy procedure or module that simulates the behavior of unimplemented components."
+    },
+    {
+      "front": "Why is complete testing impossible?",
+      "back": "Due to the vast number of inputs, paths, and interactions, exhaustive testing is not feasible."
+    },
+    {
+      "front": "What makes a test 'good'?",
+      "back": "High probability of finding errors, non-redundancy, clarity, and optimal complexity."
+    },
+    {
+      "front": "What is the goal of Software Architecture?",
+      "back": "To define a system’s structure, enabling reuse, scalability, performance, and maintainability."
+    },
+    {
+      "front": "Name four common architecture patterns.",
+      "back": "Layered, Event-Driven, Microkernel, Microservices."
+    },
+    {
+      "front": "What is the Layered Architecture?",
+      "back": "A tiered approach where data flows from presentation to business, persistence, and database layers."
+    }
+  ]

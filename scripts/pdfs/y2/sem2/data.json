@@ -1,0 +1,406 @@
+[
+    {
+        "front": "What is data science?",
+        "back": "Data science involves methods and techniques for extracting useful information and knowledge from data. It is an interdisciplinary field combining Computer Science, Maths, Statistics, and Decision Science, requiring technical, analytical, and business skills. "
+      },
+      {
+        "front": "Why are businesses interested in data science projects?",
+        "back": "Businesses are interested in data science projects for gaining competitive advantages, increasing productivity, and enhancing customer engagement/satisfaction."
+      },
+      {
+        "front": "What is data-driven decision making (DDDM)?",
+        "back": "Data-driven decision making is the practice of making business decisions based on the analysis of data rather than purely on intuition. For example, selecting advertisements based on consumer reaction data instead of marketing experience. "
+      },
+      {
+        "front": "What are common mistakes in data science projects?",
+        "back": "Rushing into data collection and analysis, spending less time to plan and scope the work, and not performing data and business domain understanding."
+      },
+      {
+        "front": "What are the six stages of the Cross Industry Standard Process for Data Mining (CRISP-DM)?",
+        "back": "1. Business Understanding 2. Data Understanding 3. Data Preparation 4. Modelling 5. Evaluation 6. Deployment. This is an iterative process."
+      },
+      {
+        "front": "What are the key activities in the 'Business Understanding' stage of CRISP-DM?",
+        "back": "Understand the current situation and past related projects, frame the business problem as an analytics challenge, map the problem to data science tasks, and assess available resources (technology, systems, tools, people, data)."
+      },
+      {
+        "front": "What is 'Classification' as a data mining task?",
+        "back": "Classification attempts to predict, for each individual in a population, which of a small set of classes this individual belongs to. Example: Which customers are likely to respond to an offer? "
+      },
+      {
+        "front": "What is 'Regression' (or 'value estimation') as a data mining task?",
+        "back": "Regression attempts to estimate or predict, for each individual, the numerical value of some variable for that individual. Example: How much will a given customer use the service? "
+      },
+      {
+        "front": "What is 'Clustering' as a data mining task?",
+        "back": "Clustering attempts to group individuals in a population together by their similarity, but not driven by any specific purpose. Example: Do our customers form natural groups or segments?"
+      },
+      {
+        "front": "What is 'Co-occurrence grouping' (or frequent itemset mining/association rule discovery/market-basket analysis)?",
+        "back": "This task attempts to find associations between entities based on transactions involving them. Example: What items are commonly purchased together?"
+      },
+      {
+        "front": "Differentiate between Supervised and Unsupervised data mining methods.",
+        "back": "Supervised methods involve tasks with specific targets and a set of examples (e.g., classification, regression). Unsupervised methods are tasks without specific targets, aiming to find commonalities in given examples (e.g., clustering, dimensional reduction)."
+      },
+      {
+        "front": "What are the key activities in the 'Data Understanding' stage of CRISP-DM?",
+        "back": "Identify potential data sources (transactional databases, spreadsheets, CSV, text files, web logs, etc.), capture aggregate data sources for previewing, review raw data to understand content and quality, and evaluate necessary data structures and tools."
+      },
+      {
+        "front": "What are the key activities in the 'Data Preparation' stage of CRISP-DM?",
+        "back": "Preparing an Analytics Sandbox (a central repository separate from production), performing ETL/ELT (Extract, Transform, Load/Extract, Load, Transform), learning about data accessibility and gaps, and Data Conditioning (cleaning, normalizing, transforming data), Survey and Visualise data."
+      },
+      {
+        "front": "What does 'Modelling' in CRISP-DM involve?",
+        "back": "Modelling includes Model Planning (data exploration, variable selection, model selection e.g., Linear Regression, Decision trees) and Model Building (developing datasets for training and testing)."
+      },
+      {
+        "front": "What is the purpose of the 'Evaluation' stage in CRISP-DM?",
+        "back": "To assess the data mining results rigorously and gain confidence that they are valid and reliable before deployment. It also ensures the model satisfies original business goals."
+      },
+      {
+        "front": "What is the 'Deployment' stage in CRISP-DM?",
+        "back": "Putting the results of data mining into practice in order to realize some return on investment."
+      },
+      {
+        "front": "Differentiate between Quantitative and Qualitative Data.",
+        "back": "Quantitative data can be measured (numbers, statistics) and answers 'how much?', 'how many?', 'how often?'. Qualitative data cannot be measured (text, pictures, audio, video) and answers 'how?' and 'why?'. "
+      },
+      {
+        "front": "Why is Python popular for data science?",
+        "back": "It's easy to learn, has a large and active scientific computing community, strong library support (e.g., Pandas), and is widely adopted in industry and research. "
+      },
+      {
+        "front": "Name some essential Python libraries for data science.",
+        "back": "NumPy (numerical computing), Pandas (data manipulation and analysis), Matplotlib (plotting and visualization), SciPy (scientific computing capabilities), OS (interacting with the operating system). "
+      },
+      {
+        "front": "What is NumPy?",
+        "back": "NumPy (Numerical Python) is a powerful library in Python for numerical computing. It provides support for large multi-dimensional arrays and matrices, along with a collection of mathematical functions to operate on these arrays efficiently. "
+      },
+      {
+        "front": "What is a NumPy ndarray?",
+        "back": "The main object in NumPy is the homogeneous multidimensional array, known as ndarray. It is fast, space-efficient, and provides vectorized arithmetic operations and matrix operations. "
+      },
+      {
+        "front": "How do NumPy arrays differ from Python lists?",
+        "back": "NumPy arrays are faster and more compact, consume less memory, and all elements must be homogeneous (same data type). Python lists can contain different data types. "
+      },
+      {
+        "front": "What is NumPy Broadcasting?",
+        "back": "Broadcasting allows NumPy to perform element-wise operations on arrays of different shapes by automatically expanding smaller arrays to match the shape of larger ones. "
+      },
+      {
+        "front": "What is Pandas in Python?",
+        "back": "Pandas is an open-source data analysis and manipulation tool built on Python. It offers high-performance, easy-to-use data structures (Series and DataFrame) and data analysis tools. "
+      },
+      {
+        "front": "What is a Pandas Series?",
+        "back": "A Pandas Series is a one-dimensional labeled array capable of holding any data type, similar to a NumPy array but with an explicit index. "
+      },
+      {
+        "front": "What is a Pandas DataFrame?",
+        "back": "A Pandas DataFrame is a two-dimensional, size-mutable, tabular data structure with labeled axes (rows and columns). It can be thought of as a dictionary of Series sharing the same index. Columns can be of different value types. "
+      },
+      {
+        "front": "How can you handle missing data in Pandas?",
+        "back": "Pandas provides methods like `.fillna()` to replace missing values, `.dropna()` to remove missing values, and `.interpolate()` to estimate missing values. "
+      },
+      {
+        "front": "How can you combine DataFrames in Pandas?",
+        "back": "DataFrames can be combined using `concat()` for stacking (vertically or horizontally) and `merge()` for joining based on common keys (similar to SQL joins). "
+      },
+      {
+        "front": "What is the OS library in Python used for?",
+        "back": "The OS library provides a way to interact with the operating system. It allows you to work with files and directories, and use operating system dependent functionality in a portable way. "
+      },
+      {
+        "front": "Name some common functions in the Python OS library.",
+        "back": "`os.getcwd()` (get current working directory), `os.chdir(path)` (change directory), `os.listdir(path)` (list files/directories), `os.mkdir(path)` (create directory), `os.remove(path)` (delete file), `os.path.join(path1, path2, ...)` (join paths). "
+      },
+      {
+        "front": "What is a recursive function?",
+        "back": "A recursive function is a function that calls itself to solve a problem. It's useful for problems that can be broken down into smaller, similar subproblems. It requires a base case to end the recursion. "
+      },
+      {
+        "front": "What is Matplotlib in Python?",
+        "back": "Matplotlib is a widely used Python library for creating static, animated, and interactive 2D visualizations and plots. It allows visual access to large amounts of data in a digestible manner. "
+      },
+      {
+        "front": "Name some common plot types supported by Matplotlib.",
+        "back": "Line plot, bar plot (bar chart), scatter plot, histogram, box plot, and pie chart. "
+      },
+      {
+        "front": "What is a Box Plot and what does it show?",
+        "back": "A box plot shows the five-number summary of a dataset: minimum score, first quartile (Q1), median (Q2), third quartile (Q3), and maximum score. It is useful for showing the average, skewness, dispersion, and outliers of a dataset. "
+      },
+      {
+        "front": "What is a Histogram and what is it used for?",
+        "back": "A histogram is a graphical representation that shows the frequency of numerical data using rectangles. The height of the rectangles represents the frequency. It's used to summarize discrete or continuous data measured on an interval scale. "
+      },
+      {
+        "front": "What is a Scatter Plot used for?",
+        "back": "A scatter plot is used to determine whether or not two variables have a relationship or correlation by displaying values for typically two variables as a collection of points. "
+      },
+      {
+        "front": "How can you save a plot in Matplotlib?",
+        "back": "You can save a Matplotlib figure to a file using `plt.savefig()`. It supports various formats like PNG, JPG, PDF, and SVG. You can also specify options like DPI for resolution. "
+      },
+      {
+        "front": "What is Statistics?",
+        "back": "Statistics is the art of learning from data. It is a branch of mathematics dealing with collecting, analyzing, interpreting, presenting, and organizing data to summarize complex data, make predictions, and draw reliable conclusions. "
+      },
+      {
+        "front": "What is Skewness and Kurtosis in descriptive statistics?",
+        "back": "Skewness measures the asymmetry of the data distribution (positive skew = tail on the right, negative skew = tail on the left). Kurtosis measures the 'tailedness' or sharpness of the peak of the data distribution relative to a normal distribution. "
+      },
+      {
+        "front": "What are Inferential Statistics used for?",
+        "back": "Inferential statistics allow us to make inferences and draw conclusions about a larger population based on a sample of data drawn from that population. A key concept is Hypothesis Testing. "
+      },
+      {
+        "front": "What is Hypothesis Testing?",
+        "back": "A method for testing a claim or hypothesis about a parameter in a population using sample data. It involves a Null Hypothesis (H₀: statement of no effect/difference) and an Alternative Hypothesis (H₁ or Ha: statement indicating an effect/difference). "
+      },
+      {
+        "front": "Name some common statistical tests used in inferential statistics.",
+        "back": "Z-Test (large sample, known population SD), T-Test (small sample, unknown population SD, comparison of means), Chi-Square Test (categorical data, independence/goodness-of-fit), F-Test (comparing variances, used in ANOVA). "
+      },
+      {
+        "front": "Differentiate between Business Analysis and Business Analytics.",
+        "back": "Business Analysis focuses on identifying business needs and determining solutions to business problems, often involving process improvement and requirements management. Business Analytics is interested in decision-making based on data, using statistical and quantitative methods. "
+      },
+      {
+        "front": "What is a Relational Data Model?",
+        "back": "A model where data is organized into tables (relations) consisting of rows and columns. A single sheet in Excel can be considered a relational data model. Each column has the same type of information, and each row represents a single object/event, with a relation between all columns in a row. "
+      },
+      {
+        "front": "What is Machine Learning (ML)?",
+        "back": "Machine learning is a subfield of artificial intelligence that gives computers the ability to learn without being explicitly programmed. It enables machines to imitate intelligent human behavior. "
+      },
+      {
+        "front": "What are the main types of Machine Learning?",
+        "back": "Supervised Learning, Unsupervised Learning, and Reinforcement Learning. "
+      },
+      {
+        "front": "Describe Supervised Learning.",
+        "back": "In supervised learning, input and output data are provided (historical labeled data). The algorithm learns from this labeled data to make predictions. Examples include spam detection, image recognition. Common tasks are Regression and Classification. "
+      },
+      {
+        "front": "Describe Unsupervised Learning.",
+        "back": "In unsupervised learning, only input data is provided, without explicit output labels. The goal is to find patterns or structure in the data. Examples include customer segmentation and market basket analysis. Common tasks are Clustering and Dimensionality Reduction. "
+      },
+      {
+        "front": "Describe Reinforcement Learning.",
+        "back": "Reinforcement learning involves an agent learning through trial and error by receiving rewards or penalties for its actions in an environment. Examples include game AI and robotics (e.g., self-driving cars). "
+      },
+      {
+        "front": "Outline the general process of Supervised Machine Learning.",
+        "back": "1. Collect and organize labeled dataset (features X, labels y). 2. Split data into Training Set and Test Set. 3. Train a model using the Training Set. 4. Evaluate the model's performance on the Test Set. 5. If performance is unsatisfactory, adjust model hyperparameters and retrain. 6. Deploy the model. "
+      },
+      {
+        "front": "What is Regression in machine learning?",
+        "back": "Regression is a supervised learning technique used to predict continuous values. Linear Regression, for example, aims to find the best-fitting linear relationship between input variables (X) and an output variable (Y). "
+      },
+      {
+        "front": "What is Logistic Regression used for?",
+        "back": "Logistic Regression is a supervised learning algorithm used for binary classification problems. It predicts the probability that a given input belongs to a particular category, using a logistic (sigmoid) function to map predictions to probabilities between 0 and 1. "
+      },
+      {
+        "front": "What is Feature Engineering?",
+        "back": "Feature engineering is the process of using domain knowledge to extract or create new features from raw data to improve the performance of machine learning models. Approaches include extracting, combining, or transforming information. "
+      },
+    {
+      "front": "What does CRISP-DM stand for in data mining?",
+      "back": "Cross Industry Standard Process for Data Mining"
+    },
+    {
+      "front": "What are the six phases of CRISP-DM?",
+      "back": "Business Understanding, Data Understanding, Data Preparation, Modelling, Evaluation, Deployment"
+    },
+    {
+      "front": "Define 'p-value' in hypothesis testing.",
+      "back": "The probability of obtaining test results at least as extreme as the observed during the test, assuming H₀ is true."
+    },
+    {
+      "front": "What is the typical threshold (alpha) value for significance?",
+      "back": "0.05"
+    },
+    {
+      "front": "When do you reject the null hypothesis (H₀)?",
+      "back": "If p-value < alpha (significance level)"
+    },
+    {
+      "front": "What is the formula for a simple linear regression?",
+      "back": "y = β₀ + β₁x + ε"
+    },
+    {
+      "front": "What function does logistic regression use to map predictions?",
+      "back": "Sigmoid function"
+    },
+    {
+      "front": "What are features and labels in supervised learning?",
+      "back": "Features (X) are input variables; labels (y) are target outputs."
+    },
+    {
+      "front": "What is the purpose of train-test split?",
+      "back": "To evaluate model performance on unseen data."
+    },
+    {
+      "front": "Name three common classification algorithms.",
+      "back": "Decision Tree, Logistic Regression, K-Nearest Neighbors"
+    },
+    {
+      "front": "What is one-hot encoding?",
+      "back": "Transforming categorical data into binary columns representing presence (1) or absence (0)."
+    },
+    {
+      "front": "What does NumPy's broadcasting enable?",
+      "back": "Element-wise operations between arrays of different shapes."
+    },
+    {
+      "front": "List 3 rules of broadcasting in NumPy.",
+      "back": "1. Prepend 1s to smaller shape, 2. Match dimensions or one must be 1, 3. Stretch size-1 dimensions"
+    },
+    {
+      "front": "What is the difference between loc[] and iloc[] in Pandas?",
+      "back": "loc[] uses labels, iloc[] uses integer index positions."
+    },
+    {
+      "front": "What does df.groupby() do?",
+      "back": "Groups rows and applies aggregate functions like sum, mean, etc."
+    },
+    {
+      "front": "What is the purpose of .fillna() in Pandas?",
+      "back": "Fills missing values in a DataFrame."
+    },
+    {
+      "front": "What does .dropna() do in Pandas?",
+      "back": "Removes rows or columns with missing values."
+    },
+    {
+      "front": "What is the difference between Series and DataFrame?",
+      "back": "Series is 1D; DataFrame is 2D with rows and columns."
+    },
+    {
+      "front": "What is standard deviation?",
+      "back": "Square root of variance; measures dispersion around the mean."
+    },
+    {
+      "front": "What does skewness indicate?",
+      "back": "Asymmetry in the data distribution (right or left skew)."
+    },
+    {
+      "front": "What does kurtosis measure?",
+      "back": "The 'tailedness' or peak sharpness of a distribution."
+    },
+    {
+      "front": "Which library provides support for 2D visualizations in Python?",
+      "back": "Matplotlib"
+    },
+    {
+      "front": "What is the primary object in NumPy?",
+      "back": "ndarray (N-dimensional array)"
+    },
+    {
+      "front": "Why use NumPy arrays over Python lists?",
+      "back": "They are faster, more memory efficient, and support vectorized operations."
+    },
+    {
+      "front": "What function in NumPy reads text files?",
+      "back": "loadtxt()"
+    },
+    {
+      "front": "What is boolean masking in NumPy?",
+      "back": "Filtering arrays using conditional expressions."
+    },
+    {
+      "front": "What is the purpose of mean_squared_error in regression?",
+      "back": "Measures average squared difference between predicted and actual values."
+    },
+    {
+      "front": "What does R² score indicate?",
+      "back": "Proportion of variance in dependent variable explained by the model."
+    },
+    {
+      "front": "What is the purpose of the OS module in Python?",
+      "back": "Interacts with the operating system to manage files and directories."
+    },
+    {
+      "front": "Name three file operations from the os module.",
+      "back": "os.listdir(), os.remove(), os.mkdir()"
+    },
+    {
+      "front": "What are the two main types of statistics?",
+      "back": "Descriptive and Inferential statistics"
+    },
+    {
+      "front": "What is inferential statistics?",
+      "back": "Making predictions about a population based on a sample."
+    },
+    {
+      "front": "What does the F-test evaluate?",
+      "back": "Compares variances between two or more groups (used in ANOVA)."
+    },
+    {
+      "front": "When do you use a T-Test?",
+      "back": "When comparing means with small sample size and unknown population standard deviation."
+    },
+    {
+      "front": "What is the use of Chi-Square Test?",
+      "back": "For categorical data: test independence or goodness-of-fit."
+    },
+    {
+      "front": "What is the output of a classification model?",
+      "back": "Discrete category labels"
+    },
+    {
+      "front": "What is a kernel in SVM or KDE?",
+      "back": "A function used to transform or weigh data points for pattern analysis."
+    },
+    {
+      "front": "What does `.apply()` do in Pandas?",
+      "back": "Applies a function along an axis of a DataFrame."
+    },
+    {
+      "front": "What is dimensionality reduction?",
+      "back": "Reducing the number of features while preserving variance (e.g., PCA)."
+    },
+    {
+      "front": "How does K-means clustering work?",
+      "back": "Groups data into k clusters based on distance from centroids."
+    },
+    {
+      "front": "What is the role of validation in ML?",
+      "back": "To assess model performance before deployment using unseen data."
+    },
+    {
+      "front": "What is reinforcement learning?",
+      "back": "Learning through interaction with environment using reward and penalty."
+    },
+    {
+      "front": "What is the main objective in model evaluation?",
+      "back": "To ensure the model meets business objectives and is reliable."
+    },
+    {
+      "front": "What is ETL in data preparation?",
+      "back": "Extract, Transform, Load – process of moving and processing data into a usable format."
+    },
+    {
+      "front": "What is a sandbox in data preparation?",
+      "back": "An isolated environment for analytical data processing separate from production systems."
+    },
+    {
+      "front": "What is co-occurrence grouping in data mining?",
+      "back": "Finding items or entities that frequently appear together (e.g., market basket analysis)."
+    },
+    {
+      "front": "Name two common unsupervised learning tasks.",
+      "back": "Clustering and Dimensionality Reduction"
+    },
+    {
+      "front": "What is a Data Lake?",
+      "back": "A centralized repository that stores structured and unstructured data at scale."
+    }
+  ]

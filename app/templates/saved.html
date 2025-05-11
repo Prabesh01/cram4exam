@@ -75,43 +75,65 @@
   </style>
   <header>
     <div class="tab">Answers</div>
-    <div class="tab">BOOKMARKS</div>
+    <div class="tab">Questions</div>
+
   </header>
   <div class="content" id="answered">
-    <div class="card">
+    {% for answer in answers %}
+    <div class="card" id="answer-{{ answer.pk }}">
       <div class="card-header">
-        <img src="https://i.pravatar.cc/40?img=1" class="avatar">
         <div>
-          <strong>Brunch this weekend?</strong><br>
-          <small>Ali Conners in category name</small>
+          <strong>{{ answer.question.module }} {% if answer.question.module.year_long %}[y{{answer.question.module.year}}-sem{{answer.question.sem}}]{%endif%}</strong><br>
+          <small>{{ answer.question.question }}</small>
         </div>
       </div>
-      <p>I'll be in your neighborhood doing errands. Selfies tumblr dreamcatcher, wayfarers mlkshk master cleanse mixtape man bun tofu you probably haven't heard of them pitchfork banjo.</p>
+      <p class="answer-content">{{answer.answer}}</p>
       <div class="likes-comments-time">
-        <span>12 LIKES</span>
-        <span>4 COMMENTS</span>
-        <span>4HRS AGO</span>
+        <span style="cursor:pointer;" class="edit-answer" data-answer-id="{{ answer.pk }}">Edit Answer</span>
+        <span><a href="{% url 'view_question' answer.question.qid %}"> View Question</a></span>
+        <span><a href="{% url 'delete_answer' answer.pk %}"> Delete Answer</a></span>
       </div>
     </div>
-
+    {% endfor %}
   </div>
 
   <div class="content" id="bookmarked" style="display:none;">
+    {% if questions %}
+    <h3>Contributions</h3>
+    {% for question in questions %}
     <div class="card">
       <div class="card-header">
-        <img src="https://i.pravatar.cc/40?img=4" class="avatar">
         <div>
-          <strong>Recipe to try?</strong><br>
-          <small>Brian Holt</small>
+          <strong>{{ question.module }}</strong><br>
+            <small>Year-{{question.module.year}} Sem-{% if question.module.year_long %}{{question.sem}}{%else%}{{question.module.sem}}{%endif%}</small>
         </div>
       </div>
-      <p>We should eat this: Grapefruit, Squash, Corn, and Tomatillo tacos. Selfies tumblr dreamcatcher, wayfarers mlkshk master cleanse mixtape man bun tofu you probably haven't heard of them pitchfork banjo.</p>
+      <p>{{question.question}}</p>
       <div class="likes-comments-time">
-        <span>10 LIKES</span>
-        <span>3 COMMENTS</span>
-        <span>4HRS AGO</span>
+        <span><a href="{% url 'edit_question' question.qid %}">Edit</a></span>
+        <span><a href="{% url 'view_question' question.qid %}">View</a></span>
+        <span><a href="{% url 'delete_question' question.qid %}">Delete</a></span>
       </div>
     </div>
+    {% endfor %}
+    <h3>Bookmarks</h3>
+    {% endif %}
+    {% for b in bookmarks %}
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <strong>{{ b.question.module }}</strong><br>
+            <small>Year-{{b.question.module.year}} Sem-{% if b.question.module.year_long %}{{b.question.sem}}{%else%}{{b.question.module.sem}}{%endif%}</small>
+        </div>
+      </div>
+      <p>{{b.question.question}}</p>
+      <div class="likes-comments-time">
+        <span></span>
+        <span><a href="{% url 'view_question' b.question.qid %}">View</a></span>
+        <span></span>
+      </div>
+    </div>
+    {% endfor %}
 
 </div>
 
@@ -139,5 +161,28 @@
     // Optional: highlight the default active tab
     tabs[0].style.borderBottom = '2px solid #00e676';
   </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add click event listeners to all edit answer links
+        document.querySelectorAll('.edit-answer').forEach(function(editLink) {
+            editLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                const answerId = this.getAttribute('data-answer-id');
+                const answerCard = document.getElementById('answer-' + answerId);
+                const answerContent = answerCard.querySelector('.answer-content');
+                var currentAnswer = answerContent.textContent.replace(/SaveCancel/, '').trim();
+
+                answerContent.innerHTML = `<form class="edit-answer-form" action="/a/edit/${answerId}" method="POST"><input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+<textarea name="text_answer" rows="5" style="width: 100%;">${currentAnswer}</textarea><div><button type="submit" class="btn btn-primary">Save</button><button type="button" class="btn btn-secondary cancel-edit">Cancel</button></div></form>
+                `;
+                // Add event listener for cancel button
+                answerCard.querySelector('.cancel-edit').addEventListener('click', function() {
+                    answerContent.textContent = currentAnswer;
+                });
+            });
+        });
+    });
+    </script>
   {% endblock %}
 {% endblock %}

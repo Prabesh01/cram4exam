@@ -1,0 +1,194 @@
+[
+    {
+      "front": "What is Software Engineering?",
+      "back": "The application of a systematic, disciplined, and quantifiable approach to the development, operation, and maintenance of software."
+    },
+    {
+      "front": "What are the essential attributes of good software?",
+      "back": "Maintainability, dependability and security, efficiency, and acceptability."
+    },
+    {
+      "front": "Define the term 'Software Crisis'.",
+      "back": "Difficulty in writing useful and efficient computer programs in the required time, often due to complexity, poor management, or lack of training."
+    },
+    {
+      "front": "What is the IEEE definition of Software Engineering?",
+      "back": "A systematic, disciplined, quantifiable approach to the development, operation, and maintenance of software."
+    },
+    {
+      "front": "What are the two types of software products?",
+      "back": "Generic products and customized products."
+    },
+    {
+      "front": "Differentiate between generic and customized software.",
+      "back": "Generic software is developed for a broad market, while customized software is built for specific client requirements."
+    },
+    {
+      "front": "List the common types of application software.",
+      "back": "Stand-alone, transaction-based, embedded systems, batch processing, entertainment, modeling and simulation, data collection systems."
+    },
+    {
+      "front": "What is the purpose of SDLC?",
+      "back": "To develop software systematically, track progress, manage changes, and reduce the risk of failure."
+    },
+    {
+      "front": "List the main stages of the Software Development Life Cycle (SDLC).",
+      "back": "Initiation, System Concept Development, Planning, Requirement Analysis, Design, Development, Integration and Testing, Deployment and Maintenance."
+    },
+    {
+      "front": "What is the Waterfall Model?",
+      "back": "A linear and sequential development model where each phase must be completed before the next begins."
+    },
+    {
+      "front": "When is the Waterfall Model most suitable?",
+      "back": "When requirements are well understood, fixed, and unlikely to change."
+    },
+    {
+      "front": "Define the Prototype Model.",
+      "back": "A development model where a prototype of the software is built, tested, and reworked until an acceptable prototype is achieved."
+    },
+    {
+      "front": "What is the Spiral Model best known for?",
+      "back": "Its emphasis on risk analysis and iterative development for large, complex, and high-risk projects."
+    },
+    {
+      "front": "Define 'Requirement Engineering'.",
+      "back": "The process of gathering, analyzing, documenting, and managing software requirements."
+    },
+    {
+      "front": "What is the purpose of a Software Requirements Specification (SRS) document?",
+      "back": "To formally describe all functional and non-functional requirements for the software."
+    },
+    {
+      "front": "List the core components of Requirement Engineering.",
+      "back": "Inception, Elicitation, Elaboration, Negotiation, Specification, Validation, Requirements Management."
+    },
+    {
+      "front": "Differentiate between Functional and Non-Functional Requirements.",
+      "back": "Functional requirements describe what the system should do; non-functional requirements describe how the system performs under constraints."
+    },
+    {
+      "front": "What is Structured Analysis?",
+      "back": "A method of analysis that focuses on the system’s processes and data using diagrammatic techniques like DFDs."
+    },
+    {
+      "front": "What is a Data Flow Diagram (DFD)?",
+      "back": "A graphical representation of data flow within a system, showing inputs, outputs, storage, and processing."
+    },
+    {
+      "front": "Name the four components of a DFD.",
+      "back": "Entities, Process, Data Storage, Data Flow."
+    },
+    {
+      "front": "What is a Structure Chart?",
+      "back": "A hierarchical diagram showing the relationship between modules of a system."
+    },
+    {
+      "front": "What are the 4 P's of Software Project Management?",
+      "back": "People, Product, Process, Project."
+    },
+    {
+      "front": "What is the Project Management Triangle?",
+      "back": "Time, Cost, Scope – changing one affects the others."
+    },
+    {
+      "front": "What is the role of a Project Manager?",
+      "back": "To plan, execute, monitor, and close projects, ensuring they meet goals within constraints."
+    },
+    {
+      "front": "What is a Gantt Chart?",
+      "back": "A bar chart that visualizes the schedule of a project, showing tasks, durations, and dependencies."
+    },
+    {
+      "front": "What is the Critical Path in project management?",
+      "back": "The longest sequence of dependent tasks that determine the shortest possible project duration."
+    },
+    {
+      "front": "What is the PERT technique used for?",
+      "back": "Estimating the project timeline using optimistic, pessimistic, and most likely time estimates."
+    },
+    {
+      "front": "What is the purpose of Requirement Elicitation?",
+      "back": "To gather accurate requirements from stakeholders using interviews, questionnaires, observation, etc."
+    },
+    {
+      "front": "What is Information Security?",
+      "back": "Protecting information from unauthorized access, alteration, or destruction."
+    },
+    {
+      "front": "What are the three pillars of the CIA triad?",
+      "back": "Confidentiality, Integrity, Availability."
+    },
+    {
+      "front": "Define 'Risk' in Information Security.",
+      "back": "The potential for loss or damage when a threat exploits a vulnerability."
+    },
+    {
+      "front": "What is 'Non-repudiation'?",
+      "back": "Assurance that someone cannot deny the validity of their digital actions."
+    },
+    {
+      "front": "Name some tools for securing information systems.",
+      "back": "Cryptography, Firewalls, DLP, IDS/IPS, EDR."
+    },
+    {
+      "front": "What is a Transaction Processing System (TPS)?",
+      "back": "A system that handles the collection, modification, and retrieval of all transaction data."
+    },
+    {
+      "front": "What is a Management Information System (MIS)?",
+      "back": "A system that converts TPS data into summarized reports to help middle managers make decisions."
+    },
+    {
+      "front": "What is an Executive Information System (EIS)?",
+      "back": "A system designed to help senior executives make strategic decisions."
+    },
+    {
+      "front": "What is the primary goal of SDLC?",
+      "back": "To ensure software is developed efficiently, with quality and minimum risk."
+    },
+    {
+      "front": "What are milestones in project management?",
+      "back": "Key events or checkpoints in a project timeline used to measure progress."
+    },
+    {
+      "front": "What is the role of Validation in Requirement Engineering?",
+      "back": "Ensuring the documented requirements accurately represent stakeholder needs."
+    },
+    {
+      "front": "What is 'Elaboration' in Requirement Engineering?",
+      "back": "Refining and expanding requirements to form clear and complete user scenarios."
+    },
+    {
+      "front": "What is 'Negotiation' in Requirement Engineering?",
+      "back": "The process of resolving conflicting requirements and prioritizing them."
+    },
+    {
+      "front": "What are the characteristics of a good software requirement?",
+      "back": "Correct, unambiguous, complete, consistent, verifiable, modifiable, and traceable."
+    },
+    {
+      "front": "What is a Process Specification (PSPEC)?",
+      "back": "A detailed textual description of a process in a DFD, used to guide design."
+    },
+    {
+      "front": "What is Transform Analysis used for?",
+      "back": "To convert DFD into structure charts by identifying input, output, and transformation components."
+    },
+    {
+      "front": "When is Transaction Analysis used in structured design?",
+      "back": "For systems where different transaction types trigger different processing paths."
+    },
+    {
+      "front": "What is meant by ‘loop’ in a structure chart?",
+      "back": "Repetitive execution of a module by its sub-module, shown with a curved arrow."
+    },
+    {
+      "front": "What is float in CPM?",
+      "back": "The amount of time a task can be delayed without affecting the overall project timeline."
+    },
+    {
+      "front": "What is the difference between Forward and Backward Pass in CPM?",
+      "back": "Forward pass calculates early start/finish; backward pass calculates late start/finish."
+    }
+  ]

@@ -60,7 +60,7 @@
         {% for q in questions %}
         <div class="col-lg-6 question-item" data-question-type="{% if q.is_mcq %}mcq{% else %}non-mcq{% endif %}">
         <div class="prob">
-            <details>
+            <details {%if not q.is_mcq%} id = "{{ q.qid }}" {%endif%} >
                 <summary>
             <h3>{{ q.question }}</h3>
             <p>#{{ forloop.counter }}</p>
@@ -85,20 +85,15 @@
                     {% endfor %}
                 {%else%}
                     <i>Provided Answer: </i>
-                    <pre><code>&amp;#x202e;Code all the things!</code></pre>
+                    <pre><code>{{q.answer}}</code></pre>
                 {% endif %}
                 </dd>
 
 
                 </dt>
-                <dd class="output">
-                    <i>Top Answer: </i>
-                    <pre><code>&#x202e;Code all the things!</code></pre>
+                <dd id ="top_answer" class="output">
                 </dd>
-                <i>Your Answers: </i>
-                <dd class="output">
-                    <i>#1: </i>
-                    <pre><code>&#x202e;Code all the things!</code></pre>
+                <dd id="self_answers" class="output">
                 </dd>
 
             </dl>
@@ -141,5 +136,32 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+</script>
+<script>
+    document.querySelectorAll('details').forEach(details => {
+        details.addEventListener('toggle', function() {
+          if (this.open) {
+            const questionId = this.id;
+            const topAnswerElement = this.querySelector('#top_answer');
+            const selfAnswersElement = this.querySelector('#self_answers');
+
+            // Fetch the answers from the server
+            fetch(`/answers/${questionId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.top_answer){
+                    topAnswerElement.innerHTML = `<i>Top Answer: </i><pre><code>${data.top_answer}</code></pre>`;
+                    }
+                    if (data.self_answers.length > 0) {
+                    selfAnswersElement.innerHTML = `<i>Your Answers: </i><pre>${data.self_answers.map(answer => `<code>${answer}</code>`).join('<br>')}</pre>`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching answers:', error);
+                });
+                this.id="";
+          }
+        });
+      });
 </script>
 {% endblock %}

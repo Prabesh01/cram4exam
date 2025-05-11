@@ -103,3 +103,19 @@ class Profile(models.Model):
                 self.streak = 0
 
                 self.save()
+
+class Bookmark(models.Model):
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    date_bookmarked = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.question.question}"
+
+class Upvote(models.Model):
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    answer = models.ForeignKey(UserAnswer, on_delete=models.CASCADE)
+    date_upvoted = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.answer.answer}"

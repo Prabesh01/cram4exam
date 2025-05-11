@@ -6,39 +6,28 @@
         <div class="card">
             <div class="card-header bg-primary text-white">
                 <h4 class="mb-0">
-                    Add New Question
-                    {% if question %} - {{ question.module.code }}{% endif %}
+                    Edit Question - {{ question.qid }}
                 </h4>
             </div>
             <div class="card-body">
-                <form method="post" id="questionForm">
+                <form method="post" id="questionEditForm">
                     {% csrf_token %}
 
+                    <!-- Module information (read-only) -->
                     <div class="mb-3">
-                        <label for="module" class="form-label">Module</label>
-                        <select class="form-select" id="module" name="module" required
-                                onchange="window.location.href='{% url 'add_question' %}?module='+this.value">
-                            <option value="">Select a module</option>
-                            {% for module in all_modules %}
-                                <option value="{{ module.code }}"
-                                    {% if selected_module and selected_module.code == module.code %}selected{% endif %}
-                                    {% if question and question.module.code == module.code %}selected{% endif %}>
-                                    {{ module.code }} - {{ module.name }}
-                                </option>
-                            {% endfor %}
-                        </select>
+                        <label class="form-label">Module</label>
+                        <input type="text" class="form-control" value="{{ question.module.code }} - {{ question.module.name }}" readonly>
+                        <input type="hidden" name="module" value="{{ question.module.code }}">
                     </div>
 
-                    {% if selected_module and not selected_module.year_long or question and not question.module.year_long %}
-                        <input type="hidden" name="sem" value="{% if question %}{{ question.sem }}{% else %}{{ selected_module.sem }}{% endif %}">
+                    {% if not question.module.year_long %}
+                        <input type="hidden" name="sem" value="{{ question.sem }}">
                     {% else %}
                         <div class="mb-3">
                             <label for="sem" class="form-label">Semester</label>
                             <select class="form-select" id="sem" name="sem" required>
                                 {% for sem_num, sem_lvl in semesters %}
-                                    <option value="{{ sem_num }}"
-                                        {% if selected_module and selected_module.sem == sem_num %}selected{% endif %}
-                                        {% if question and question.sem == sem_num %}selected{% endif %}>
+                                    <option value="{{ sem_num }}" {% if question.sem == sem_num %}selected{% endif %}>
                                         {{ sem_lvl }}
                                     </option>
                                 {% endfor %}
@@ -48,27 +37,26 @@
 
                     <div class="mb-3">
                         <label for="question" class="form-label">Question</label>
-                        <textarea class="form-control" id="question" name="question" rows="3" required>{% if question %}{{ question.question }}{% endif %}</textarea>
+                        <textarea class="form-control" id="question" name="question" rows="3" required>{{ question.question }}</textarea>
                     </div>
 
                     <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="is_mcq" name="is_mcq"
-                            {% if question and question.is_mcq %}checked{% endif %}>
+                        <input type="checkbox" class="form-check-input" id="is_mcq" name="is_mcq" {% if question.is_mcq %}checked{% endif %}>
                         <label class="form-check-label" for="is_mcq">MCQ?</label>
                     </div>
 
-                    <div id="answerField" class="mb-3" {% if question and question.is_mcq %}style="display: none;"{% endif %}>
+                    <div id="answerField" class="mb-3" {% if question.is_mcq %}style="display: none;"{% endif %}>
                         <label for="answer" class="form-label">Answer (optional)</label>
-                        <textarea class="form-control" id="answer" name="answer" rows="3">{% if question %}{{ question.answer }}{% endif %}</textarea>
+                        <textarea class="form-control" id="answer" name="answer" rows="3">{{ question.answer }}</textarea>
                     </div>
 
-                    <div id="optionsContainer" {% if not question or not question.is_mcq %}style="display: none;"{% endif %}>
+                    <div id="optionsContainer" {% if not question.is_mcq %}style="display: none;"{% endif %}>
                         <h5>Options</h5>
                         <div class="mb-3">
                             <small class="text-muted">Check all correct answers</small>
                         </div>
                         <div id="optionsList">
-                            {% if question and question.is_mcq %}
+                            {% if question.is_mcq %}
                                 {% for option in question.get_options %}
                                 <div class="option-item mb-3 p-3 border rounded" id="option-{{ forloop.counter0 }}">
                                     <div class="mb-2">
@@ -93,7 +81,8 @@
                     </div>
 
                     <div class="d-grid gap-2 mt-4">
-                        <button type="submit" class="btn btn-primary">Submit Question</button>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <a href="{% url 'saves' %}" class="btn btn-outline-secondary">Cancel</a>
                     </div>
                 </form>
             </div>
@@ -110,14 +99,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const answerField = document.getElementById('answerField');
     const optionsList = document.getElementById('optionsList');
     const addOptionBtn = document.getElementById('addOptionBtn');
-    const moduleSelect = document.getElementById('module');
-
-    // Check if module code is in URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const moduleCode = urlParams.get('module');
-    if (moduleCode) {
-        moduleSelect.value = moduleCode;
-    }
+    let nextOptionId = optionsList.children.length;  // Start with existing options count
 
     // Toggle MCQ options
     isMcqCheckbox.addEventListener('change', function() {
@@ -139,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function() {
     addOptionBtn.addEventListener('click', addOption);
 
     function addOption() {
-        const optionId = Date.now();
+        const optionId = nextOptionId++;
         const optionHtml = `
             <div class="option-item mb-3 p-3 border rounded" id="option-${optionId}">
                 <div class="mb-2">
@@ -169,6 +151,27 @@ document.addEventListener('DOMContentLoaded', function() {
             const id = this.getAttribute('data-id');
             document.getElementById(`option-${id}`).remove();
         });
+    });
+
+    // Form validation
+    document.getElementById('questionEditForm').addEventListener('submit', function(e) {
+        if (isMcqCheckbox.checked) {
+            // Validate at least one option is selected as correct
+            const correctOptions = document.querySelectorAll('input[name="correct_options[]"]:checked');
+            if (correctOptions.length === 0) {
+                e.preventDefault();
+                alert('Please select at least one correct option for the MCQ.');
+                return false;
+            }
+
+            // Validate at least two options are provided
+            if (optionsList.children.length < 2) {
+                e.preventDefault();
+                alert('MCQ questions must have at least two options.');
+                return false;
+            }
+        }
+        return true;
     });
 });
 </script>

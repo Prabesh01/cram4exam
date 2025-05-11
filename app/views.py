@@ -2,8 +2,10 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .forms import ProfileForm
 from django.db.models import Q
+from django.http import JsonResponse
+from django.db.models import Count
 
-from app.models import Module, Sem, Year, Question, Option, Profile, UserAnswer, DailyQuestion
+from app.models import Module, Sem, Year, Question, Option, Profile, UserAnswer, DailyQuestion, Bookmark, Upvote
 from django.utils import timezone
 from datetime import timedelta
 from datetime import datetime, time
@@ -15,6 +17,7 @@ def generate_daily_questions(user):
         questions = Question.objects.filter(
             Q(module__sem=user.profile.sem) | Q(module__year_long=True),
             Q(module__year=user.profile.year),
+            ~Q(added_by__username="bot")
         )
     else:
         questions = Question.objects.filter(
@@ -100,39 +103,58 @@ def list_question(request):
     code = request.GET.get('module')
     module = get_object_or_404(Module, code=code)
     if request.user.profile.sem == Sem.TWO:
-        questions = Question.objects.filter(module__code=code).order_by('date_added')
+        questions = Question.objects.filter(~Q(added_by__username="bot"),module__code=code).order_by('date_added')
     else:
-        questions = Question.objects.filter(module__code=code, sem=Sem.ONE).order_by('date_added')
+        questions = Question.objects.filter(~Q(added_by__username="bot"),module__code=code, sem=Sem.ONE).order_by('date_added')
     questions=questions.order_by('date_added').prefetch_related('option_set')
     return render(request, 'qbank.html', {'module': module,'questions':questions})
 
 @login_required
 def flash_cards(request):
+    if request.method == 'POST' and 'bookmark_question' in request.POST:
+        question_id = request.POST.get('bookmark_question')
+        question = get_object_or_404(Question, qid=question_id)
+
+        bookmark, created = Bookmark.objects.get_or_create(
+            user=request.user,
+            question=question
+        )
+        if not created:
+            bookmark.delete()
+
     modules = Module.objects.filter(Q(sem=request.user.profile.sem) | Q(year_long=True), year=request.user.profile.year)
 
     questions= None
     selected_module = request.GET.get('module')
-    need_mcq = request.GET.get('need_mcq')
+    if not selected_module: selected_module = 'all'
     if selected_module:
         if selected_module == 'all':
             if request.user.profile.sem == Sem.TWO:
-                questions = Question.objects.filter(module__in=modules)
+                questions = Question.objects.filter(added_by__username="bot",module__in=modules).order_by('?')
             else:
-                questions = Question.objects.filter(module__in=modules, sem=Sem.ONE)
+                questions = Question.objects.filter(added_by__username="bot",module__in=modules, sem=Sem.ONE).order_by('?')
         else:
             selected_module = get_object_or_404(Module, code=selected_module)
-            print(selected_module)
+
             if request.user.profile.sem == Sem.TWO:
-                questions = Question.objects.filter(module=selected_module)
+                questions = Question.objects.filter(added_by__username="bot",module=selected_module).order_by('?')
             else:
-                questions = Question.objects.filter(module=selected_module, sem=Sem.ONE)
-        print(questions)
-        if need_mcq:
-            questions = questions.filter(is_mcq=True)
-        else:
-            questions = questions.filter(is_mcq=False)
-    print(questions)
-    return render(request, 'flash_cards.html', {'modules': modules,'questions':questions, 'selected_module': selected_module, 'need_mcq': need_mcq})
+                questions = Question.objects.filter(added_by__username="bot",module=selected_module, sem=Sem.ONE).order_by('?')
+
+    questions_data=[]
+    for question in questions:
+        has_bookmark = Bookmark.objects.filter(
+            user=request.user,
+            question=question
+        ).exists()
+
+        questions_data.append({
+            'question': question,
+            'has_bookmark': has_bookmark
+        })
+
+
+    return render(request, 'flash_cards.html', {'modules': modules,'questions':questions_data, 'selected_module': selected_module})
 
 @login_required
 def add_question(request, qid=None):
@@ -210,19 +232,148 @@ def leaderboard(request):
     users = Profile.objects.filter(streak__gte=1).order_by('-streak')
     return render(request, 'leaderboard.html', {'students': users})
 
-
+@login_required
 def view_question(request, question_id):
-    pass
+    question = get_object_or_404(Question, qid=question_id)
 
+    is_bookmarked = False
+    if request.user.is_authenticated:
+        is_bookmarked = Bookmark.objects.filter(
+            user=request.user,
+            question=question
+        ).exists()
+
+    if request.method == 'POST':
+        if 'text_answer' in request.POST:
+            answer = request.POST.get('text_answer')
+            # save answer
+            if not question.is_mcq:
+                UserAnswer.objects.create(
+                    user=request.user,
+                    question=question,
+                    answer=answer
+                )
+        elif 'upvote_answer' in request.POST:
+            answer_id = request.POST.get('upvote_answer')
+            answer = get_object_or_404(UserAnswer, pk=answer_id)
+
+            upvote, created = Upvote.objects.get_or_create(
+                user=request.user,
+                answer=answer
+            )
+            if not created:
+                upvote.delete()
+        elif 'bookmark_question' in request.POST:
+            bookmark, created = Bookmark.objects.get_or_create(
+                user=request.user,
+                question=question
+            )
+            if not created:
+                bookmark.delete()
+        return redirect('view_question', question_id=question_id)
+    answers = UserAnswer.objects.filter(question=question).order_by('-date_answered')
+
+    answer_data = []
+    for answer in answers:
+        upvote_count = Upvote.objects.filter(answer=answer).count()
+        is_upvoted = False
+        if request.user.is_authenticated:
+            is_upvoted = Upvote.objects.filter(
+                user=request.user,
+                answer=answer
+            ).exists()
+
+        answer_data.append({
+            'answer': answer,
+            'upvote_count': upvote_count,
+            'is_upvoted': is_upvoted
+        })
+
+    return render(request, 'question.html', {
+        'question': question,
+        'answers': answer_data,
+        'is_bookmarked': is_bookmarked
+    })
+
+@login_required
 def get_saves(request):
-    return render(request, 'saved.html', {})
+    answers = UserAnswer.objects.filter(user=request.user).order_by('-date_answered')
+    questions = Question.objects.filter(added_by=request.user).order_by('-date_added')
+    bookmarks = Bookmark.objects.filter(user=request.user).order_by('-date_bookmarked')
+    return render(request, 'saved.html', {'answers': answers,'questions': questions, 'bookmarks': bookmarks})
+
+@login_required
+def delete_question(request, question_id):
+    question = get_object_or_404(Question, qid=question_id, added_by=request.user)
+    question.delete()
+
+    return redirect('saves')
+
+@login_required
+def delete_answer(request, answer_id):
+    answer = get_object_or_404(UserAnswer, pk=answer_id, user=request.user)
+    answer.delete()
+
+    return redirect('saves')
+
+@login_required
+def edit_question(request, qid):
+    question = get_object_or_404(Question, qid=qid, added_by=request.user)
+
+    if request.method == 'POST':
+            is_mcq = 'is_mcq' in request.POST
+
+            if not question.module.year_long:
+                sem = question.module.sem
+            else:
+                sem = request.POST.get('sem')
+
+            # Update the question
+            question.question = request.POST.get('question')
+            question.answer = None if is_mcq else request.POST.get('answer')
+            question.is_mcq = is_mcq
+            question.sem = sem
+            question.save()
+
+            if is_mcq:
+                # delete old options
+                Option.objects.filter(question=question).delete()
+                # Add new options
+                options = request.POST.getlist('options[]')
+                correct_options = request.POST.get('correct_options[]')
+                for i, option_text in enumerate(options):
+                    Option.objects.create(
+                        question=question,
+                        option=option_text,
+                        correct=(str(i) in correct_options)
+                    )
+            return redirect('saves')
+
+    return render(request, 'edit_question.html', {'question': question, 'semesters': Sem.choices})
+
+@login_required
+def edit_answer(request, answer_id):
+    answer = get_object_or_404(UserAnswer, pk=answer_id, user=request.user)
+
+    answer.answer = request.POST.get('text_answer')
+    answer.save()
+    return redirect('saves')
+
+@login_required
+def top_answers(request, question_id):
+    question = get_object_or_404(Question, qid=question_id)
+    answers = UserAnswer.objects.filter(question=question).order_by('-date_answered')
+    self_answers = UserAnswer.objects.filter(question=question, user=request.user).order_by('-date_answered')
+
+    top_answer = answers.annotate(upvote_count=Count('upvote')).filter(upvote_count__gte=2).order_by('-upvote_count').first()
+
+    self_answers = [a.answer for a in self_answers]
+    top_answer = top_answer.answer if top_answer else None
+
+    return JsonResponse({'self_answers': self_answers, 'top_answer': top_answer})
 
 # to-do:
 # view question
-# upvote/undo answer
 # bookmark/undo question
+# upvote/undo answer
 
-# flashcard ui
-
-# edit / delete question
-# add  / edit / delete answer/comment

@@ -1,0 +1,350 @@
+{% extends 'base.html' %}
+
+{% block content %}    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4895ef;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --success-color: #4cc9f0;
+            --danger-color: #f72585;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .question-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .question-meta {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .question-meta span {
+            background: #e9ecef;
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            margin-right: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .author {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .author-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.8rem;
+            font-weight: bold;
+        }
+
+        .author-name {
+            font-weight: 600;
+        }
+
+        .bookmark-btn {
+            background: none;
+            border: none;
+            color: #adb5bd;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .bookmark-btn.active {
+            color: var(--danger-color);
+        }
+
+        .answer-section {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .answer-form textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            resize: vertical;
+            min-height: 120px;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .answer-form button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .answer-form button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .answers-list {
+            margin-top: 2rem;
+        }
+
+        .answer-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .answer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .answer-author {
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .answer-date {
+            color: #6c757d;
+            font-size: 0.8rem;
+        }
+
+        .answer-content {
+            margin-bottom: 1rem;
+            line-height: 1.7;
+        }
+
+        .answer-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .vote-btn {
+            background: none;
+            border: none;
+            color: #adb5bd;
+            cursor: pointer;
+            font-size: 1.2rem;
+            margin-right: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .vote-btn.upvoted {
+            color: var(--primary-color);
+        }
+
+        .vote-count {
+            margin-left: 0.3rem;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            .question-card, .answer-section {
+                padding: 1.5rem;
+            }
+
+            .question-header {
+                flex-direction: column;
+            }
+
+            .bookmark-btn {
+                align-self: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Question Card -->
+        <div class="question-card">
+            <div class="question-header">
+                <div>
+                    <div class="author">
+                        <img src="https://api.dicebear.com/9.x/bottts/svg?seed={{question.added_by}}" alt="Author Avatar" class="author-avatar">
+                        <div class="author-name">{{question.added_by.first_name}} {{question.added_by.last_name}}</div>
+                    </div>
+                    <div class="question-meta">
+                        <span>{{question.module}}</span>
+                        <span>Year {{question.module.year}}</span>
+                        <span>Semester {%if question.module.year_long%}{{question.sem}}{%else%}{{question.module.sem}}{%endif%}</span>
+                    </div>
+                </div>
+                <form action="" method="post">
+                    <input type="hidden" name="bookmark_question" value="{{question.qid}}">
+                    {% csrf_token %}
+                    <button type="submit" class="bookmark-btn {%if is_bookmarked%}active{%endif%}" id="bookmark-btn">
+                        <i class="{%if is_bookmarked%}fas{%else%}far{%endif%} fa-bookmark"></i>
+                    </button>
+                </form>
+            </div>
+            <div class="question-text">
+                {{question.question}}
+
+                {% if question.is_mcq %}
+                <br>
+                {% for option in question.option_set.all %}
+                   <input type="checkbox" value="{{ option.option }}">{{ option.option }}</input><br>
+                </li>
+                {% endfor %}
+            {% endif %}
+
+            </div>
+            <div class="provided-answer">
+                <h3>Provided Answer:</h3>
+                {% if question.is_mcq %}
+                {% for option in question.option_set.all %}
+                {% if option.correct %}
+                   <input type="checkbox" value="{{ option.option }}" checked disabled>{{ option.option }}</input><br>
+                {% endif %}
+                </li>
+                {% endfor %}
+            {%else%}
+                {{question.answer}}
+            {% endif %}
+
+            </div>
+        </div>
+
+        <!-- Answer Form -->
+        <div class="answer-section">
+            <h2>Share Your Answer</h2>
+            <form class="answer-form" method="POST">
+                {% csrf_token %}
+                <textarea name="text_answer" placeholder="Write your answer here..." required></textarea>
+                <button type="submit">Post Answer</button>
+            </form>
+        </div>
+
+        {% if answers %}
+        <div class="answers-list">
+            <h2>Community Answers</h2>
+
+            {% for answer in answers %}
+            <div class="answer-card">
+                <div class="answer-header">
+                    <div class="answer-author">{{answer.answer.user.first_name}} {{answer.user.added_by.last_name}}</div>
+                    <div class="answer-date">{{ answer.answer.date_answered }}</div>
+                </div>
+                <div class="answer-content">
+                    <p>{{answer.answer.answer}}</p>
+                </div>
+                <div class="answer-actions">
+                    <form action="" method="post">
+                        <input type="hidden" name="upvote_answer" value="{{answer.answer.pk}}">
+                        {% csrf_token %}
+                        <button type="submit" class="vote-btn {%if answer.is_upvoted%}upvoted{%endif%}" data-answer-id="1">
+                            <i class="fas fa-arrow-up"></i>
+                            <span class="vote-count">{{answer.upvote_count}}</span>
+                        </button>
+
+                    </form>
+                </div>
+            </div>
+
+            {%endfor%}
+        </div>
+        {% else %}
+            <snall>No answers yet. Be the first to share your knowledge!</snall>
+            {%endif%}
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script>
+        // Bookmark functionality
+        const bookmarkBtn = document.getElementById('bookmark-btn');
+        bookmarkBtn.addEventListener('click', function() {
+            this.classList.toggle('active');
+            const icon = this.querySelector('i');
+            if (this.classList.contains('active')) {
+                icon.classList.remove('far');
+                icon.classList.add('fas');
+                // Save to bookmarks
+            } else {
+                icon.classList.remove('fas');
+                icon.classList.add('far');
+                // Remove from bookmarks
+            }
+        });
+
+        // Voting functionality
+        document.querySelectorAll('.vote-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const answerId = this.getAttribute('data-answer-id');
+                const isUpvote = this.querySelector('.fa-arrow-up');
+
+                if (isUpvote) {
+                    this.classList.toggle('upvoted');
+                    const countElement = this.querySelector('.vote-count');
+                    let count = parseInt(countElement.textContent);
+                    count = this.classList.contains('upvoted') ? count + 1 : count - 1;
+                    countElement.textContent = count;
+                }
+            });
+        });
+    </script>
+{% endblock %}

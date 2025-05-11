@@ -1,0 +1,186 @@
+[
+  {
+    "front": "What is the purpose of Java Servlets in web development?",
+    "back": "Java Servlets are used to extend the capabilities of servers by handling requests and responses in a web application."
+  },
+  {
+    "front": "Explain the servlet lifecycle stages.",
+    "back": "The servlet lifecycle includes: init() for initialization, service() for handling requests, and destroy() for cleanup before deletion."
+  },
+  {
+    "front": "What is the role of the init() method in a servlet?",
+    "back": "The init() method is called once when the servlet is first loaded and is used for one-time setup tasks."
+  },
+  {
+    "front": "What does the service() method do in a servlet?",
+    "back": "The service() method processes client requests and generates responses, handling HTTP methods like GET and POST."
+  },
+  {
+    "front": "What is the destroy() method in servlets used for?",
+    "back": "The destroy() method is called before the servlet is removed from service, and it's used to release resources."
+  },
+  {
+    "front": "Define JSP.",
+    "back": "JSP (Java Server Pages) is a server-side technology used to create dynamic, platform-independent web content by embedding Java code in HTML pages."
+  },
+  {
+    "front": "What is the lifecycle of a JSP page?",
+    "back": "The JSP lifecycle includes: Translation, Compilation, Class loading, Instantiation, Initialization (jspInit), Execution (jspService), and Destruction (jspDestroy)."
+  },
+  {
+    "front": "What does the jspInit() method do?",
+    "back": "It initializes the JSP and is called once when the JSP is first loaded."
+  },
+  {
+    "front": "What is the jspService() method responsible for?",
+    "back": "jspService() handles all client requests and sends appropriate responses."
+  },
+  {
+    "front": "Why is jspDestroy() important in JSP lifecycle?",
+    "back": "jspDestroy() is used to clean up resources before the JSP is taken out of service."
+  },
+  {
+    "front": "What are static web pages?",
+    "back": "Static web pages have fixed content, do not change unless edited manually, and are often used for About or Contact pages."
+  },
+  {
+    "front": "What are dynamic web pages?",
+    "back": "Dynamic web pages generate content in real-time based on user interaction and are processed by server-side scripts."
+  },
+  {
+    "front": "What is MVC architecture?",
+    "back": "MVC (Model-View-Controller) is a design pattern that separates application logic into three components: Model (data), View (UI), and Controller (logic)."
+  },
+  {
+    "front": "What is the role of the Model in MVC?",
+    "back": "Model manages the data, logic, and rules of the application."
+  },
+  {
+    "front": "What does the View component do in MVC?",
+    "back": "The View displays data to the user and defines the UI of the application."
+  },
+  {
+    "front": "What does the Controller do in MVC architecture?",
+    "back": "The Controller handles input, manipulates the model, and updates the view accordingly."
+  },
+  {
+    "front": "What is JSTL in JSP?",
+    "back": "JSTL (JavaServer Pages Standard Tag Library) is a collection of custom tags that encapsulate core functionalities in JSP applications."
+  },
+  {
+    "front": "What does the <c:forEach> tag do in JSTL?",
+    "back": "It allows iteration over collections like arrays, lists, or maps."
+  },
+  {
+    "front": "How is <c:if> used in JSTL?",
+    "back": "It is used for conditional rendering of content based on a boolean expression."
+  },
+  {
+    "front": "Why use JSTL over scriptlets?",
+    "back": "JSTL improves code readability, separates logic from presentation, and follows MVC design better than scriptlets."
+  },
+  {
+    "front": "What is XAMPP?",
+    "back": "XAMPP is a free and open-source web server stack package that includes Apache, MySQL, PHP, and Perl."
+  },
+  {
+    "front": "What is JDBC?",
+    "back": "JDBC (Java Database Connectivity) is an API that allows Java programs to connect to and interact with databases."
+  },
+  {
+    "front": "List steps to connect to a database using JDBC.",
+    "back": "1. Load JDBC driver, 2. Establish connection, 3. Create statement, 4. Execute query, 5. Process results, 6. Close connection."
+  },
+  {
+    "front": "What is the use of HttpServletRequest?",
+    "back": "HttpServletRequest provides request information for HTTP servlets like parameters, headers, and client data."
+  },
+  {
+    "front": "What is the use of HttpServletResponse?",
+    "back": "HttpServletResponse is used to send response data to the client, including content and headers."
+  },
+  {
+    "front": "What are JSP implicit objects?",
+    "back": "These are objects automatically available in JSP pages, like request, response, session, out, and pageContext."
+  },
+  {
+    "front": "What is the session object in JSP?",
+    "back": "It maintains data across multiple requests from the same user."
+  },
+  {
+    "front": "What are cookies used for in JSP?",
+    "back": "Cookies store small pieces of data on the client's machine to remember user-specific information."
+  },
+  {
+    "front": "What is a JavaBean?",
+    "back": "A JavaBean is a reusable software component that follows conventions such as having a public no-argument constructor and getter/setter methods."
+  },
+  {
+    "front": "What does <jsp:useBean> do?",
+    "back": "It locates or instantiates a bean and makes it available to the JSP page."
+  },
+  {
+    "front": "What does <jsp:setProperty> do?",
+    "back": "It sets a property of a bean with a value from the request or a specific value."
+  },
+  {
+    "front": "What does <jsp:getProperty> do?",
+    "back": "It retrieves and displays the value of a bean property."
+  },
+  {
+    "front": "What is a filter in a Java web app?",
+    "back": "A filter intercepts requests and responses, allowing preprocessing or postprocessing like logging or authentication."
+  },
+  {
+    "front": "What are the main interfaces in servlet filters?",
+    "back": "Filter, FilterChain, and FilterConfig."
+  },
+  {
+    "front": "What is the role of annotations in Servlets?",
+    "back": "@WebServlet annotation is used to define a servlet without using web.xml."
+  },
+  {
+    "front": "What does REST stand for?",
+    "back": "Representational State Transfer \u2013 a standard for designing networked applications using HTTP."
+  },
+  {
+    "front": "What HTTP methods are associated with CRUD?",
+    "back": "Create: POST, Read: GET, Update: PUT, Delete: DELETE."
+  },
+  {
+    "front": "What is state management?",
+    "back": "State management keeps track of user data across multiple interactions in a web app."
+  },
+  {
+    "front": "How does session tracking work in Java?",
+    "back": "It tracks user sessions using HttpSession, which stores user-specific data between requests."
+  },
+  {
+    "front": "What is the purpose of <c:choose> in JSTL?",
+    "back": "It is a conditional tag that works like a switch-case with <c:when> and <c:otherwise>."
+  },
+  {
+    "front": "What does the <fmt:formatNumber> tag do?",
+    "back": "Formats numeric values according to specified patterns."
+  },
+  {
+    "front": "What is the role of the controller in MVC?",
+    "back": "The controller receives input, processes it, and updates the model and view accordingly."
+  },
+  {
+    "front": "What is the use of request.getParameter()?",
+    "back": "It retrieves data sent by the client via form fields."
+  },
+  {
+    "front": "What is the function of response.sendRedirect()?",
+    "back": "It redirects the client to a different resource, starting a new request."
+  },
+  {
+    "front": "What is a RequestDispatcher?",
+    "back": "Used to forward a request to another resource or include content from another resource."
+  },
+  {
+    "front": "How can files be uploaded in a servlet?",
+    "back": "Use multipart/form-data in the form and @MultipartConfig in the servlet to handle file uploads."
+  }
+]

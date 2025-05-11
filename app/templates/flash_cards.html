@@ -1,98 +1,237 @@
+<!--
+used code from:
+- https://codepen.io/camdenfoucht/pen/NJJQzo
+-->
+
 {% extends 'base.html' %}
 
 {% block content %}
+<style>
+  .wrapper {
+    max-width: 100vw;
+    overflow-x: hidden;
+    text-align: center;
+    padding-bottom: 2rem;
+  }
+
+  .carousel {
+    display: flex;
+    transition: 0.5s ease-in-out;
+  }
+
+  .card {
+    width: 90vw;
+    max-width: 500px;
+    height: 350px;
+    margin: 40px auto;
+    perspective: 1000px;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: transform 0.6s;
+    position: relative;
+    font-size: 1.1rem;
+  }
+
+  .card div {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding: 2rem;
+    backface-visibility: hidden;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: left;
+    font-weight: 500;
+    line-height: 1.4;
+    word-break: break-word;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .card .back {
+    transform: rotateX(180deg);
+  }
+
+  .card.flipped {
+    transform: rotateX(180deg);
+  }
+
+  .prev,
+  .next {
+    width: 100px;
+    padding: 10px;
+    margin: 1rem;
+    font-weight: bold;
+    font-size: 14px;
+    border: none;
+    background-color: #eee;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+  }
+
+  .prev:hover,
+  .next:hover {
+    background-color: #ccc;
+  }
+
+  .bookmark-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    outline: none;
+    margin-top: 1rem;
+  }
+
+  .heart-icon {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    transition: all 0.2s ease;
+  }
+
+  .bookmark-btn.active .heart-icon {
+    fill: red;
+    stroke: red;
+  }
+
+  .bookmark-btn:hover .heart-icon {
+    transform: scale(1.1);
+  }
+
+  @media (max-width: 600px) {
+    .card {
+      height: 400px;
+      font-size: 1rem;
+    }
+
+    .card div {
+      padding: 1rem;
+    }
+  }
+</style>
+
 <h3 style="text-align: center;">AI-generated Flash Cards</h3>
 <p style="text-align: center">From lecture slides</p>
 <form method="get" id="selection form">
                     <div class="mb-3">
                         <label for="module" class="form-label">Module</label>
-                        <select class="form-select" id="module" name="module" required>
+                        <select class="form-select" id="module" name="module" required
+                        onchange="window.location.href='{% url 'flash_cards' %}?module='+this.value">
                             <option value="all">All modules</option>
                             {% for module in modules %}
-                                <option value="{{ module.code }}">
+                                <option value="{{ module.code }}"
+                                    {% if selected_module and selected_module.code == module.code %}selected{% endif %}>
                                     {{ module.code }} - {{ module.name }}
                                 </option>
                             {% endfor %}
                         </select>
-                        <label for="need_mcq" class="form-label">MCQ only?</label>
-                        <input type="checkbox" class="form-check-input" id="need_mcq" name="need_mcq"
-                    </div><br>
-                    <input type="submit" class="btn btn-primary" value="Generate Flash Cards">
+                    </div>
                 </form>
-            </div>
-        </div>
+{% if questions %}
+<div class="wrapper">
+    <div class="carousel">
     </div>
-</div>
+    <button class="prev">Prev</button>
+    <span id="counter">1</span> / {{ questions|length }}
+    <button class="next">Next</button>
+
+    <form action="" method="post">
+      <input id="qid" type="hidden" name="bookmark_question" value="">
+      {% csrf_token %}
+      <button type="submit" class="bookmark-btn {%if is_bookmarked%}active{%endif%}" id="bookmark-btn">
+        <svg class="heart-icon" viewBox="0 0 24 24">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+    </button>
+  </form>
+
+  </div>
+
+{%endif%}
 {% endblock %}
 
 {% block scripts %}
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const isMcqCheckbox = document.getElementById('is_mcq');
-    const optionsContainer = document.getElementById('optionsContainer');
-    const answerField = document.getElementById('answerField');
-    const optionsList = document.getElementById('optionsList');
-    const addOptionBtn = document.getElementById('addOptionBtn');
-    const moduleSelect = document.getElementById('module');
+    const counter = document.getElementById("counter");
+    const qid = document.getElementById("qid");
+    const bookmarkBtn = document.getElementById("bookmark-btn");
+let cards = [
+{%for q in questions %}
+  {
+    qid: "{{ q.question.qid }}",
+    front: "{{ q.question.question }}",
+    back: "{{ q.question.answer }}",
+    has_bookmark: {{ q.has_bookmark|yesno:"true,false" }}
+  },
+{%endfor %}
+];
 
-    // Check if module code is in URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const moduleCode = urlParams.get('code');
-    if (moduleCode) {
-        moduleSelect.value = moduleCode;
+let currentCard = 1,
+  carousel = document.querySelector(".carousel"),
+  next = document.querySelector(".next"),
+  prev = document.querySelector(".prev");
+
+renderCards();
+
+function renderCards() {
+  carousel.style.width = `${cards.length}00vw`;
+  qid.value = cards[0].qid;
+  bookmarkBtn.classList.toggle("active", cards[0].has_bookmark);
+
+  cards.map(el => {
+    let div = document.createElement("div");
+    div.classList.add("card");
+    let front = document.createElement("div");
+    front.classList.add("front");
+    let back = document.createElement("div");
+    back.classList.add("back");
+    front.textContent = el.front;
+    back.textContent = el.back;
+    div.appendChild(front);
+    div.appendChild(back);
+    div.addEventListener("click", function(e) {
+      if (e.target === div || e.target === front || e.target === back) {
+        this.classList.toggle("flipped");
     }
-
-    // Toggle MCQ options
-    isMcqCheckbox.addEventListener('change', function() {
-        if (this.checked) {
-            optionsContainer.style.display = 'block';
-            answerField.style.display = 'none';
-            // Add first two options by default if empty
-            if (optionsList.children.length === 0) {
-                addOption();
-                addOption();
-            }
-        } else {
-            optionsContainer.style.display = 'none';
-            answerField.style.display = 'block';
-        }
     });
+    carousel.appendChild(div);
+  });
+}
 
-    // Add option
-    addOptionBtn.addEventListener('click', addOption);
+next.addEventListener("click", function(e) {
+  if (currentCard >= cards.length) {
+    return;
+  }
 
-    function addOption() {
-        const optionId = Date.now();
-        const optionHtml = `
-            <div class="option-item mb-3 p-3 border rounded" id="option-${optionId}">
-                <div class="mb-2">
-                    <label class="form-label">Option Text</label>
-                    <input type="text" class="form-control" name="options[]" required>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="correct_options[]" value="${optionId}">
-                    <label class="form-check-label">Correct Answer</label>
-                </div>
-                <button type="button" class="btn btn-sm btn-outline-danger mt-2 remove-option" data-id="${optionId}">
-                    <i class="bi bi-trash"></i> Remove
-                </button>
-            </div>
-        `;
-        optionsList.insertAdjacentHTML('beforeend', optionHtml);
-
-        // Add event listener to remove button
-        document.querySelector(`.remove-option[data-id="${optionId}"]`).addEventListener('click', function() {
-            document.getElementById(`option-${optionId}`).remove();
-        });
-    }
-
-    // Initialize existing remove buttons
-    document.querySelectorAll('.remove-option').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const id = this.getAttribute('data-id');
-            document.getElementById(`option-${id}`).remove();
-        });
-    });
+  currentCard++;
+  cardFly();
 });
+
+prev.addEventListener("click", function(e) {
+  if (currentCard - 1 <= 0) {
+    return;
+  }
+  currentCard--;
+  cardFly();
+});
+
+function cardFly() {
+    counter.textContent = currentCard;
+  carousel.style.transform = `translateX(-${currentCard - 1}00vw)`;
+  qid.value = cards[currentCard - 1].qid;
+  bookmarkBtn.classList.toggle("active", cards[currentCard - 1].has_bookmark);
+  document.querySelectorAll('.card').forEach(card => {
+    card.classList.remove('flipped');
+});
+}
 </script>
 {% endblock %}
