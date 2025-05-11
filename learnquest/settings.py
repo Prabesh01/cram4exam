@@ -25,8 +25,8 @@ SECRET_KEY = 'django-insecure-7g#0iyhu-bef%agh097!*-41pznqojh^3jb@@f#xo(v^l+n%lc
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['127.0.0.1','ratta.cote.ws']
+CSRF_TRUSTED_ORIGINS = ['https://ratta.cote.ws']
 
 # Application definition
 
