@@ -108,9 +108,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const isMcqCheckbox = document.getElementById('is_mcq');
     const optionsContainer = document.getElementById('optionsContainer');
     const answerField = document.getElementById('answerField');
+    const questionField = document.getElementById('question');
     const optionsList = document.getElementById('optionsList');
     const addOptionBtn = document.getElementById('addOptionBtn');
     const moduleSelect = document.getElementById('module');
+
+    questionField.focus();
 
     // Check if module code is in URL
     const urlParams = new URLSearchParams(window.location.search);
