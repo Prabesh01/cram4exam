@@ -185,6 +185,18 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById(`option-${id}`).remove();
         });
     });
+
+    // Handle Enter key for form submission and Shift+Enter for new lines
+    const textareas = document.querySelectorAll('textarea');
+    textareas.forEach(textarea => {
+        textarea.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                questionForm.submit();
+            }
+            // Shift+Enter will work normally (creates new line)
+        });
+    });
 });
 </script>
 {% endblock %}
