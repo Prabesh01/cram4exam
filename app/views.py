@@ -109,7 +109,7 @@ def list_question(request):
         questions = Question.objects.filter(~Q(added_by__username="bot"),module__code=code).order_by('date_added')
     else:
         questions = Question.objects.filter(~Q(added_by__username="bot"),module__code=code, sem=Sem.ONE).order_by('date_added')
-    questions=questions.order_by('date_added').prefetch_related('option_set')
+    questions=questions.order_by('-added_by__profile__legit','date_added').prefetch_related('option_set','added_by__profile')
     return render(request, 'qbank.html', {'module': module,'questions':questions})
 
 @login_required

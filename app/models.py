@@ -74,6 +74,7 @@ class Profile(models.Model):
     last_streak = models.DateField(null=True, blank=True)
     year = models.IntegerField(choices=Year.choices, null=True, blank=True)
     sem = models.IntegerField(choices=Sem.choices, null=True, blank=True)
+    legit = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.username
