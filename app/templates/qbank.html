@@ -84,8 +84,10 @@
                     </li>
                     {% endfor %}
                 {%else%}
+                    {%if q.answer %}
                     <i>Provided Answer: </i>
                     <pre><code>{{q.answer}}</code></pre>
+                    {% endif %}
                 {% endif %}
                 </dd>
 

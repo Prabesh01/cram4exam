@@ -254,6 +254,7 @@
             {% endif %}
 
             </div>
+            {% if question.is_mcq or question.answer %}
             <div class="provided-answer">
                 <h3>Provided Answer:</h3>
                 {% if question.is_mcq %}
@@ -268,6 +269,7 @@
             {% endif %}
 
             </div>
+{% endif %}
         </div>
 
         <!-- Answer Form -->
