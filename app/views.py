@@ -308,8 +308,18 @@ def view_question(request, question_id):
         answer_data.append({
             'answer': answer,
             'upvote_count': upvote_count,
-            'is_upvoted': is_upvoted
+            'is_upvoted': is_upvoted,
+            'is_users_answer': answer.user == request.user
         })
+
+    answer_data.sort(
+        key=lambda x: (
+            not x['is_users_answer'],
+            -x['upvote_count'],
+            -x['answer'].date_answered.timestamp() if x['answer'].date_answered else 0
+        )
+    )
+
 
     return render(request, 'question.html', {
         'question': question,
