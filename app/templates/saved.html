@@ -72,15 +72,77 @@
         align-items: center;
       }
     }
+
+        .filter-container {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .filter-row {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        
+        .filter-label {
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: #555;
+        }
+        
+        select {
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: white;
+            min-width: 150px;
+        }
+
+summary {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 1.2em;
+  font-weight: bold;
+  padding: 0.5em 0;
+}
+
+.summary-title {
+  margin-left: 0.3em;
+}        
   </style>
   <header>
     <div class="tab">Answers</div>
     <div class="tab">Questions</div>
 
   </header>
+
+    <div class="filter-container">
+        <div class="filter-row">
+            <div class="filter-group">
+                <label class="filter-label">Module:</label>
+                <select id="moduleFilter">
+                    <option value="">All Modules</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+
+
   <div class="content" id="answered">
     {% for question, answers in grouped_answers.items %}
-    <div class="card" id="answer-{{ answer.pk }}">
+    <div class="card" data-module="{{ question.module }}{% if question.module.year_long %} - {{ question.sem }}{% endif %}">
       <div class="card-header">
         <div>
           <strong>{{ question.module }} {% if question.module.year_long %}[y{{question.module.year}}-sem{{question.sem}}]{%endif%}</strong><br>
@@ -106,9 +168,10 @@
 
   <div class="content" id="bookmarked" style="display:none;">
     {% if questions %}
-    <h3>Contributions</h3>
+    <details>
+    <summary><h3 class="summary-title"><span style="">&#11163;</span>Contributions ({{questions|length}})</h3></summary>
     {% for question in questions %}
-    <div class="card">
+    <div class="card" data-module="{{ question.module }}{% if question.module.year_long %} - {{ question.sem }}{% endif %}">
       <div class="card-header">
         <div>
           <strong>{{ question.module }}</strong><br>
@@ -123,10 +186,11 @@
       </div>
     </div>
     {% endfor %}
-    <h3>Bookmarks</h3>
+    </details>
+    <h3>Bookmarks ({{bookmarks|length}})</h3>
     {% endif %}
     {% for b in bookmarks %}
-    <div class="card">
+    <div class="card" data-module="{{ b.question.module }}{% if b.question.module.year_long %} - {{ b.question.sem }}{% endif %}">
       <div class="card-header">
         <div>
           <strong>{{ b.question.module }}</strong><br>
@@ -170,7 +234,45 @@
   </script>
 
   <script>
+let allModules = new Set();
+function populateDropdown(){
+
+const select = document.getElementById("moduleFilter");
+            const items = document.querySelectorAll('[data-module]');
+            items.forEach(item => {
+                const module = item.getAttribute('data-module');
+                allModules.add(module);
+});
+allModules.forEach(module => {
+                    const option = document.createElement('option');
+                    option.value = module;
+                    option.textContent = module;
+                    select.appendChild(option);
+	});
+}
+
+        function applyFilters() {
+            const moduleFilter = document.getElementById('moduleFilter').value;
+            
+            const items = document.querySelectorAll('[data-module]');
+            
+            items.forEach(item => {
+                const itemModule = item.getAttribute('data-module');
+                
+                let shouldShow = true;
+                
+                if (moduleFilter && itemModule !== moduleFilter) {
+                    shouldShow = false;
+                }
+                
+                item.style.display = shouldShow ? 'block' : 'none';
+            });
+        }
+
+
+        document.getElementById('moduleFilter').addEventListener('change', applyFilters);
     document.addEventListener('DOMContentLoaded', function() {
+        populateDropdown();
         // Add click event listeners to all edit answer links
         document.querySelectorAll('.edit-answer').forEach(function(editLink) {
             editLink.addEventListener('click', function(e) {
