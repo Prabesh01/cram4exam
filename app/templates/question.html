@@ -226,7 +226,7 @@
                 <div>
                     <div class="author">
                         <img src="https://api.dicebear.com/9.x/bottts/svg?seed={{question.added_by}}" alt="Author Avatar" class="author-avatar">
-                        <div class="author-name">{{question.added_by.first_name}} {{question.added_by.last_name}}</div>
+                        <div class="author-name">{{question.added_by.first_name}} {{question.added_by.last_name}}<br><span style="font-weight: normal;">{{ question.date_added|date:"F j, Y" }}</span></div>
                     </div>
                     <div class="question-meta">
                         <span>{{question.module}}</span>
