@@ -229,7 +229,7 @@
                         <div class="author-name">{{question.added_by.first_name}} {{question.added_by.last_name}}<br><span style="font-weight: normal;">{{ question.date_added|date:"F j, Y" }}</span></div>
                     </div>
                     <div class="question-meta">
-                        <span>{{question.module}}</span>
+                        <span><a style="text-decoration:none;" href="{% url 'qbank' %}?module={{question.module.code}}">{{question.module}}</a></span>
                         <span>Year {{question.module.year}}</span>
                         <span>Semester {%if question.module.year_long%}{{question.sem}}{%else%}{{question.module.sem}}{%endif%}</span>
                     </div>
