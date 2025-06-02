@@ -11,6 +11,8 @@ from django.utils import timezone
 from datetime import timedelta
 from datetime import datetime, time
 
+from collections import defaultdict
+
 def generate_daily_questions(user):
     existing_questions = DailyQuestion.objects.filter(user=user, status=False).values_list('question', flat=True)
 
@@ -320,7 +322,12 @@ def get_saves(request):
     answers = UserAnswer.objects.filter(user=request.user).order_by('-date_answered')
     questions = Question.objects.filter(added_by=request.user).order_by('-date_added')
     bookmarks = Bookmark.objects.filter(user=request.user).order_by('-date_bookmarked')
-    return render(request, 'saved.html', {'answers': answers,'questions': questions, 'bookmarks': bookmarks})
+
+    grouped_answers = defaultdict(list)
+    for answer in answers:
+        grouped_answers[answer.question].append(answer)
+
+    return render(request, 'saved.html', {'grouped_answers': dict(grouped_answers),'questions': questions, 'bookmarks': bookmarks})
 
 @login_required
 def delete_question(request, question_id):

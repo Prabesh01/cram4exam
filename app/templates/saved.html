@@ -79,19 +79,26 @@
 
   </header>
   <div class="content" id="answered">
-    {% for answer in answers %}
+    {% for question, answers in grouped_answers.items %}
     <div class="card" id="answer-{{ answer.pk }}">
       <div class="card-header">
         <div>
-          <strong>{{ answer.question.module }} {% if answer.question.module.year_long %}[y{{answer.question.module.year}}-sem{{answer.question.sem}}]{%endif%}</strong><br>
-          <small>{{ answer.question.question }}</small>
+          <strong>{{ question.module }} {% if question.module.year_long %}[y{{question.module.year}}-sem{{question.sem}}]{%endif%}</strong><br>
+          <small>{{ question.question }}</small>
         </div>
       </div>
+
+      <div class="answers-container">
+       {% for answer in answers %}
+      <div class="card answer-card" id="answer-{{ answer.pk }}">
       <p class="answer-content">{{answer.answer}}</p>
       <div class="likes-comments-time">
         <span style="cursor:pointer;" class="edit-answer" data-answer-id="{{ answer.pk }}">Edit Answer</span>
         <span><a href="{% url 'view_question' answer.question.qid %}"> View Question</a></span>
         <span><a href="{% url 'delete_answer' answer.pk %}"> Delete Answer</a></span>
+      </div>
+      </div>
+        {% endfor %}
       </div>
     </div>
     {% endfor %}
