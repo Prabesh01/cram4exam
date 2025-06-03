@@ -102,7 +102,7 @@ class Profile(models.Model):
             diff_days = (today - self.last_streak).days
             if diff_days > 1:
                 self.streak = 0
-
+                self.last_streak=None
                 self.save()
 
 class Bookmark(models.Model):
