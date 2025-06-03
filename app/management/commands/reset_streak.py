@@ -20,5 +20,5 @@ class Command(BaseCommand):
         for user in users:
             if user.profile.last_streak:
                 diff_days = (now_date - user.profile.last_streak).days
-                if diff_days > 2: user.profile.reset_streak()
+                if diff_days >= 2: user.profile.reset_streak()
 
