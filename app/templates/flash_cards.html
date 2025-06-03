@@ -182,6 +182,12 @@ let currentCard = 1,
 
 renderCards();
 
+function decodeHtmlEntities(text) {
+  const textarea = document.createElement('textarea');
+  textarea.innerHTML = text;
+  return textarea.value;
+}
+
 function renderCards() {
   carousel.style.width = `${cards.length}00vw`;
   qid.value = cards[0].qid;
@@ -194,8 +200,8 @@ function renderCards() {
     front.classList.add("front");
     let back = document.createElement("div");
     back.classList.add("back");
-    front.textContent = el.front;
-    back.textContent = el.back;
+    front.textContent = decodeHtmlEntities(el.front);
+    back.textContent = decodeHtmlEntities(el.back);
     div.appendChild(front);
     div.appendChild(back);
     div.addEventListener("click", function(e) {
