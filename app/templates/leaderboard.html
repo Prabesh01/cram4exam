@@ -77,6 +77,12 @@ window.onload = function() {
     , frame = undefined
     , confetti = [];
 
+
+  // Add a variable to track if we should stop creating confetti
+  var stopCreatingConfetti = false;
+  var confettiDuration = 5000; // 5 seconds (change this to your desired duration)
+
+
   var particles = 10
     , spread = 40
     , sizeMin = 3
@@ -246,11 +252,20 @@ window.onload = function() {
       var theme = colorThemes[0]
         , count = 0;
       (function addConfetto() {
+        if (!stopCreatingConfetti) {
         var confetto = new Confetto(theme);
         confetti.push(confetto);
         container.appendChild(confetto.outer);
         timer = setTimeout(addConfetto, spread * random());
+      }
       })(0);
+
+      // Set a timeout to stop creating new confetti after N seconds
+      setTimeout(function() {
+        stopCreatingConfetti = true;
+        clearTimeout(timer);  // Clear the confetti creation timer
+      }, confettiDuration);
+
 
       // Start the loop
       var prev = undefined;
@@ -266,7 +281,7 @@ window.onload = function() {
           }
         }
 
-        if (timer || confetti.length)
+        if (!stopCreatingConfetti || confetti.length)
           return frame = requestAnimationFrame(loop);
 
         // Cleanup
