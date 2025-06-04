@@ -145,6 +145,9 @@ summary {
 
 
   <div class="content" id="answered">
+    {% if not grouped_answers %}
+        Your answers will appear here.
+    {% endif %}
     {% for question, answers in grouped_answers.items %}
     <div class="card" data-module="{{ question.module }}{% if question.module.year_long %} - {{ question.sem }}{% endif %}">
       <div class="card-header">
@@ -192,6 +195,9 @@ summary {
     {% endfor %}
     </details>
     <h3>Bookmarks ({{bookmarks|length}})</h3>
+    {% endif %}
+    {% if not bookmarks %}
+    The questions you bookmarked will appear here.
     {% endif %}
     {% for b in bookmarks %}
     <div class="card" data-module="{{ b.question.module }}{% if b.question.module.year_long %} - {{ b.question.sem }}{% endif %}">
