@@ -68,7 +68,10 @@
             margin-bottom: 1.5rem;
             line-height: 1.7;
         }
-
+        .question-q {
+            white-space: pre-line;
+            display: inline;
+         }
         .author {
             display: flex;
             align-items: center;
@@ -243,7 +246,7 @@
                 </form>
             </div>
             <div class="question-text">
-                {{question.question}}
+                <span class="question-q">{{question.question}}</span>
 
                 {% if question.is_mcq %}
                 <br>
