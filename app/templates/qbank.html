@@ -25,9 +25,11 @@
         dd { margin-left:0; }
     }
     code {
-        display: block;
         padding: 1em;
-        background-color: #eee;
+        display: block;
+}
+    pre, code {
+    background-color: #eee;
     }
     details > summary {
         list-style: none;
@@ -57,6 +59,20 @@ hr:first-of-type {
     margin: 20px 0;
 }
 
+    .question-text {
+        white-space: pre-line;
+        display: inline;
+    }
+    
+    /* Truncate question in collapsed state */
+    details:not([open]) .question-text {
+        display: -webkit-box;
+        -webkit-line-clamp: 3; /* Show only 1 line */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
     </style>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <p style="text-align: center;">{{ module.code }}: <strong>"{{module.name}}"</strong></p>
@@ -80,7 +96,10 @@ hr:first-of-type {
         <div class="prob">
             <details {%if not q.is_mcq%} id = "{{ q.qid }}" {%endif%} >
                 <summary>
-            <h3>{{ q.question }}</h3>
+            <div class="question-container">
+                <h3 class="question-text">{{ q.question }}</h3>
+            </div>
+
             <p>#{{ forloop.counter }}</p>
             {% if q.is_mcq %}
                 {% for option in q.option_set.all %}
@@ -175,7 +194,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     topAnswerElement.innerHTML = `<i>Top Answer: </i><pre><code>${data.top_answer}</code></pre>`;
                     }
                     if (data.self_answers.length > 0) {
-                    selfAnswersElement.innerHTML = `<i>Your Answers: </i><pre>${data.self_answers.map(answer => `<code>${answer}</code>`).join('<br>')}</pre>`;
+                    selfAnswersElement.innerHTML = `<i>Your Answers: </i>${data.self_answers.map(answer => `<pre><code>${answer}</code>`).join('</pre>')}`;
                     }
                 })
                 .catch(error => {
