@@ -68,7 +68,7 @@
             margin-bottom: 1.5rem;
             line-height: 1.7;
         }
-        .question-q {
+        .question-q, .answer-a {
             white-space: pre-line;
             display: inline;
          }
@@ -296,7 +296,7 @@
                     <div class="answer-date">{{ answer.answer.date_answered }}</div>
                 </div>
                 <div class="answer-content">
-                    <p>{{answer.answer.answer}}</p>
+                    <p class="answer-a">{{answer.answer.answer}}</p>
                 </div>
                 <div class="answer-actions">
                     <form action="" method="post">
