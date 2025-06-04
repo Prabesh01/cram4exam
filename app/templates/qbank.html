@@ -95,6 +95,41 @@
         margin: 1.5rem 0;
     }
 
+
+        .filter-container {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .filter-row {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        Add commentMore actions
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        
+        .filter-label {
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: #555;
+        }
+        
+        select {
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: white;
+            min-width: 150px;
+        }
     </style>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <p style="text-align: center;">{{ module.code }}: <strong>"{{module.name}}"</strong></p>
@@ -107,6 +142,24 @@
         <button type="button" class="btn btn-outline-primary filter-btn" data-filter="mcq">MCQ Only</button>
         <button type="button" class="btn btn-outline-primary filter-btn" data-filter="non-mcq">Non-MCQ Only</button>
     </div>
+
+
+    <div class="filter-container">
+        <div class="filter-row">
+            <div class="filter-group">
+                <label class="filter-label">Upload Year:</label>
+                <select id="yearFilter">
+                    <option value="">All Years</option>
+                </select>
+            </div>
+        </div>
+    </div>
+{% if not questions %}
+<div class="text-center mt-4">
+No questions available for this module.<br>
+    <a href="{% url 'add_question' %}?module={{ module.code }}" class="btn btn-primary">+ Add Questions</a>
+</div>
+{% endif %}
         <div class="row g-4">
         {% for q in questions %}
 
@@ -129,7 +182,7 @@
     {% endif %}
     {% endifchanged %}
 
-        <div class="col-lg-6 question-item {% if not q.added_by.profile.legit %}load-more{% endif %}" data-question-type="{% if q.is_mcq %}mcq{% else %}non-mcq{% endif %}">
+        <div class="col-lg-6 question-item {% if not q.added_by.profile.legit %}load-more{% endif %}" data-question-type="{% if q.is_mcq %}mcq{% else %}non-mcq{% endif %}" data-year='{{ q.date_added|date:"Y" }}'>
         <div class="prob">
             <details {%if not q.is_mcq%} id = "{{ q.qid }}" {%endif%} >
                 <summary>
@@ -192,7 +245,48 @@
 {% endblock %}
 {% block scripts %}
 <script>
+let allYears = new Set();
+function populateDropdown(){
+
+const select = document.getElementById("yearFilter");
+            const items = document.querySelectorAll('[data-year]');
+            items.forEach(item => {
+                const year = item.getAttribute('data-year');
+                allYears.add(year);
+});
+allYears.forEach(year => {
+                    const option = document.createElement('option');
+                    option.value = year;
+                    option.textContent = year;
+                    select.appendChild(option);
+	});
+}
+
+        function applyFilters() {
+            const yearFilter = document.getElementById('yearFilter').value;
+            
+            const items = document.querySelectorAll('[data-year]');
+            
+            items.forEach(item => {
+                const itemYear = item.getAttribute('data-year');                
+                let shouldShow = true;
+                
+                if (yearFilter && itemYear !== yearFilter) {
+                    shouldShow = false;
+                }
+                
+if (!item.classList.includes('load-more')){
+                item.style.display = shouldShow ? 'block' : 'none';
+}
+            });
+        }
+
+
+        document.getElementById('yearFilter').addEventListener('change', applyFilters);
+
+
 document.addEventListener('DOMContentLoaded', function() {
+    populateDropdown();
     const filterButtons = document.querySelectorAll('.filter-btn');
 
     filterButtons.forEach(button => {
