@@ -86,7 +86,7 @@ def get_year_sem(email_name):
         if year == cur_year:
             year=1
             sem=1
-        elif cur_year == year+1 and cur_month<9:
+        elif cur_year == year+1 and cur_month<=6:
                 year=1
                 sem=2
     else:
@@ -110,7 +110,7 @@ def get_year_sem(email_name):
         if cur_month<=2:
             year=2
             sem=1
-        elif cur_month<=9:
+        elif cur_month<=6:
             year=2
             sem=2
         else:
