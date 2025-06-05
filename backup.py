@@ -11,7 +11,6 @@ basedir=os.path.dirname(os.path.abspath(__file__))
 
 from dotenv import load_dotenv
 load_dotenv(basedir+'/.env')
-access_token=os.getenv('dropbox_access_token')
 
 to_backup=basedir+"/db.sqlite3"
 
@@ -37,6 +36,14 @@ with open(last_md5_file, 'w') as f: f.write(current_md5)
 
 with open(to_backup,'rb') as f:
     data=f.read()
+
+def get_access_token_from_refresh_token_oauth(api, refresh_token, clientid, client_secret):
+    oauth_url = f"{api}?refresh_token={refresh_token}&grant_type=refresh_token&client_id={clientid}&client_secret={client_secret}"
+    response=requests.post(oauth_url)
+    token=response.json()["access_token"]
+    return token
+
+access_token = get_access_token_from_refresh_token_oauth("https://api.dropbox.com/oauth2/token",os.getenv('dropbox_refresh_token'), os.getenv('dropbox_clientid'), os.getenv('dropbox_client_secret'))
 
 headers = {
     'Authorization': f'Bearer {access_token}',
