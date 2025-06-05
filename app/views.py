@@ -14,7 +14,7 @@ from datetime import datetime, time
 from collections import defaultdict
 
 def generate_daily_questions(user):
-    existing_questions = DailyQuestion.objects.filter(user=user, status=False).values_list('question', flat=True)
+    existing_questions = DailyQuestion.objects.filter(user=user).values_list('question', flat=True)
 
     if user.profile.sem == Sem.TWO:
         questions = Question.objects.filter(
@@ -224,25 +224,27 @@ def add_question(request):
 
 @login_required
 def edit_profile(request):
+    profile=request.user.profile
     if request.method == 'POST':
-        form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
+            generate_daily_questions(request.user)
             return redirect('edit_profile')
     else:
-        form = ProfileForm(instance=request.user.profile)
+        form = ProfileForm(instance=profile)
     now = timezone.now()
     now_date = now.date()
     claimed_today = hours_left = False
-    if request.user.profile.streak:
-        diff_days = (now_date - request.user.profile.last_streak).days
+    if profile.streak:
+        diff_days = (now_date - profile.last_streak).days
         if diff_days < 1:
             claimed_today = True
         if diff_days < 2:
             end_of_day = now.replace(hour=23, minute=59, second=59, microsecond=0)
             hours_left = int((end_of_day - now).total_seconds() // 3600)
         else:
-            request.user.profile.reset_streak()
+            profile.reset_streak()
 
     return render(request, 'edit_profile.html', {
         'form': form,
