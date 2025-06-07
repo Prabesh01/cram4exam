@@ -51,9 +51,6 @@
   }
     </style>
 <div class="your-rank">Leaderboard</div>
-{% if not students %}
-The leaderboard is so empty. No one uses this shit.
-{% endif %}
 {% for stud in students %}
 <div  {% if stud.user == request.user %}
     class="current-user leaderboard"
@@ -66,6 +63,9 @@ The leaderboard is so empty. No one uses this shit.
     <p class="score">🔥 {{ stud.streak }} day streak</p>
     </div>
 {% endfor %}
+{% if not students %}
+The leaderboard is so empty. No one uses this shit.
+{% else %}
 <script>
 'use strict';
 
@@ -297,4 +297,5 @@ window.onload = function() {
   poof();
 };
 </script>
+{% endif %}
 {% endblock %}
