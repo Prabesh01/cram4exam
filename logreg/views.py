@@ -13,6 +13,8 @@ from datetime import datetime
 
 import google_auth_oauthlib.flow
 
+import posthog
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 env_file=BASE_DIR / ".env"
@@ -54,12 +56,16 @@ def callback(request):
     email_name, _ = email_addr.rsplit('@', 1)
 
     year, sem = get_year_sem(email_name)
-    if not year: return redirect('login')
+    if not year:
+        posthog.capture("login_attempt",distinct_id='phid-'+email_name,properties={'$set': {'username':email_name,'email':email_addr}})
+        return redirect('login')
 
     names=email_name.split('.')[:-1]
 
     fname=' '.join(names[:-1]).title()
     lname=names[-1].title()
+
+    posthog.capture("login",distinct_id='phid-'+email_name,properties={'$set': {'username':email_name,'email':email_addr}})
 
     user, created = User.objects.get_or_create(username=email_name, first_name=fname, last_name=lname, email=email_addr)
     l(request, user)

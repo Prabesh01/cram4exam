@@ -212,5 +212,9 @@
         });
     });
     </script>
-
+<script>
+posthog.identify(
+  'phid-{{ user.username }}',
+);
+</script>
 {% endblock %}
