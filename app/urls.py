@@ -20,4 +20,7 @@ urlpatterns = [
     path('profile/', views.edit_profile, name='edit_profile'),
     path('leaderboard/', views.leaderboard, name='lb'),
     path('saved/', views.get_saves, name='saves'),
+
+    path('cwteam/', views.cwteam, name='cwteam'),
+    path('set-cw-status/', views.set_cw_status, name='set-cw_status'),
 ]

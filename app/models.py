@@ -13,6 +13,17 @@ class Year(models.IntegerChoices):
     TWO = 2, 'year 2'
     THREE = 3, 'year 3'
 
+class Role(models.TextChoices):
+    CODING = 'coding', 'Coding vyaidinxu solo'
+    DOCUMENTATION = 'documentation', 'Documentation vyaidinxu solo'
+    FRONTEND = 'frontend', 'Frontend matrai'
+    BACKEND = 'backend', 'Backend matrai'
+    CANT = 'cant', 'kei ni aaudena ;/ need help'
+    WONT = 'wont', 'kei garna vyaidina hola. team ma rakho'
+    PARTIAL_CODING = 'partial_coding', 'halka coding assist'
+    PARTIAL_DOCUMENTATION = 'partial_documentation', 'Halka documentation assist'
+    PARTIAL_ALL = 'partial_all', 'alikiti sab ma help garxu'
+
 class Module(models.Model):
 
     code = models.CharField(max_length=10, unique=True)
@@ -23,6 +34,28 @@ class Module(models.Model):
 
     def __str__(self):
         return self.name
+
+class GroupCousework(models.Model):
+    gcid = models.AutoField(primary_key=True)
+    module = models.ForeignKey(Module, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+
+class Team(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # name = models.CharField(max_length=255)
+    group_coursework = models.ForeignKey(GroupCousework, on_delete=models.CASCADE)
+    looking_for = models.CharField(choices=Role.choices, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class TeamMembership(models.Model):
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    position = models.CharField(choices=Role.choices, null=True, blank=True)
+
+class Designation(models.Model):
+    group_coursework = models.ForeignKey(GroupCousework, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    open_for = models.CharField(choices=Role.choices, null=True, blank=True)
 
 class Question(models.Model):
     qid = models.AutoField(primary_key=True)
@@ -74,6 +107,7 @@ class Profile(models.Model):
     last_streak = models.DateField(null=True, blank=True)
     year = models.IntegerField(choices=Year.choices, null=True, blank=True)
     sem = models.IntegerField(choices=Sem.choices, null=True, blank=True)
+    section = models.IntegerField( null=True, blank=True)
     legit = models.BooleanField(default=False)
 
     def __str__(self):

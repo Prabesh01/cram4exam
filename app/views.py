@@ -1,12 +1,13 @@
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
 from .forms import ProfileForm
 from django.db.models import Q
 from django.http import JsonResponse
 from django.db.models import Count
 from django.contrib import messages
 
-from app.models import Module, Sem, Year, Question, Option, Profile, UserAnswer, DailyQuestion, Bookmark, Upvote
+from app.models import Module, Sem, Year, Question, Option, Profile, UserAnswer, DailyQuestion, Bookmark, Upvote, GroupCousework, Team, TeamMembership, Designation, Role
 from django.utils import timezone
 from datetime import timedelta
 from datetime import datetime, time
@@ -417,3 +418,48 @@ def top_answers(request, question_id):
 # bookmark/undo question
 # upvote/undo answer
 
+@login_required
+def cwteam(request):
+    selected_gcid = request.GET.get('gcid')
+    grp_courseworks = GroupCousework.objects.filter(
+        Q(module__sem=request.user.profile.sem) | Q(module__year_long=True),
+        Q(module__year=request.user.profile.year)
+    )
+    user_team=user_role=None
+    if not selected_gcid:
+        return render(request, 'cwteam.html', {'userteam': None, 'grp_courseworks': grp_courseworks})
+
+    selected_gcid = int(selected_gcid)
+
+    section_filter = request.GET.get('section')
+    membership = TeamMembership.objects.filter(user=request.user, team__group_coursework__gcid=selected_gcid).select_related('team').first()
+    if membership:
+        user_team = membership.team
+    else:
+        user_role=Designation.objects.filter(user=request.user,group_coursework__gcid=selected_gcid)
+
+    teams = []
+    teams_query = Team.objects.filter(group_coursework__gcid=selected_gcid)
+    if section_filter:
+        teams_query = teams_query.filter(user__profile__section=section_filter)
+    teams = teams_query.prefetch_related('teammembership_set__user__profile').select_related('user__profile')
+
+    return render(request, 'cwteam.html', {'userteam': user_team, 'grp_courseworks': grp_courseworks, 'selected_gcid': selected_gcid, 'teams': teams, 'current_section': section_filter, "roles": Role.choices, "user_role":user_role})
+
+def set_cw_status(request):
+    selected_gcid = int(request.POST.get('gcid'))
+    selected_role = request.POST.get('open_for')
+    return_url = f"{reverse('cwteam')}?gcid={selected_gcid}"
+    if selected_gcid and selected_role:
+        group_coursework = get_object_or_404(GroupCousework, gcid=selected_gcid)
+        existing_designation = Designation.objects.filter(user=request.user, group_coursework=group_coursework).first()
+        if existing_designation:
+            if existing_designation.open_for == selected_role:
+                existing_designation.delete()
+                return redirect(return_url)
+        Designation.objects.update_or_create(
+            user=request.user,
+            group_coursework=group_coursework,
+            defaults={'open_for': selected_role}
+        )
+        return redirect(return_url)

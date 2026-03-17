@@ -1,0 +1,222 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 15px;
+    transition: all 0.3s ease;
+}
+
+.role-card {
+    position: relative;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 20px;
+    cursor: pointer;
+    overflow: hidden;
+    background: #fff;
+    text-align: center;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.role-card:hover {
+    border-color: #3b82f6;
+    transform: translateY(-2px);
+}
+
+.card-bg-icon {
+    position: absolute;
+    right: -10px;
+    bottom: -10px;
+    width: 80px;
+    opacity: 0.1; /* Light faded look */
+    pointer-events: none;
+}
+
+/* Hide the actual radio circle */
+.hidden-radio {
+    display: none;
+}
+
+/* Style for when a card is selected */
+.role-card.selected {
+    border-color: #2563eb;
+    background-color: #eff6ff;
+}
+
+.role-card.hidden {
+    display: none;
+}
+
+.unselect-btn {
+    display: none;
+    margin-top: 10px;
+    font-size: 0.8rem;
+    color: #ef4444;
+    background: none;
+    border: none;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.selected .unselect-btn {
+    display: inline-block;
+}
+</style>
+<h3 style="text-align: center;">Find Team for Group Coursework</h3>
+
+<div class="year-sections">
+    {% if not profile.year or not profile.sem %}
+        Please set your year and semester from the <a href="{% url 'edit_profile' %}">profile settings</a>.
+    {% else %}
+        Displaying group-couseworks only for Year: {{ profile.year }} Sem: {{ profile.sem }}.
+        <br>You can change this from your  <a href="{% url 'edit_profile' %}">profile settings</a>.
+<p></p>
+<form method="get" id="selection form">
+                    <div class="mb-3">
+                        <label for="module" class="form-label">Select a Group Coursework</label>
+                        <select class="form-select" id="module" name="module" required
+                        onchange="window.location.href='{% url 'cwteam' %}?gcid='+this.value">
+                            <option value="">--select--</option>
+                            {% for gcid in grp_courseworks %}
+                                <option value="{{ gcid.gcid }}"
+                                    {% if selected_gcid == gcid.gcid %}selected{% endif %}>
+                                    {{ gcid.name }} - {{ gcid.module.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </form>
+{% if not selected_gcid %}
+<!-- leave empty -->
+{% else %}
+{% if not userteam %}
+<!-- roles list selection -->    
+<u>You are not in any team for this coursework. Click on cards below to set or unset your status::</u>
+<p></p>
+<form id="role-form" method="post" action="{% url 'set-cw_status' %}">
+    {% csrf_token %}
+    <div class="card-grid {% if user_role.0.open_for %}single-view{% endif %}" id="cardContainer">
+                <input type="hidden" name="gcid" value="{{ selected_gcid }}">
+
+        {% for value, text in roles %}
+            <div class="role-card {% if user_role.0.open_for == value %}selected{% elif user_role.0.open_for %}hidden{% endif %}"
+                 data-value="{{ value }}">
+                <input type="radio" name="open_for" value="{{ value }}" id="id_{{ value }}" 
+            onchange="this.form.submit()" 
+                       {% if form.instance.open_for == value %}checked{% endif %} class="hidden-radio">
+                
+                <label for="id_{{ value }}" class="card-content">
+                    <img src="{% static 'images/'|add:value|lower|add:'.png' %}" class="card-bg-icon" alt="">
+                    
+                    <p class="role-desc">{{ text }}</p>
+                    
+                </label>
+            </div>
+        {% endfor %}
+    </div>
+</form>
+
+<!-- create team form -->
+<hr>
+
+        <h4>Create Your Own Team</h4>
+        <form method="post" action="{% url 'create_team' %}">
+            {% csrf_token %}
+            <input type="hidden" name="gcid" value="{{ selected_gcid }}">
+            
+            <div class="mb-3">
+                <label class="form-label">Team Name</label>
+                <input type="text" name="team_name" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Looking For (Optional Default Role)</label>
+                <select class="form-select" name="looking_for">
+                    <option value="">-- No specific requirement --</option>
+                    {% for value, text in roles %}
+                        <option value="{{ value }}">{{ text }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Create Team</button>
+        </form>
+{% else %}
+
+<!-- your team [LEAVE]-->
+<!-- editable form if team owner -->
+<div class="card p-4 mt-3">
+                <h4>Your Team</h4>
+                {% if userteam.user != request.user %}
+"{{ userteam.user.username }}" added you to the team - "{{ userteam.name }}" as "{{ userteam.looking_for }}". 
+                {% endif %}
+                <form method="post" action="{% url 'update_team' userteam.id %}">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Team Name</label>
+                        <input type="text" name="team_name" class="form-control" value="{{ userteam.name|default:'My Team' }}" required>
+                    </div>
+
+                    <h5 class="mt-4">Members</h5>
+                    {% for membership in userteam.teammembership_set.all %}
+                        <div class="row mb-2">
+                            <div class="col-md-5">
+                                <input type="email" class="form-control" value="{{ membership.user.email }}" disabled>
+                            </div>
+                            <div class="col-md-5">
+                                <select name="role_{{ membership.user.id }}" class="form-select">
+                                    {% for value, text in roles %}
+                                        <option value="{{ value }}" {% if membership.position == value %}selected{% endif %}>{{ text }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                             {% if userteam.user == request.user %}
+                            <div class="col-md-2">
+                                <a href="{% url 'kick_member' userteam.id membership.user.id %}" class="btn btn-sm btn-outline-danger w-100">Remove</a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+{% if userteam.user == request.user %}
+                    <h5 class="mt-4">Add New Member</h5>
+                    <div class="row mb-3">
+                        <div class="col-md-5">
+                            <input type="email" name="new_member_email" class="form-control" placeholder="New member's email address">
+                        </div>
+                        <div class="col-md-5">
+                            <select name="new_member_role" class="form-select">
+                                <option value="">-- Select Role --</option>
+                                {% for value, text in roles %}
+                                    <option value="{{ value }}">{{ text }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+ {% endif %}
+                    <button type="submit" class="btn btn-success mt-2">Save Changes</button>
+                </form>
+
+                <hr>
+
+                <form method="post" action="{% url 'leave_team' userteam.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to leave/disband this team?');">
+                        Leave / Disband Team
+                    </button>
+                </form>
+            </div>
+{% endif %}
+
+
+<!-- teams [Create your team] -->
+<!-- users looking to join a team -->
+
+{% endif %}
+{% endif %}
+
+</div>
+{% endblock %}
