@@ -535,55 +535,43 @@ def update_team(request, team_id):
     team = get_object_or_404(Team, id=team_id)
     gcid = team.group_coursework.gcid
 
-    # Only team members can update; only the owner can do full edits
-    is_member = TeamMembership.objects.filter(team=team, user=request.user).exists()
-    if not is_member:
-        messages.error(request, 'You are not a member of this team.')
-        return redirect(f'/cwteam/?gcid={gcid}')
-
     is_owner = team.user == request.user
 
-    if is_owner:
-        team_name = request.POST.get('team_name', '').strip()
-        looking_for = request.POST.get('looking_for') or None
-        if team_name:
-            team.name = team_name
-        team.looking_for = looking_for
-        team.save()
+    if not is_owner:
+        messages.error(request, 'Only team owner can update the team.')
+        return redirect(f'/cwteam/?gcid={gcid}')
 
-        # Update roles for existing members
-        for membership in team.teammembership_set.all():
-            role_key = f'role_{membership.user.id}'
-            new_role = request.POST.get(role_key) or None
-            membership.position = new_role
-            membership.save()
+    team_name = request.POST.get('team_name', '').strip()
+    looking_for = request.POST.get('looking_for') or None
+    if team_name:
+        team.name = team_name
+    team.looking_for = looking_for
+    team.save()
 
-        # Add new member if provided
-        new_email = request.POST.get('new_member_email', '').strip()
-        new_role = request.POST.get('new_member_role') or None
-        if new_email:
-            try:
-                new_user = User.objects.get(email=new_email)
-                already_in = TeamMembership.objects.filter(
-                    user=new_user,
-                    team__group_coursework=team.group_coursework
-                ).exists()
-                if already_in:
-                    messages.warning(request, f'{new_email} is already in a team.')
-                elif new_user == request.user:
-                    messages.warning(request, 'You are already in the team.')
-                else:
-                    TeamMembership.objects.create(team=team, user=new_user, position=new_role)
-                    messages.success(request, f'{new_email} added to the team.')
-            except User.DoesNotExist:
-                messages.warning(request, f'No user found with email {new_email}.')
-    else:
-        # Non-owners can only update their own role
-        membership = TeamMembership.objects.get(team=team, user=request.user)
-        role_key = f'role_{request.user.id}'
+    # Update roles for existing members
+    for membership in team.teammembership_set.all():
+        role_key = f'role_{membership.user.id}'
         new_role = request.POST.get(role_key) or None
         membership.position = new_role
         membership.save()
+
+    # Add new member if provided
+    new_email = request.POST.get('new_member_email', '').strip()
+    new_role = request.POST.get('new_member_role') or None
+    if new_email:
+        try:
+            new_user = User.objects.get(email=new_email)
+            already_in = TeamMembership.objects.filter(
+                user=new_user,
+                team__group_coursework=team.group_coursework
+            ).exists()
+            if already_in:
+                messages.warning(request, f'{new_email} is already in a team.')
+            else:
+                TeamMembership.objects.create(team=team, user=new_user, position=new_role)
+                messages.success(request, f'{new_email} added to the team.')
+        except User.DoesNotExist:
+            messages.warning(request, f'No user found with email {new_email}.')
 
     messages.success(request, 'Team updated.')
     return redirect(f'/cwteam/?gcid={gcid}')

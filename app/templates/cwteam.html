@@ -245,15 +245,16 @@
 
                 <form method="post" action="{% url 'leave_team' userteam.pk %}">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to leave/disband this team?');">
-                        Leave / Disband Team
+                    <button type="submit" class="btn btn-danger" 
+                     {% if userteam.user == request.user %}  onclick="return confirm('Are you sure you want to leave and disband this team?');" {% else %} onclick="return confirm('Are you sure you want to leave this team?');" {% endif %}>  
+                     {% if userteam.user == request.user %}   Leave & Disband Team
+                     {% else %}  Leave Team {% endif %}
                     </button>
                 </form>
             </div>
 <hr>
         <h4>Other Teams</h4>
 {% endif %}
-
 
 <!-- teams [Create your team] -->
 <!-- users looking to join a team -->
