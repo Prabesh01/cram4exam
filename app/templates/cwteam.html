@@ -120,8 +120,8 @@
 </form>
 
 <!-- create team form -->
+<div id ="createTeam" style="display: none;">
 <hr>
-
         <h4>Create Your Own Team</h4>
         <form method="post" action="{% url 'create_team' %}">
             {% csrf_token %}
@@ -133,17 +133,47 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Looking For (Optional Default Role)</label>
+                <label class="form-label">You team is Looking For...</label>
                 <select class="form-select" name="looking_for">
-                    <option value="">-- No specific requirement --</option>
+                    <option value="">-- select --</option>
                     {% for value, text in roles %}
                         <option value="{{ value }}">{{ text }}</option>
                     {% endfor %}
                 </select>
             </div>
+                    <h5 class="mt-4">Members</h5>
+                    <div class="row mb-3">
+                        <div class="col-md-5">
+                            <input type="email" name="new_member_email" class="form-control" value="{{ request.user.email}}" readonly>
+                        </div>
+                        <div class="col-md-5">
+                            <select name="new_member_role" class="form-select" required>
+                                <option value="">-- Select Role --</option>
+                                {% for value, text in roles %}
+                                    <option value="{{ value }}">{{ text }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-5">
+                            <input type="email" name="new_member_email" class="form-control" placeholder="New member's email address">
+                        </div>
+                        <div class="col-md-5">
+                            <select name="new_member_role" class="form-select" required>
+                                <option value="">-- Select Role --</option>
+                                {% for value, text in roles %}
+                                    <option value="{{ value }}">{{ text }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
 
             <button type="submit" class="btn btn-primary">Create Team</button>
         </form>
+        </div>
+<hr>
+        <h4>Teams</h4> <b id="create_q" style="cursor: pointer;" onclick="toggleCreateTeam()">Create your own team ?</b>
 {% else %}
 
 <!-- your team [LEAVE]-->
@@ -151,7 +181,8 @@
 <div class="card p-4 mt-3">
                 <h4>Your Team</h4>
                 {% if userteam.user != request.user %}
-"{{ userteam.user.username }}" added you to the team - "{{ userteam.name }}" as "{{ userteam.looking_for }}". 
+"{{ userteam.user.username }}" added you to the team - "{{ userteam.name }}" as "{{ userteam.looking_for }}". You can leave the team if that's not what you want.
+                {% else %} 
                 {% endif %}
                 <form method="post" action="{% url 'update_team' userteam.id %}">
                     {% csrf_token %}
@@ -161,11 +192,21 @@
                         <input type="text" name="team_name" class="form-control" value="{{ userteam.name|default:'My Team' }}" required>
                     </div>
 
+            <div class="mb-3">
+                <label class="form-label">You team is Looking For...</label>
+                <select class="form-select" name="looking_for">
+                    <option value="">-- select --</option>
+                    {% for value, text in roles %}
+                        <option value="{{ value }}"  {% if userteam.looking_for == value %}selected{% endif %}>{{ text }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
                     <h5 class="mt-4">Members</h5>
                     {% for membership in userteam.teammembership_set.all %}
                         <div class="row mb-2">
                             <div class="col-md-5">
-                                <input type="email" class="form-control" value="{{ membership.user.email }}" disabled>
+                                <input type="email" class="form-control" value="{{ membership.user.email }}" {% if membership.user == userteam.user %}readonly{% endif %}>
                             </div>
                             <div class="col-md-5">
                                 <select name="role_{{ membership.user.id }}" class="form-select">
@@ -174,7 +215,7 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                             {% if userteam.user == request.user %}
+                             {% if userteam.user != membership.user and userteam.user == request.user%}
                             <div class="col-md-2">
                                 <a href="{% url 'kick_member' userteam.id membership.user.id %}" class="btn btn-sm btn-outline-danger w-100">Remove</a>
                             </div>
@@ -196,8 +237,8 @@
                             </select>
                         </div>
                     </div>
- {% endif %}
                     <button type="submit" class="btn btn-success mt-2">Save Changes</button>
+ {% endif %}
                 </form>
 
                 <hr>
@@ -209,6 +250,8 @@
                     </button>
                 </form>
             </div>
+<hr>
+        <h4>Other Teams</h4>
 {% endif %}
 
 
@@ -219,4 +262,17 @@
 {% endif %}
 
 </div>
+<script>
+        const createTeamDiv = document.getElementById('createTeam');
+const create_q = document.getElementById('create_q');
+function toggleCreateTeam() {
+        if (createTeamDiv.style.display === 'none') {
+            createTeamDiv.style.display = 'block';
+            create_q.textContent = "";
+        } else {
+            createTeamDiv.style.display = 'none';
+            create_q.textContent = "Create your own team ?";
+        }
+    }
+</script>
 {% endblock %}

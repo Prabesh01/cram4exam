@@ -22,5 +22,9 @@ urlpatterns = [
     path('saved/', views.get_saves, name='saves'),
 
     path('cwteam/', views.cwteam, name='cwteam'),
-    path('set-cw-status/', views.set_cw_status, name='set-cw_status'),
+    path('cwteam/set-cw-status/', views.set_cw_status, name='set-cw_status'),
+path('cwteam/create/', views.create_team, name='create_team'),
+path('cwteam/update/<int:team_id>/', views.update_team, name='update_team'),
+path('cwteam/kick/<int:team_id>/<int:user_id>/', views.kick_member, name='kick_member'),
+path('cwteam/leave/<int:team_id>/', views.leave_team, name='leave_team'),    
 ]

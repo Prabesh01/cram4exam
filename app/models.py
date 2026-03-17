@@ -42,7 +42,7 @@ class GroupCousework(models.Model):
 
 class Team(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, null=True, blank=True)
     group_coursework = models.ForeignKey(GroupCousework, on_delete=models.CASCADE)
     looking_for = models.CharField(choices=Role.choices, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

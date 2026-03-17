@@ -6,6 +6,7 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.db.models import Count
 from django.contrib import messages
+from django.contrib.auth.models import User
 
 from app.models import Module, Sem, Year, Question, Option, Profile, UserAnswer, DailyQuestion, Bookmark, Upvote, GroupCousework, Team, TeamMembership, Designation, Role
 from django.utils import timezone
@@ -440,9 +441,7 @@ def cwteam(request):
 
     teams = []
     teams_query = Team.objects.filter(group_coursework__gcid=selected_gcid)
-    if section_filter:
-        teams_query = teams_query.filter(user__profile__section=section_filter)
-    teams = teams_query.prefetch_related('teammembership_set__user__profile').select_related('user__profile')
+    teams = teams_query
 
     return render(request, 'cwteam.html', {'userteam': user_team, 'grp_courseworks': grp_courseworks, 'selected_gcid': selected_gcid, 'teams': teams, 'current_section': section_filter, "roles": Role.choices, "user_role":user_role})
 
@@ -463,3 +462,173 @@ def set_cw_status(request):
             defaults={'open_for': selected_role}
         )
         return redirect(return_url)
+    
+@login_required
+def create_team(request):
+    if request.method != 'POST':
+        return redirect('cwteam')
+
+    gcid = request.POST.get('gcid')
+    team_name = request.POST.get('team_name', '').strip()
+    looking_for = request.POST.get('looking_for') or None
+
+    if not gcid or not team_name:
+        messages.add_message(request, messages.WARNING, "Team name is required!")
+        return redirect(f'/cwteam/?gcid={gcid}')
+
+    gc = get_object_or_404(GroupCousework, gcid=gcid)
+
+    # Prevent user from being in multiple teams for the same coursework
+    already_in = TeamMembership.objects.filter(
+        user=request.user,
+        team__group_coursework=gc
+    ).exists()
+    if already_in:
+        messages.add_message(request, messages.WARNING, 'You are already in a team for this coursework.')
+        return redirect(f'/cwteam/?gcid={gcid}')
+
+    team = Team.objects.create(
+        user=request.user,
+        name=team_name,
+        group_coursework=gc,
+        looking_for=looking_for,
+    )
+
+    # Add creator as first member
+    creator_role = request.POST.getlist('new_member_role')
+    creator_role_value = creator_role[0] if creator_role else None
+    TeamMembership.objects.create(team=team, user=request.user, position=creator_role_value)
+
+    # Add additional members from the second member row
+    emails = request.POST.getlist('new_member_email')
+    roles = request.POST.getlist('new_member_role')
+
+    # Skip index 0 (creator's disabled field), process from index 1
+    for email, role in zip(emails[1:], roles[1:]):
+        email = email.strip()
+        if not email:
+            continue
+        try:
+            member = User.objects.get(email=email)
+            if member == request.user:
+                continue
+            already_in_any = TeamMembership.objects.filter(
+                user=member,
+                team__group_coursework=gc
+            ).exists()
+            if already_in_any:
+                messages.add_message(request, messages.WARNING, f'{email} is already in another team.')
+                continue
+            TeamMembership.objects.create(team=team, user=member, position=role or None)
+        except User.DoesNotExist:
+            messages.add_message(request, messages.WARNING, f'No user found with email {email}.')
+
+    messages.success(request, 'Team created successfully.')
+    return redirect(f'/cwteam/?gcid={gcid}')
+
+
+@login_required
+def update_team(request, team_id):
+    if request.method != 'POST':
+        return redirect('cwteam')
+
+    team = get_object_or_404(Team, id=team_id)
+    gcid = team.group_coursework.gcid
+
+    # Only team members can update; only the owner can do full edits
+    is_member = TeamMembership.objects.filter(team=team, user=request.user).exists()
+    if not is_member:
+        messages.error(request, 'You are not a member of this team.')
+        return redirect(f'/cwteam/?gcid={gcid}')
+
+    is_owner = team.user == request.user
+
+    if is_owner:
+        team_name = request.POST.get('team_name', '').strip()
+        looking_for = request.POST.get('looking_for') or None
+        if team_name:
+            team.name = team_name
+        team.looking_for = looking_for
+        team.save()
+
+        # Update roles for existing members
+        for membership in team.teammembership_set.all():
+            role_key = f'role_{membership.user.id}'
+            new_role = request.POST.get(role_key) or None
+            membership.position = new_role
+            membership.save()
+
+        # Add new member if provided
+        new_email = request.POST.get('new_member_email', '').strip()
+        new_role = request.POST.get('new_member_role') or None
+        if new_email:
+            try:
+                new_user = User.objects.get(email=new_email)
+                already_in = TeamMembership.objects.filter(
+                    user=new_user,
+                    team__group_coursework=team.group_coursework
+                ).exists()
+                if already_in:
+                    messages.warning(request, f'{new_email} is already in a team.')
+                elif new_user == request.user:
+                    messages.warning(request, 'You are already in the team.')
+                else:
+                    TeamMembership.objects.create(team=team, user=new_user, position=new_role)
+                    messages.success(request, f'{new_email} added to the team.')
+            except User.DoesNotExist:
+                messages.warning(request, f'No user found with email {new_email}.')
+    else:
+        # Non-owners can only update their own role
+        membership = TeamMembership.objects.get(team=team, user=request.user)
+        role_key = f'role_{request.user.id}'
+        new_role = request.POST.get(role_key) or None
+        membership.position = new_role
+        membership.save()
+
+    messages.success(request, 'Team updated.')
+    return redirect(f'/cwteam/?gcid={gcid}')
+
+
+@login_required
+def kick_member(request, team_id, user_id):
+    team = get_object_or_404(Team, id=team_id)
+    gcid = team.group_coursework.gcid
+
+    if team.user != request.user:
+        messages.error(request, 'Only the team owner can remove members.')
+        return redirect(f'/cwteam/?gcid={gcid}')
+
+    target_user = get_object_or_404(User, id=user_id)
+
+    if target_user == request.user:
+        messages.error(request, 'Use "Leave Team" to remove yourself.')
+        return redirect(f'/cwteam/?gcid={gcid}')
+
+    TeamMembership.objects.filter(team=team, user=target_user).delete()
+    messages.success(request, f'{target_user.username} has been removed from the team.')
+    return redirect(f'/cwteam/?gcid={gcid}')
+
+
+@login_required
+def leave_team(request, team_id):
+    if request.method != 'POST':
+        return redirect('cwteam')
+
+    team = get_object_or_404(Team, id=team_id)
+    gcid = team.group_coursework.gcid
+
+    is_member = TeamMembership.objects.filter(team=team, user=request.user).exists()
+    if not is_member:
+        messages.error(request, 'You are not in this team.')
+        return redirect(f'/cwteam/?gcid={gcid}')
+
+    if team.user == request.user:
+        # Owner disbands the entire team
+        team.delete()  # cascades to TeamMembership
+        messages.success(request, 'Team has been disbanded.')
+    else:
+        # Non-owner just leaves
+        TeamMembership.objects.filter(team=team, user=request.user).delete()
+        messages.success(request, 'You have left the team.')
+
+    return redirect(f'/cwteam/?gcid={gcid}')
