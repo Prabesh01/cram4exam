@@ -318,7 +318,7 @@
 <div class="card p-4 mt-3">
                 <h4>Your Team</h4>
                 {% if userteam.user != request.user %}
-"{{ userteam.user.username }}" added you to the team - "{{ userteam.name }}" as "{{ userteam.looking_for }}". You can leave the team if that's not what you want.
+"{{ userteam.user.username }}" added you to the team - "{{ userteam.name }}". You can leave the team if that's not what you want.
                 {% else %} 
                 {% endif %}
                 <form method="post" action="{% url 'update_team' userteam.id %}">
