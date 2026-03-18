@@ -19,10 +19,11 @@ class Role(models.TextChoices):
     FRONTEND = 'frontend', 'Frontend matrai'
     BACKEND = 'backend', 'Backend matrai'
     CANT = 'cant', 'kei ni aaudena ;/ need help'
-    WONT = 'wont', 'kei garna vyaidina hola. team ma rakho'
-    PARTIAL_CODING = 'partial_coding', 'halka coding assist'
-    PARTIAL_DOCUMENTATION = 'partial_documentation', 'Halka documentation assist'
-    PARTIAL_ALL = 'partial_all', 'alikiti sab ma help garxu'
+    PASSIVE = 'passive', 'kei garna vyaidina hola. team ma rakho'
+    CODING_ASSIST = 'coding_assist', 'halka coding assist'
+    DOCUMENTATION_ASSIST = 'documentation_assist', 'Halka documentation assist'
+    OVERALL_ASSIST = 'overall_assist', 'alikiti sab ma help garxu'
+    EMOTIONAL_SUPPORT = 'emotional_support', 'Vibe Manager + Coke/Momo sponsor'
 
 class Module(models.Model):
 
