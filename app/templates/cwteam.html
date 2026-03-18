@@ -8,6 +8,62 @@
     gap: 15px;
     transition: all 0.3s ease;
 }
+.team-card-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 15px;
+    transition: all 0.3s ease;
+}
+
+/* Container: flexible and responsive */
+.user-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* Slightly smaller min-width */
+    gap: 12px;
+}
+
+/* Card: Minimal border, subtle shadow on hover */
+.user-card {
+    border: 1px solid #f1f5f9;
+    border-radius: 8px;
+    padding: 12px 16px;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: box-shadow 0.2s;
+}
+
+.user-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* Typography: Smaller and cleaner */
+.user-name {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+/* Badge: Compact & subtle */
+.badge-looking-for {
+    display: inline-flex;
+    align-items: center;
+    font-size: 11px;
+    color: #64748b;
+    background: #f8fafc;
+    padding: 4px 8px;
+    border-radius: 4px;
+    width: fit-content;
+}
+
+.badge-icon {
+    width: 14px;
+    height: 14px;
+    margin-right: 4px;
+    color: #94a3b8;
+}
 
 .role-card {
     position: relative;
@@ -21,6 +77,16 @@
     transition: transform 0.2s, border-color 0.2s;
 }
 
+.team-card{
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 20px;
+    cursor: pointer;
+    overflow: hidden;
+    background: #fff;
+    text-align: center;
+}
+
 .role-card:hover {
     border-color: #3b82f6;
     transform: translateY(-2px);
@@ -31,7 +97,7 @@
     right: -10px;
     bottom: -10px;
     width: 80px;
-    opacity: 0.1; /* Light faded look */
+    opacity: 0.3; /* Light faded look */
     pointer-events: none;
 }
 
@@ -63,6 +129,78 @@
 
 .selected .unselect-btn {
     display: inline-block;
+}
+
+/* Base Badge Styling */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1;
+    border-radius: 9999px; /* Gives the classic "pill" shape */
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+}
+
+/* Specific Style: Team Member Role */
+.badge-role {
+    background-color: #f1f5f9; /* Light slate gray */
+    color: #475569; /* Darker slate gray for contrast */
+    border: 1px solid #e2e8f0;
+    margin-left: 8px; /* Spacing from the name */
+}
+
+/* Specific Style: "Looking For" Open Position */
+.badge-looking-for {
+    background-color: #ecfdf5; /* Light emerald green */
+    color: #059669; /* Deep emerald green */
+    border: 1px dashed #34d399; /* Dashed border to imply an empty/open slot */
+    margin-left: 12px;
+}
+
+/* Optional icon styling for the "Looking for" badge */
+.badge-icon {
+    width: 14px;
+    height: 14px;
+    margin-right: 4px;
+}
+
+/* Layout helpers for the examples above */
+.team-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.team-name {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #1e293b;
+}
+
+.team-members-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.member-item {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.member-item:last-child {
+    border-bottom: none;
+}
+
+.member-name {
+    font-size: 0.95rem;
+    color: #334155;
 }
 </style>
 <h3 style="text-align: center;">Find Team for Group Coursework</h3>
@@ -110,7 +248,6 @@
                 
                 <label for="id_{{ value }}" class="card-content">
                     <img src="{% static 'images/'|add:value|lower|add:'.png' %}" class="card-bg-icon" alt="">
-                    
                     <p class="role-desc">{{ text }}</p>
                     
                 </label>
@@ -257,7 +394,56 @@
 {% endif %}
 
 <!-- teams [Create your team] -->
+     <div class="team-card-grid {% if user_role.0.open_for %}single-view{% endif %}" id="cardContainer">
+{% if not teams %}
+<p>No teams available...</p>
+{% endif %}
+ {% for team in teams %}
+             <div class="team-card"
+                 data-value="{{ value }}">
+
+<div class="team-header">
+    <h3 class="team-name">{{ team.name }}</h3>
+    {% if team.looking_for %}
+        <span class="badge badge-looking-for">
+            <svg class="badge-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          team-card      <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z" />
+            </svg>
+            Vacancy: {{ team.looking_for }}
+        </span>
+    {% endif %}
+</div>
+
+<ul class="team-members-list">
+    {% for member in team.teammembership_set.all %}
+     <li class="member-item">
+        <span class="member-name">{{ member.user.username }}</span>
+        <span class="badge badge-role">{{ member.position }}</span>
+    </li>
+    {% endfor %}
+</ul>
+</div>
+ {% endfor %}
+ </div>
 <!-- users looking to join a team -->
+<h4>Users Looking for a Team</h4>
+{% if not users_looking_for_team %}
+No users looking for team...
+{% endif %}
+<div class="user-card-grid">
+
+{% for designation in users_looking_for_team %}
+<div class="user-card">
+    <h3 class="team-name">{{ designation.user.username }}</h3>
+    <span class="badge badge-looking-for">
+        <svg class="badge-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+      team-card      <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z" />
+        </svg>
+        Open for "{{ designation.open_for }}"
+    </span>
+</div>
+{% endfor %}
+    </div>
 
 {% endif %}
 {% endif %}

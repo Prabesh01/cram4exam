@@ -441,9 +441,11 @@ def cwteam(request):
 
     teams = []
     teams_query = Team.objects.filter(group_coursework__gcid=selected_gcid)
-    teams = teams_query
+    teams = teams_query.prefetch_related('teammembership_set__user')
 
-    return render(request, 'cwteam.html', {'userteam': user_team, 'grp_courseworks': grp_courseworks, 'selected_gcid': selected_gcid, 'teams': teams, 'current_section': section_filter, "roles": Role.choices, "user_role":user_role})
+    users_looking_for_team = Designation.objects.filter(group_coursework__gcid=selected_gcid)
+
+    return render(request, 'cwteam.html', {'userteam': user_team, 'grp_courseworks': grp_courseworks, 'selected_gcid': selected_gcid, 'teams': teams, 'current_section': section_filter, "roles": Role.choices, "user_role":user_role, "users_looking_for_team":users_looking_for_team})
 
 def set_cw_status(request):
     selected_gcid = int(request.POST.get('gcid'))
@@ -498,6 +500,8 @@ def create_team(request):
     creator_role = request.POST.getlist('new_member_role')
     creator_role_value = creator_role[0] if creator_role else None
     TeamMembership.objects.create(team=team, user=request.user, position=creator_role_value)
+    # remove any open designation for this coursework since user is now in a team
+    Designation.objects.filter(user=request.user, group_coursework=gc).delete()
 
     # Add additional members from the second member row
     emails = request.POST.getlist('new_member_email')
@@ -520,6 +524,7 @@ def create_team(request):
                 messages.add_message(request, messages.WARNING, f'{email} is already in another team.')
                 continue
             TeamMembership.objects.create(team=team, user=member, position=role or None)
+            Designation.objects.filter(user=request.user, group_coursework=gc).delete()
         except User.DoesNotExist:
             messages.add_message(request, messages.WARNING, f'No user found with email {email}.')
 
@@ -569,6 +574,7 @@ def update_team(request, team_id):
                 messages.warning(request, f'{new_email} is already in a team.')
             else:
                 TeamMembership.objects.create(team=team, user=new_user, position=new_role)
+                Designation.objects.filter(user=request.user, group_coursework=team.group_coursework).delete()
                 messages.success(request, f'{new_email} added to the team.')
         except User.DoesNotExist:
             messages.warning(request, f'No user found with email {new_email}.')
