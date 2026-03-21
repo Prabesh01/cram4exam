@@ -66,8 +66,18 @@ modules=[
         "year_long": True,
         "year": 3,
         "semester": 1,
+        "q_sem":1,
+        "json_file": 'pdfs/y3/datanweb-sem1.json'
+    },
+    {
+        "module_code":"CC6012NP",
+        "module_name": "Data and Web Development",
+        "year_long": True,
+        "year": 3,
+        "semester": 1,
         "q_sem":2,
-        "json_file": 'pdfs/y3/datanweb.json'
+        "preserve": True,
+        "json_file": 'pdfs/y3/datanweb-sem2.json'
     },
     {
         "module_code":"CS6004NP",

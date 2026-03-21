@@ -1,0 +1,326 @@
+[
+  {
+    "front": "What are the 6 levels of Bloom's Taxonomy (lowest to highest)?",
+    "back": "1. Remember\n2. Understand\n3. Apply\n4. Analyze\n5. Evaluate\n6. Create"
+  },
+  {
+    "front": "Bloom's Level 1 – Remember: What does it mean and what are the action verbs?",
+    "back": "Definition: Retrieve/recall basic facts from memory.\nVerbs: list, define, recall, identify, name, state, describe.\nDB Example: 'List the main SQL DDL commands' or 'Recall ACID properties.'"
+  },
+  {
+    "front": "Bloom's Level 2 – Understand: What does it mean and what are the action verbs?",
+    "back": "Definition: Explain, interpret, or summarize concepts.\nVerbs: explain, describe, summarize, classify, compare, interpret, paraphrase.\nDB Example: 'Explain the difference between INNER JOIN and LEFT JOIN.'"
+  },
+  {
+    "front": "Bloom's Level 3 – Apply: What does it mean and what are the action verbs?",
+    "back": "Definition: Use knowledge in familiar or new but similar situations.\nVerbs: apply, demonstrate, solve, execute, implement, use, show.\nDB Example: 'Write a SELECT query with WHERE, GROUP BY, HAVING.'"
+  },
+  {
+    "front": "Bloom's Level 4 – Analyze: What does it mean and what are the action verbs?",
+    "back": "Definition: Break information into parts, find relationships, compare.\nVerbs: analyze, compare, differentiate, organize, attribute, examine, deconstruct.\nDB Example: 'Differentiate between OLTP and OLAP database designs.'"
+  },
+  {
+    "front": "Bloom's Level 5 – Evaluate: What does it mean and what are the action verbs?",
+    "back": "Definition: Make judgments based on criteria or standards.\nVerbs: evaluate, judge, critique, justify, defend, assess, rate.\nDB Example: 'Critique the choice of NoSQL vs RDBMS for a social media feed.'"
+  },
+  {
+    "front": "Bloom's Level 6 – Create: What does it mean and what are the action verbs?",
+    "back": "Definition: Produce new/original work, design, or invent.\nVerbs: design, create, construct, develop, formulate, invent, generate, build.\nDB Example: 'Design a complete relational database schema for an e-commerce system.'"
+  },
+  {
+    "front": "What is Relational Algebra (RA)?",
+    "back": "A procedural query language with a rigorous mathematical foundation.\n- Uses operators like σ (select), π (project), ⋈ (join)\n- Mainly used internally by DBMS and for academic/theoretical purposes\n- Deals only with the manipulative part (DML) of the relational model"
+  },
+  {
+    "front": "What is SQL (Structured Query Language)?",
+    "back": "A declarative query language used in real-world databases.\n- Uses English-like commands: SELECT, WHERE, JOIN\n- Built on relational algebra concepts\n- Deals with BOTH structural (DDL) and manipulative (DML) parts\n- Used by users and developers for real-world database interaction"
+  },
+  {
+    "front": "What are the key differences between Relational Algebra and SQL?",
+    "back": "RA → Procedural | SQL → Declarative\nRA → Math operators (σ, π, ⋈) | SQL → English-like (SELECT, WHERE, JOIN)\nRA → Theoretical/internal to DBMS | SQL → Practical/real-world\nRA → Only DML | SQL → DDL + DML\nRA → Base concept | SQL → Superset of RA"
+  },
+  {
+    "front": "RA Operator σ (sigma) — what does it do and what is its SQL equivalent?",
+    "back": "Operator: σ (Selection / RESTRICT)\nPurpose: Selects ROWS that satisfy a given condition\nSQL Equivalent: WHERE clause\nExample: σ(Credit_points > 3)(Course) → SELECT * FROM Course WHERE Credit_points > 3;"
+  },
+  {
+    "front": "RA Operator π (pi) — what does it do and what is its SQL equivalent?",
+    "back": "Operator: π (Projection / PROJECT)\nPurpose: Selects specific COLUMNS from a relation\nSQL Equivalent: SELECT clause\nExample: π(Name, Student_Number)(Student) → SELECT Name, Student_Number FROM Student;"
+  },
+  {
+    "front": "RA Operator ⋈ (bowtie) — what does it do and what is its SQL equivalent?",
+    "back": "Operator: ⋈ (Join)\nPurpose: Combines tuples from two relations based on a matching condition\nSQL Equivalent: JOIN ... ON\nExample: Students ⋈ Students.sid=Marks.sid Marks"
+  },
+  {
+    "front": "RA Operator ∪ — what does it do and what is its SQL equivalent?",
+    "back": "Operator: ∪ (Union)\nPurpose: Combines tuples from two relations\nSQL Equivalent: UNION (removes duplicates) / UNION ALL (keeps duplicates)\nNote: Both relations must have the same number of compatible columns."
+  },
+  {
+    "front": "RA Operator ∩ — what does it do and what is its SQL equivalent?",
+    "back": "Operator: ∩ (Intersection)\nPurpose: Returns tuples that are COMMON to both relations\nSQL Equivalent: INTERSECT"
+  },
+  {
+    "front": "RA Operator − (minus) — what does it do and what is its SQL equivalent?",
+    "back": "Operator: − (Set Difference)\nPurpose: Returns tuples present in Relation 1 but NOT in Relation 2\nSQL Equivalent: EXCEPT / MINUS"
+  },
+  {
+    "front": "RA Operator ρ (rho) — what does it do and what is its SQL equivalent?",
+    "back": "Operator: ρ (Rename)\nPurpose: Renames a relation or an attribute\nSQL Equivalent: AS keyword"
+  },
+  {
+    "front": "SQL: How do you get all students who appear in Current_Marks but NOT in Old_Marks?",
+    "back": "SQL:\nSELECT student FROM Current_Marks\nEXCEPT\nSELECT student FROM Old_Marks;\n\nRA: π(student)(Current_Marks) − π(student)(Old_Marks)"
+  },
+  {
+    "front": "SQL: How do you display all students in BIT degree from both Y2 and Y3 tables?",
+    "back": "SQL:\nSELECT student FROM Y3_student WHERE degree = 'BIT'\nUNION\nSELECT student FROM Y2_student WHERE degree = 'BIT';\n\nRA: σ(degree='BIT')(Y3_student) ∪ σ(degree='BIT')(Y2_student)"
+  },
+  {
+    "front": "SQL: How do you show all students in Y3 who scored 'B' in any subject?",
+    "back": "SQL:\nSELECT Y3_student.student\nFROM Y3_student\nJOIN Current_Marks ON Y3_student.student = Current_Marks.student\nWHERE Current_Marks.mark = 'B';\n\nRA: π(student)(Y3_student ⋈ σ(mark='B')(Current_Marks))"
+  },
+  {
+    "front": "What is the syntax for CREATE TABLE in SQL?",
+    "back": "CREATE TABLE table_name (\n  column_name data_type [constraints],\n  ...\n);\n\nExample:\nCREATE TABLE Students (\n  sid CHAR(20) PRIMARY KEY,\n  name CHAR(30),\n  login CHAR(20),\n  age INTEGER\n);"
+  },
+  {
+    "front": "What is the syntax for INSERT INTO in SQL?",
+    "back": "INSERT INTO table_name (col1, col2, ...)\nVALUES (val1, val2, ...);\n\nExample:\nINSERT INTO Students (sid, name, email, age)\nVALUES (53688, 'Smith', 'smith@ee', 18);\n\nNote: Strings use single quotes; numbers do not."
+  },
+  {
+    "front": "What are the rules for INSERT INTO?",
+    "back": "1. Column order must match the order of values\n2. Strings must be in single quotes '...'\n3. Numeric values need no quotes\n4. Columns with NULL or DEFAULT can be omitted\n5. If column names are omitted, values must be in the exact order defined in the table, and all NOT NULL columns must be included"
+  },
+  {
+    "front": "What is the syntax for UPDATE in SQL?",
+    "back": "UPDATE table_name\nSET col1 = val1, col2 = val2, ...\nWHERE condition;\n\nExample:\nUPDATE Students\nSET email = 'smith123@ee', age = 19\nWHERE sid = 53688;\n\nWarning: Without WHERE, ALL rows are updated!"
+  },
+  {
+    "front": "What is the syntax for ALTER TABLE in SQL?",
+    "back": "ALTER TABLE table_name\nADD column_name data_type;\n\nExample:\nALTER TABLE Students\nADD phone_number VARCHAR2(15);\n\nAlso used to: MODIFY (change data type), DROP COLUMN (remove a column)"
+  },
+  {
+    "front": "What is the syntax for DROP TABLE in SQL?",
+    "back": "DROP TABLE table_name;\n\nExample:\nDROP TABLE Students;\n\nImportant: This PERMANENTLY deletes the table schema AND all its data. It cannot be undone!"
+  },
+  {
+    "front": "What are the three types of SQL privileges (with examples)?",
+    "back": "1. DML Privileges: INSERT, UPDATE, DELETE, SELECT\n2. DDL Privileges: CREATE, ALTER, DROP\n3. Administrative: ALL PRIVILEGES, GRANT OPTION\n\nGrant all: GRANT ALL PRIVILEGES TO 'username';\nGrant specific: GRANT INSERT, UPDATE, DELETE TO 'username';"
+  },
+  {
+    "front": "What is Database Recovery?",
+    "back": "The process of restoring the database to the last correct and consistent state that existed BEFORE a failure occurred.\n\nIt ensures the Consistency, Integrity, and Durability of the database — the C, I, and D of ACID properties."
+  },
+  {
+    "front": "What are the 5 main reasons database recovery is needed?",
+    "back": "1. System Failures – hardware crash, software bugs, power failure\n2. Transaction Failures – deadlock, network issues, logical errors\n3. Human Errors – accidental deletion, wrong updates, incorrect data entry\n4. Security Breaches – hacking, malware, unauthorized access\n5. Natural Disasters – fire, flood, earthquake"
+  },
+  {
+    "front": "What are the 5 states in the Transaction State Transition Diagram?",
+    "back": "1. ACTIVE – transaction is executing\n2. PARTIALLY COMMITTED – all operations done, not yet saved permanently\n3. COMMITTED – transaction saved successfully; moves to TERMINATED\n4. FAILED – error detected; transaction cannot proceed\n5. ABORTED – transaction rolled back; moves to TERMINATED"
+  },
+  {
+    "front": "In the State Transition Diagram, what triggers each transition?",
+    "back": "BEGIN TRANSACTION → ACTIVE\nEND TRANSACTION → PARTIALLY COMMITTED\nCOMMIT → COMMITTED → TERMINATED\nABORT (from ACTIVE) → FAILED\nABORT (from PARTIALLY COMMITTED) → FAILED\nFAILED → ABORTED → TERMINATED"
+  },
+  {
+    "front": "What are the three database recovery methods?",
+    "back": "1. Deferred Update – changes are NOT written to the database until a transaction commits. On failure: just discard the log (no UNDO needed, only REDO possible).\n2. Immediate/Intermediate Update – changes are written to the database BEFORE commit. On failure: may need UNDO (incomplete) or REDO (completed but not reflected).\n3. Shadow Paging – maintains two page tables (current + shadow). On failure: discard current page table and revert to shadow."
+  },
+  {
+    "front": "In database recovery with checkpoints, what is the UNDO list?",
+    "back": "The UNDO list contains transactions that STARTED but did NOT COMMIT before the system failure.\nThese need to be rolled back (undone) because their changes are incomplete and unreliable."
+  },
+  {
+    "front": "In database recovery with checkpoints, what is the REDO list?",
+    "back": "The REDO list contains transactions that COMMITTED before the system failure but whose changes may NOT have been written to disk.\nThese need to be re-applied (redone) to ensure durability."
+  },
+  {
+    "front": "In database recovery with checkpoints, what is 'Do Nothing'?",
+    "back": "'Do Nothing' (Unaffected) applies to transactions that COMPLETED BEFORE the checkpoint was taken.\nSince a checkpoint guarantees the data was written to disk, these transactions need no redo or undo."
+  },
+  {
+    "front": "EXAM QUESTION: T1–T5 checkpoint scenario. Categorize each transaction:\nT1: started before checkpoint, did NOT complete\nT2: started before checkpoint, completed before failure\nT3: started after checkpoint, completed before failure\nT4: completed BEFORE the checkpoint\nT5: started after checkpoint, did NOT complete",
+    "back": "T1 → UNDO (started before checkpoint, not completed)\nT2 → REDO (started before checkpoint, completed after it)\nT3 → REDO (started after checkpoint, completed before failure)\nT4 → DO NOTHING / Unaffected (completed before checkpoint)\nT5 → UNDO (started after checkpoint, not completed)"
+  },
+  {
+    "front": "EXAM QUESTION (variant 2): Categorize:\nT1: completed before checkpoint\nT2: started before checkpoint, completed before failure\nT3: started before checkpoint, did NOT complete\nT4: started after checkpoint, completed before failure\nT5: started after checkpoint, did NOT complete",
+    "back": "T1 → DO NOTHING (completed before checkpoint)\nT2 → REDO\nT3 → UNDO\nT4 → REDO\nT5 → UNDO"
+  },
+  {
+    "front": "What is Shadow Paging in database recovery?",
+    "back": "Shadow Paging maintains TWO copies of the page table:\n- Current page table: used during active transactions\n- Shadow page table: a safe backup copy from before changes began\n\nOn failure: discard the current page table and revert to the shadow.\nOn commit: make current page table the new shadow.\n\nAdvantage: No need for undo/redo logs. Disadvantage: High storage overhead."
+  },
+  {
+    "front": "What are the ANSI-SPARC three levels of data abstraction?",
+    "back": "1. External Level (View Level) – what individual users see; each user can have a custom view\n2. Conceptual Level (Logical Level) – what data is stored and how it is related; hides physical details\n3. Internal Level (Physical Level) – how data is physically stored on disk (files, indexes, storage structures)\n\nMapping: External↔Conceptual and Conceptual↔Internal"
+  },
+  {
+    "front": "What is Data Independence?",
+    "back": "The ability to change the schema at one level without affecting the schema at the next higher level.\n\nTwo types:\n1. Physical Data Independence – change internal/physical schema without affecting the conceptual schema\n2. Logical Data Independence – change conceptual schema without affecting external/user views\n\nMappings between levels make this possible."
+  },
+  {
+    "front": "What are the main types of data models?",
+    "back": "1. Hierarchical Model – tree structure, parent-child relationships\n2. Network Model – graph structure, records linked with pointers (many-to-many)\n3. Relational Model – data stored in tables (relations); most widely used\n4. Object-Oriented Model – data stored as objects\n5. Entity-Relationship (ER) Model – conceptual design tool\n6. NoSQL Models – document, key-value, graph, column-family"
+  },
+  {
+    "front": "What is Entity Integrity?",
+    "back": "A rule ensuring that every table has a Primary Key (PK) that is:\n- UNIQUE (no two rows have the same PK value)\n- NOT NULL (PK cannot be empty)\n\nExamples from JobsNepal scenario:\n- Company → Company Registration Number (PK)\n- Job Posting → Job ID (PK)\n- Candidate → Candidate ID (PK)"
+  },
+  {
+    "front": "What is Referential Integrity?",
+    "back": "A rule ensuring that a Foreign Key (FK) value in one table must either:\n- Match an existing Primary Key value in the referenced table, OR\n- Be NULL (if the FK allows nulls)\n\nExample: In JobsNepal, every Job Posting must reference a valid Company Registration Number."
+  },
+  {
+    "front": "What is Domain Integrity?",
+    "back": "A rule ensuring that all values in a column fall within a defined set of valid values.\n\nExamples from JobsNepal:\n- Job Type: only 'Full-Time', 'Part-Time', or 'Internship'\n- Salary: between 20,000 – 500,000\n- Application Status: only 'Pending', 'Accepted', or 'Rejected'\n- Application Date: must be a valid date"
+  },
+  {
+    "front": "ANSI-SPARC Exam Q: How do the three levels relate to each other?",
+    "back": "External Level is supported by the Conceptual Level — views are derived from the conceptual schema.\nConceptual Level is supported by the Internal Level — logical structures are mapped to physical storage.\n\nMappings between levels enable DATA INDEPENDENCE: changes at one level don't break the level above it."
+  },
+  {
+    "front": "Why is mapping needed in ANSI-SPARC architecture?",
+    "back": "Mappings translate requests/data between levels:\n- External-Conceptual Mapping: translates user view queries to the conceptual schema\n- Conceptual-Internal Mapping: translates logical queries to physical storage access\n\nWithout mappings, a physical storage change would break all user applications. Mappings shield users from underlying changes — enabling data independence."
+  },
+  {
+    "front": "What are ACID properties in database transactions?",
+    "back": "A – Atomicity: A transaction is all-or-nothing. Either all operations complete, or none do.\nC – Consistency: A transaction moves the database from one valid state to another.\nI – Isolation: Concurrent transactions don't interfere with each other.\nD – Durability: Once committed, changes persist even if the system crashes."
+  },
+  {
+    "front": "SQL: Write a query to show all students who got 'A' in Current_Marks.",
+    "back": "SQL:\nSELECT * FROM Current_Marks WHERE mark = 'A';\n\nRA:\nσ(mark='A')(Current_Marks)"
+  },
+  {
+    "front": "SQL: Write a query to show students who took Java and their marks.",
+    "back": "SQL:\nSELECT student, mark FROM Current_Marks WHERE course = 'Java';\n\nRA:\nπ(student, mark)(σ(course='Java')(Current_Marks))"
+  },
+  {
+    "front": "SQL: Write a query to show student name and session of courses they are taking (Current_Marks joined with Course).",
+    "back": "SQL:\nSELECT Current_Marks.student, Course.session\nFROM Current_Marks\nJOIN Course ON Current_Marks.course = Course.course;\n\nRA:\nπ(student, session)(Current_Marks ⋈ Current_Marks.course=Course.course Course)"
+  },
+  {
+    "front": "What is a Transaction in a database?",
+    "back": "A transaction is a logical unit of work that consists of one or more database operations (read/write) that must be executed as a whole.\n\nIt must follow ACID properties: Atomicity, Consistency, Isolation, Durability.\n\nExample: Transferring money from account A to B involves debit A AND credit B — both must succeed or both must fail."
+  },
+  {
+    "front": "What is a Checkpoint in database recovery?",
+    "back": "A checkpoint is a recorded point in time where the DBMS guarantees that all committed transactions BEFORE the checkpoint have been successfully written to disk.\n\nPurpose: Reduces recovery time — transactions before the checkpoint are already safe ('Do Nothing'), so recovery only needs to handle transactions after the checkpoint."
+  },
+  {
+    "front": "What is the difference between Deferred Update and Immediate Update recovery?",
+    "back": "Deferred Update:\n- Changes written to LOG only during transaction\n- Changes written to DATABASE only after COMMIT\n- On failure: only REDO needed (no UNDO, because DB was never changed)\n\nImmediate Update:\n- Changes written to DATABASE before COMMIT\n- On failure: may need UNDO (incomplete) or REDO (committed but not on disk)"
+  },
+  {
+    "front": "What is the JobsNepal.com case scenario referential integrity rule?",
+    "back": "1. Every Job Posting must reference a valid Company (FK: Company Registration Number)\n2. Every Application must reference a valid Candidate (FK: Candidate ID)\n3. Every Application must reference a valid Job Posting (FK: Job ID)\n4. A Candidate cannot apply for the same job more than once (UNIQUE constraint on Candidate ID + Job ID)"
+  },
+  {
+    "front": "What are the domain integrity rules for the Leisure World Tours & Travels system?",
+    "back": "- Tour Type: only 'Adventure', 'Trekking', 'Sightseeing', or 'Cultural'\n- Booking Status: only 'Pending', 'Confirmed', or 'Cancelled'\n- Duration and Price: must be logically consistent (positive values)\n- Tour Package ID: must be unique\n- Customer ID: must be unique\n- Booking ID: must be unique\n- Booking Date: must be a valid date"
+  },
+  {
+    "front": "What are the entities in the Leisure World Tours & Travels system?",
+    "back": "1. Tour Package – identified by Tour Package ID (PK)\n2. Customer – identified by Customer ID (PK)\n3. Booking – identified by Booking ID (PK), links Customer (FK) and Tour Package (FK)\n\nConstraint: A customer cannot book the same tour more than once at a given period — enforced with a UNIQUE constraint on (Customer ID, Tour Package ID, Period)."
+  },
+  {
+    "front": "What is the correct order for CREATING tables with foreign keys?",
+    "back": "Always create the REFERENCED (parent) table FIRST, then the REFERENCING (child) table.\n\nExample for JobsNepal:\n1. CREATE TABLE Company\n2. CREATE TABLE JobPosting (has FK to Company)\n3. CREATE TABLE Candidate\n4. CREATE TABLE Application (has FK to JobPosting AND Candidate)\n\nReason: FK must point to an existing table."
+  },
+  {
+    "front": "What is the correct order for DROPPING tables with foreign keys?",
+    "back": "Always DROP the REFERENCING (child) table FIRST, then the REFERENCED (parent) table.\n\nThis is the REVERSE order of creation.\n\nExample for JobsNepal:\n1. DROP TABLE Application\n2. DROP TABLE JobPosting\n3. DROP TABLE Candidate\n4. DROP TABLE Company\n\nReason: Cannot delete a parent table while a child table still references it."
+  },
+  {
+    "front": "SQL: Write a CREATE TABLE statement for a GoldRate table with daily rates per tola and per 10gm.",
+    "back": "CREATE TABLE GoldRate (\n  rate_id INT PRIMARY KEY,\n  rate_date DATE NOT NULL,\n  price_per_tola DECIMAL(10,2) NOT NULL,\n  price_per_10gm DECIMAL(10,2) NOT NULL\n);"
+  },
+  {
+    "front": "SQL: Write an UPDATE statement to change today's gold rate per tola and per 10gm.",
+    "back": "UPDATE GoldRate\nSET price_per_tola = 150000,\n    price_per_10gm = 128570\nWHERE rate_date = SYSDATE;\n\n(Use SYSDATE in Oracle or CURDATE() in MySQL for today's date)"
+  },
+  {
+    "front": "What is the PRODUCT (Cartesian Product) operation in Relational Algebra?",
+    "back": "The PRODUCT (×) combines every row from relation R with every row from relation S.\n\nIf R has 3 rows and S has 2 rows → result has 3×2 = 6 rows.\nSQL Equivalent: SELECT * FROM R, S; (with no JOIN condition)\n\nPractical use: Usually followed by a selection (σ) to filter meaningful combinations — this is essentially a JOIN."
+  },
+  {
+    "front": "What is the DIVIDE operation in Relational Algebra?",
+    "back": "The DIVIDE (÷) operation finds all values in relation R that are associated with ALL values in relation S.\n\nExample: Find students who have taken ALL courses.\n\nNo direct SQL equivalent — typically implemented using NOT EXISTS or double EXCEPT/MINUS."
+  },
+  {
+    "front": "What are DDL commands in SQL? Give examples.",
+    "back": "DDL = Data Definition Language — defines/modifies database STRUCTURE.\n\nCommands:\n- CREATE TABLE – create a new table\n- ALTER TABLE – modify existing table (add/modify/drop columns)\n- DROP TABLE – permanently delete a table\n- CREATE INDEX – create an index\n- CREATE VIEW – create a virtual table\n\nDDL changes affect the SCHEMA, not the data."
+  },
+  {
+    "front": "What are DML commands in SQL? Give examples.",
+    "back": "DML = Data Manipulation Language — works with the DATA inside tables.\n\nCommands:\n- SELECT – retrieve data\n- INSERT INTO – add new rows\n- UPDATE – modify existing rows\n- DELETE – remove rows\n\nDML commands can be rolled back (undone) in a transaction."
+  },
+  {
+    "front": "What is the difference between DELETE and DROP TABLE?",
+    "back": "DELETE:\n- DML command\n- Removes specific ROWS from a table\n- Table structure (schema) remains\n- Can be rolled back\n- Example: DELETE FROM Students WHERE age < 18;\n\nDROP TABLE:\n- DDL command\n- Removes the ENTIRE TABLE including schema and all data\n- Cannot be rolled back\n- Example: DROP TABLE Students;"
+  },
+  {
+    "front": "What is the difference between UNION and UNION ALL in SQL?",
+    "back": "UNION:\n- Combines results from two queries\n- Automatically REMOVES duplicate rows\n- Slower (has to check for duplicates)\n\nUNION ALL:\n- Combines results from two queries\n- KEEPS all rows including duplicates\n- Faster (no duplicate checking)\n\nBoth require the same number and type of columns."
+  },
+  {
+    "front": "What is the difference between WHERE and HAVING in SQL?",
+    "back": "WHERE:\n- Filters ROWS before grouping\n- Cannot use aggregate functions (SUM, COUNT, AVG...)\n- Example: WHERE age > 18\n\nHAVING:\n- Filters GROUPS after GROUP BY\n- Used with aggregate functions\n- Example: HAVING COUNT(*) > 5\n\nOrder: WHERE → GROUP BY → HAVING"
+  },
+  {
+    "front": "SQL: Get student names, their marks, and course names (3-table join)",
+    "back": "SQL:\nSELECT Students.Name, Marks.Score, Courses.Course_name\nFROM Students\nJOIN Marks ON Students.sid = Marks.sid\nJOIN Courses ON Marks.Course_id = Courses.course_id;\n\nRA:\nπ(Name,Score,Course_name)((Students ⋈ Students.sid=Marks.sid Marks) ⋈ Marks.course_id=Courses.course_id Courses)"
+  },
+  {
+    "front": "What is the difference between PRIMARY KEY and FOREIGN KEY?",
+    "back": "PRIMARY KEY:\n- Uniquely identifies each row in a table\n- Must be UNIQUE and NOT NULL\n- One per table\n- Example: student_id INT PRIMARY KEY\n\nFOREIGN KEY:\n- Links one table to the primary key of another\n- Enforces referential integrity\n- Can be NULL (if optional relationship)\n- Example: FOREIGN KEY (dept_id) REFERENCES Department(dept_id)"
+  },
+  {
+    "front": "What is OLTP vs OLAP?",
+    "back": "OLTP (Online Transaction Processing):\n- Daily operations: INSERT, UPDATE, DELETE\n- Many short, fast transactions\n- Normalized database design\n- Example: banking system, e-commerce orders\n\nOLAP (Online Analytical Processing):\n- Data analysis and reporting\n- Few, complex, read-heavy queries\n- Denormalized (star/snowflake schema)\n- Example: business intelligence dashboards"
+  },
+  {
+    "front": "What is Normalization and why does it reduce redundancy?",
+    "back": "Normalization is the process of organizing a database to reduce data redundancy and improve data integrity.\n\nBy splitting data into related tables:\n- Each piece of data is stored ONCE (no duplication)\n- Updates only need to happen in ONE place\n- Reduces UPDATE, INSERT, and DELETE anomalies\n\nForms: 1NF → 2NF → 3NF → BCNF"
+  },
+  {
+    "front": "What are the 5 Normal Forms?",
+    "back": "1NF (First): No repeating groups; each column has atomic (indivisible) values\n2NF (Second): In 1NF + no partial dependencies (non-key attributes depend on whole PK)\n3NF (Third): In 2NF + no transitive dependencies (non-key attributes don't depend on other non-key attributes)\nBCNF (Boyce-Codd): Stricter 3NF — every determinant must be a candidate key\n4NF: In BCNF + no multi-valued dependencies"
+  },
+  {
+    "front": "What is the difference between a star schema and a snowflake schema?",
+    "back": "Star Schema:\n- Central fact table connected directly to dimension tables\n- Simpler, faster queries\n- More data redundancy in dimension tables\n\nSnowflake Schema:\n- Dimension tables are further normalized (split into sub-dimensions)\n- Less redundancy, more storage efficiency\n- More complex queries (more joins needed)\n\nBoth are used in data warehousing / OLAP."
+  },
+  {
+    "front": "SQL: How do you grant and revoke privileges in SQL?",
+    "back": "GRANT:\nGRANT SELECT, INSERT ON Students TO 'alice';\nGRANT ALL PRIVILEGES ON database.* TO 'admin';\n\nREVOKE:\nREVOKE INSERT ON Students FROM 'alice';\n\nWith grant option (user can grant to others):\nGRANT SELECT ON Students TO 'alice' WITH GRANT OPTION;"
+  },
+  {
+    "front": "What is an Index in a database and why is it used?",
+    "back": "An index is a data structure that speeds up data retrieval on a table column.\n\nWithout index: Full table scan (slow)\nWith index: Direct lookup (fast)\n\nTrade-off: Speeds up SELECT but slows INSERT/UPDATE/DELETE (index must be updated)\n\nCreated with: CREATE INDEX idx_name ON table(column);\nUsed for: Frequently searched columns, JOIN keys, ORDER BY columns"
+  },
+  {
+    "front": "What is a View in SQL?",
+    "back": "A View is a virtual table created from a SELECT query. It doesn't store data itself.\n\nSyntax:\nCREATE VIEW view_name AS\nSELECT columns FROM table WHERE condition;\n\nBenefits:\n- Simplifies complex queries\n- Provides security (hides sensitive columns)\n- Abstracts schema changes from users\n\nCorresponds to the EXTERNAL level in ANSI-SPARC architecture."
+  },
+  {
+    "front": "How does the State Transition Diagram apply to a real FYP (Final Year Project) scenario? Give an example.",
+    "back": "Example: Online Payment Process\n- ACTIVE: User initiates payment\n- PARTIALLY COMMITTED: Payment details submitted\n- COMMITTED → TERMINATED: Payment confirmed and recorded\n- FAILED (ABORT): Payment rejected (insufficient funds, network error)\n- ABORTED → TERMINATED: Payment rolled back, balance unchanged\n\nThis ensures ATOMICITY — either the payment fully completes, or nothing is charged."
+  },
+  {
+    "front": "EXAM: What is the need for mapping in ANSI-SPARC?",
+    "back": "Mappings translate data/queries between the three levels:\n\n1. External-to-Conceptual mapping: converts a user's view-level query into operations on the conceptual schema\n2. Conceptual-to-Internal mapping: converts logical operations into physical storage access\n\nWhy needed:\n- Without mappings, any change to physical storage would break all user applications\n- Mappings enable DATA INDEPENDENCE — changes at lower levels are hidden from users above"
+  },
+  {
+    "front": "EXAM: Explain the difference between logical and physical data independence.",
+    "back": "Physical Data Independence:\n- Ability to change the INTERNAL (physical) schema WITHOUT changing the conceptual schema\n- Example: Moving data from HDD to SSD, changing file organization — apps are unaffected\n\nLogical Data Independence:\n- Ability to change the CONCEPTUAL schema WITHOUT changing external views\n- Example: Adding a new table/column — existing user views remain unaffected\n- Harder to achieve than physical independence"
+  },
+  {
+    "front": "What is the difference between Hierarchical and Network data models?",
+    "back": "Hierarchical Model:\n- Data organized as a TREE (one parent, many children)\n- Simple but rigid: each child has exactly ONE parent\n- Example: org charts, file systems\n- Limitation: cannot represent many-to-many relationships\n\nNetwork Model:\n- Data organized as a GRAPH (nodes and pointers)\n- Each record can have MULTIPLE parents\n- Can represent many-to-many relationships\n- More flexible but complex to navigate"
+  },
+  {
+    "front": "What is a transaction log (write-ahead log) and why is it important for recovery?",
+    "back": "A transaction log records ALL changes made by every transaction BEFORE they are applied to the database.\n\nEach log entry contains:\n- Transaction ID\n- Data item changed\n- Old value (before image) — used for UNDO\n- New value (after image) — used for REDO\n\nImportance: On system failure, the log is used to UNDO incomplete transactions and REDO committed ones, restoring database consistency."
+  }
+]
