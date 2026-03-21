@@ -168,8 +168,8 @@ let cards = [
 {%for q in questions %}
   {
     qid: "{{ q.question.qid }}",
-    front: "{{ q.question.question }}",
-    back: "{{ q.question.answer }}",
+    front: "{{ q.question.question|escapejs }}",
+    back: "{{ q.question.answer|escapejs }}",
     has_bookmark: {{ q.has_bookmark|yesno:"true,false" }}
   },
 {%endfor %}
