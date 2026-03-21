@@ -60,6 +60,24 @@ modules=[
         "preserve": True,
         "json_file": 'pdfs/y2/sem2/se.json'
     },
+    {
+        "module_code":"CC6012NP",
+        "module_name": "Data and Web Development",
+        "year_long": True,
+        "year": 3,
+        "semester": 1,
+        "q_sem":2,
+        "json_file": 'pdfs/y3/datanweb.json'
+    },
+    {
+        "module_code":"CS6004NP",
+        "module_name": "Application Development",
+        "year_long": True,
+        "year": 3,
+        "semester": 1,
+        "q_sem":2,
+        "json_file": 'pdfs/y3/appdev.json'
+    }
 ]
 
 

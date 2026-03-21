@@ -1,0 +1,690 @@
+[
+  {
+    "front": "What does the WHERE clause do in SQL?",
+    "back": "It filters rows from a table based on one or more conditions. Only rows that satisfy the condition(s) are returned.\n\nExample: SELECT * FROM employees WHERE department_id = 90;"
+  },
+  {
+    "front": "What comparison operators can be used in a WHERE clause?",
+    "back": "= (equal), != or <> (not equal), > (greater than), < (less than), >= (greater than or equal), <= (less than or equal)\n\nAlso: BETWEEN...AND, IN, LIKE, IS NULL"
+  },
+  {
+    "front": "What is the difference between != and <> in SQL?",
+    "back": "They are functionally identical — both mean 'not equal to'. Either can be used in a WHERE clause.\n\nExample: WHERE salary != 5000 is same as WHERE salary <> 5000"
+  },
+  {
+    "front": "What does the BETWEEN operator do? Are the boundary values included?",
+    "back": "BETWEEN selects values within a range — and YES, both the lower and upper limit values are INCLUDED.\n\nExample: WHERE salary BETWEEN 3000 AND 5000\n(Returns salaries of 3000, 5000, and everything in between)"
+  },
+  {
+    "front": "What does the IN operator do in SQL?",
+    "back": "IN retrieves rows where a column's value matches any value in a specified list.\n\nExample: WHERE department_id IN (10, 20, 30)\nThis is equivalent to: WHERE department_id = 10 OR department_id = 20 OR department_id = 30"
+  },
+  {
+    "front": "What does the LIKE operator do? What are its wildcard characters?",
+    "back": "LIKE is used for pattern matching in strings.\n\n% = matches any number of characters (including zero)\n_ = matches exactly one character\n\nExamples:\n- WHERE first_name LIKE 'S%' → starts with S\n- WHERE last_name LIKE '_t%' → 't' is the second character"
+  },
+  {
+    "front": "How do you check for NULL values in SQL? Why can't you use = NULL?",
+    "back": "Use IS NULL or IS NOT NULL — never = NULL.\n\nNULL means 'unknown', so comparing with = always returns UNKNOWN (not TRUE or FALSE).\n\nCorrect: WHERE commission_pct IS NULL\nWrong: WHERE commission_pct = NULL"
+  },
+  {
+    "front": "What do the AND, OR, and NOT logical operators do?",
+    "back": "AND — returns rows only if BOTH conditions are TRUE\nOR — returns rows if EITHER condition is TRUE\nNOT — reverses/negates the result of a condition\n\nExample: WHERE job_id = 'IT_PROG' OR department_id = 60"
+  },
+  {
+    "front": "What is the order of precedence for SQL operators? (highest to lowest)",
+    "back": "1. Arithmetic operators\n2. Concatenation operator\n3. Comparison conditions\n4. IS [NOT] NULL, LIKE, [NOT] IN\n5. [NOT] BETWEEN\n6. Not equal to\n7. NOT (logical)\n8. AND (logical)\n9. OR (logical)\n\nUse parentheses to override this order!"
+  },
+  {
+    "front": "What does ORDER BY do? What is the default sort order?",
+    "back": "ORDER BY sorts query results. Default order is ASC (ascending — smallest to largest, A to Z).\n\nUse DESC for descending order.\n\nExample: SELECT * FROM employees ORDER BY salary DESC;"
+  },
+  {
+    "front": "How do you sort by multiple columns in SQL?",
+    "back": "List columns in ORDER BY separated by commas. The FIRST column listed is the primary sort, then subsequent columns are used to break ties.\n\nExample: ORDER BY department_id, salary DESC\n→ Sorts by dept first, then within each dept sorts salary high to low."
+  },
+  {
+    "front": "What are Single Row Functions in SQL?",
+    "back": "Functions that operate on ONE row at a time and return ONE result per row.\n\nThey can:\n- Accept one or more arguments\n- Be used alone or nested\n- Be used in SELECT, WHERE, or ORDER BY clauses\n\nCategories: Character, Number, Date, Conversion, General"
+  },
+  {
+    "front": "What are the 5 categories of Single Row Functions?",
+    "back": "1. Character — text manipulation (UPPER, LOWER, SUBSTR, etc.)\n2. Number — math operations (ROUND, TRUNC, MOD)\n3. Date — date operations (SYSDATE, ADD_MONTHS, etc.)\n4. Conversion — type conversion (TO_CHAR, TO_NUMBER, TO_DATE)\n5. General — NULL handling (NVL, NVL2, NULLIF, COALESCE)"
+  },
+  {
+    "front": "What is the difference between UPPER(), LOWER(), and INITCAP()?",
+    "back": "UPPER('hello') → 'HELLO' (all uppercase)\nLOWER('HELLO') → 'hello' (all lowercase)\nINITCAP('hello world') → 'Hello World' (first letter of each word capitalized)\n\nReal use: INITCAP used for names on official documents like citizenship cards."
+  },
+  {
+    "front": "What does SUBSTR() do? What is its syntax?",
+    "back": "SUBSTR(string, start_position, length) — extracts a substring.\n\nExamples:\n- SUBSTR('FinalYearStudent', 1, 3) → 'Fin'\n- SUBSTR('FinalYearStudent', -1, 3) → 't' (negative starts from end)\n\nNote: If length is negative, it returns empty/nothing."
+  },
+  {
+    "front": "What does INSTR() do? What is its syntax?",
+    "back": "INSTR(string, substring, start_pos, occurrence) — returns the position of a substring.\n\nExamples on 'FinalYearStudent':\n- INSTR('FinalYearStudent', 'a') → 4 (first 'a')\n- INSTR('FinalYearStudent', 'a', 5) → 9 (search from position 5)\n- INSTR('FinalYearStudent', 'a', 2, 2) → 9 (2nd occurrence after pos 2)\n\nReturns 0 if not found."
+  },
+  {
+    "front": "What does the LENGTH() function do?",
+    "back": "Returns the number of characters in a string.\n\nExample: LENGTH('Hello') → 5\n\nUse case: Display each employee's full name and the total character count:\nSELECT first_name || ' ' || last_name, LENGTH(first_name || ' ' || last_name) FROM employees;"
+  },
+  {
+    "front": "What do LPAD() and RPAD() do?",
+    "back": "They pad a string to a specified total length.\n\nLPAD(string, total_length, pad_char) — pads on the LEFT\nRPAD(string, total_length, pad_char) — pads on the RIGHT\n\nExamples:\n- LPAD('45', 5, '0') → '00045' (useful for fixed-width ID display)\n- RPAD('ABC', 10, ' ') → 'ABC       ' (useful for fixed-width product codes)"
+  },
+  {
+    "front": "What does TRIM() do in SQL?",
+    "back": "TRIM removes leading and trailing spaces (or specified characters) from a string.\n\nExample: TRIM('  Hello  ') → 'Hello'\n\nReal use: Cleaning user-entered data where accidental spaces might cause mismatches in queries."
+  },
+  {
+    "front": "What does the CONCAT() function do? What is an alternative?",
+    "back": "CONCAT(str1, str2) joins two strings together.\n\nAlternative: Use the || operator (concatenation operator) which can join multiple strings.\n\nExample: first_name || ' ' || last_name → 'John Smith'\n\nYou can also add literal text: first_name || ' works in Dept ' || department_id"
+  },
+  {
+    "front": "What does the ROUND() function do? What do positive/negative precision values mean?",
+    "back": "ROUND(number, precision) rounds a number.\n\n- ROUND(45.923, 2) → 45.92 (2 decimal places)\n- ROUND(45.923, 0) → 46 (whole number)\n- ROUND(45.923, -1) → 50 (round to nearest 10)\n\nNegative precision rounds to tens, hundreds, etc."
+  },
+  {
+    "front": "What is the difference between ROUND() and TRUNC()?",
+    "back": "ROUND() rounds the number (can round up or down).\nTRUNC() simply cuts/truncates — it does NOT round.\n\nExamples:\n- ROUND(45.923, 2) → 45.92\n- TRUNC(45.923, 2) → 45.92 (same here)\n\n- ROUND(45.923, 0) → 46\n- TRUNC(45.923, 0) → 45 (just drops decimals, no rounding)"
+  },
+  {
+    "front": "What does the MOD() function do?",
+    "back": "MOD(number, divisor) returns the REMAINDER after division.\n\nExample: MOD(11000, 5000) → 1000 (because 11000 ÷ 5000 = 2 remainder 1000)\n\nReal use: MOD(employee_id, 2) = 0 → filters only even employee IDs"
+  },
+  {
+    "front": "What does SYSDATE return? What about CURRENT_DATE?",
+    "back": "SYSDATE — returns the current date and time from the DATABASE SERVER.\nCURRENT_DATE — returns the current date and time based on the SESSION TIME ZONE.\n\nThey may differ if the server and session are in different time zones.\n\nReal use: Audit logs, timestamps, calculating days worked."
+  },
+  {
+    "front": "How do you calculate the number of days between two dates in Oracle SQL?",
+    "back": "Simply subtract one date from another — Oracle returns the difference in days.\n\nExample: SYSDATE - hire_date → number of days the employee has worked\n\nTo get years: (SYSDATE - hire_date) / 365"
+  },
+  {
+    "front": "What does ADD_MONTHS() do? What happens with SELECT ADD_MONTHS('31-dec-2008', 2.5)?",
+    "back": "ADD_MONTHS(date, n) adds n months to a date.\n\nFor ADD_MONTHS('31-dec-2008', 2.5):\n- The decimal 2.5 is TRUNCATED to 2\n- Result: 28-FEB-2009 (last day of February, since Dec 31 + 2 months)\n\nIf the result month has fewer days than the start day, it returns the last day of that month."
+  },
+  {
+    "front": "What does TO_CHAR() do when used with dates?",
+    "back": "TO_CHAR(date, format) converts a date to a formatted string.\n\nCommon formats:\n- TO_CHAR(SYSDATE, 'DD-Mon-YYYY') → '21-Mar-2026'\n- TO_CHAR(hire_date, 'Day, DD-Month-YYYY') → 'Monday, 14-November-2025'\n\nReal use: Printing dates on invoices, reports, and receipts in a readable format."
+  },
+  {
+    "front": "What does TO_NUMBER() do?",
+    "back": "TO_NUMBER(string) converts a text/string value to a numeric type.\n\nExample: TO_NUMBER('15.5') → 15.5 (now you can do math on it)\n\nReal use: Discount fields stored as text that need to be used in calculations, or hours worked stored as strings."
+  },
+  {
+    "front": "What does TO_DATE() do?",
+    "back": "TO_DATE(string, format) converts a string to a DATE type.\n\nExample: TO_DATE('15-Nov-2025', 'DD-Mon-YYYY') → a proper Oracle date value\n\nReal use: When dates come in as text from user input or imports and need to be stored/compared as actual dates."
+  },
+  {
+    "front": "What is NVL() and how does it work?",
+    "back": "NVL(expression, replacement) — if the expression is NULL, it returns the replacement value; otherwise it returns the original value.\n\nExample: NVL(commission_pct, 0) → returns 0 if commission is NULL\n\nReal use: Preventing NULL from breaking calculations (NULL + anything = NULL)."
+  },
+  {
+    "front": "What is NVL2() and how does it differ from NVL()?",
+    "back": "NVL2(expression, value_if_not_null, value_if_null)\n\n- If expression IS NOT NULL → returns value_if_not_null\n- If expression IS NULL → returns value_if_null\n\nExample: NVL2(commission_pct, 'HAS COMMISSION', 'NO COMMISSION')\n\nNVL only has 2 args; NVL2 lets you specify BOTH what to show for NULL and NOT NULL."
+  },
+  {
+    "front": "What does NULLIF() do?",
+    "back": "NULLIF(expr1, expr2) — if both expressions are EQUAL, it returns NULL; otherwise it returns expr1.\n\nExample: NULLIF(promo_discount, seasonal_discount)\n→ Returns NULL if both discounts are the same; otherwise returns promo_discount.\n\nReal use: Avoiding division by zero: NULLIF(denominator, 0)"
+  },
+  {
+    "front": "What is COALESCE() and how is it different from NVL()?",
+    "back": "COALESCE(expr1, expr2, expr3, ...) returns the FIRST non-NULL value in the list.\n\nNVL() only takes 2 arguments.\nCOALESCE() can take many arguments — more flexible.\n\nExample: COALESCE(phone_mobile, phone_home, phone_work, 'No Contact')\n→ Returns whichever first phone number is not NULL."
+  },
+  {
+    "front": "What is SELECT 100 + NULL + 999 FROM dual; — what does it return?",
+    "back": "It returns NULL.\n\nAny arithmetic operation involving NULL results in NULL. This is why NVL() is important — use NVL(column, 0) before arithmetic to avoid NULL propagation."
+  },
+  {
+    "front": "How do you display the last 2 characters of a string WITHOUT using LENGTH()?",
+    "back": "Use SUBSTR with a negative starting position:\n\nSUBSTR(FIRST_NAME, -2)\n\nA negative position in SUBSTR counts from the END of the string. -2 means 'start 2 characters from the end', so it returns the last 2 characters."
+  },
+  {
+    "front": "What are Aggregate (Group) Functions in SQL?",
+    "back": "Functions that operate on MULTIPLE rows and return ONE result per group.\n\nKey characteristics:\n- Used with GROUP BY to group results\n- Ignore NULL values by default\n- Can be used in SELECT or HAVING clause (NOT in WHERE)\n- Also called: multi-row functions or group functions\n\nMain functions: SUM, AVG, COUNT, MIN, MAX"
+  },
+  {
+    "front": "What is the syntax for using aggregate functions with GROUP BY?",
+    "back": "SELECT column_name, group_function(column)\nFROM table\n[WHERE condition]\n[GROUP BY column]\n[HAVING group_condition]\n[ORDER BY column];\n\nImportant: Every column in SELECT that is NOT an aggregate must appear in GROUP BY."
+  },
+  {
+    "front": "What is the difference between WHERE and HAVING?",
+    "back": "WHERE filters INDIVIDUAL ROWS — applied BEFORE grouping — cannot use aggregate functions.\n\nHAVING filters GROUPS — applied AFTER grouping — CAN use aggregate functions.\n\nExample:\nWHERE salary > 5000 → filters rows before grouping\nHAVING AVG(salary) > 10000 → filters groups after grouping"
+  },
+  {
+    "front": "How does COUNT(*) differ from COUNT(column_name)?",
+    "back": "COUNT(*) — counts ALL rows including those with NULLs\nCOUNT(column) — counts only rows where that column is NOT NULL\n\nExample: If 10 employees exist but only 6 have commission:\n- COUNT(*) → 10\n- COUNT(commission_pct) → 6"
+  },
+  {
+    "front": "What does COUNT(DISTINCT column) do?",
+    "back": "It counts the number of UNIQUE non-NULL values in a column.\n\nExample: COUNT(DISTINCT job_id) → how many different job roles exist in a department\n\nUseful for: counting unique managers, unique products ordered, etc."
+  },
+  {
+    "front": "Do aggregate functions ignore NULL values?",
+    "back": "YES — aggregate functions (SUM, AVG, MIN, MAX, COUNT(column)) all ignore NULLs.\n\nException: COUNT(*) counts all rows including NULLs.\n\nTo include NULLs in calculations, wrap the column in NVL() first:\nAVG(NVL(commission_pct, 0))"
+  },
+  {
+    "front": "What is a Subquery in SQL?",
+    "back": "A subquery (inner query) is a SELECT statement nested inside another SQL statement.\n\nIt executes FIRST, and its result is used by the OUTER query.\n\nExample:\nSELECT * FROM employees\nWHERE salary > (SELECT AVG(salary) FROM employees);"
+  },
+  {
+    "front": "What is a single-row subquery vs a multi-row subquery?",
+    "back": "Single-row subquery — returns ONE row/value. Used with: =, >, <, >=, <=, <>\n\nMulti-row subquery — returns MULTIPLE rows. Used with: IN, ANY, ALL, EXISTS\n\nExample single-row: WHERE salary = (SELECT MAX(salary) FROM employees)\nExample multi-row: WHERE dept_id IN (SELECT dept_id FROM departments WHERE location = 'Seattle')"
+  },
+  {
+    "front": "What does the ALL operator do in subqueries?",
+    "back": "WHERE salary > ALL(subquery) — the condition must be TRUE for EVERY value returned by the subquery.\n\nExample: WHERE salary > ALL(SELECT salary FROM employees WHERE last_name = 'King')\n→ Returns employees whose salary is greater than the HIGHEST salary of any King\n\nCompare: > ANY would only need to beat one value."
+  },
+  {
+    "front": "What is a correlated subquery?",
+    "back": "A subquery that references a column from the OUTER query. It executes once for each row in the outer query.\n\nExample:\nSELECT * FROM employees e\nWHERE salary > (SELECT AVG(salary) FROM employees WHERE department_id = e.department_id)\n\nHere, e.department_id refers to the outer query's current row."
+  },
+  {
+    "front": "What is a CTE (Common Table Expression)?",
+    "back": "A CTE is a named temporary result set defined with the WITH keyword, used within a single query.\n\nSyntax:\nWITH cte_name AS (\n  SELECT ...\n)\nSELECT * FROM cte_name;\n\nAdvantages over subqueries: more readable, reusable within the same query, easier to debug."
+  },
+  {
+    "front": "How do you write multiple CTEs in one query?",
+    "back": "Separate them with commas, all before the final SELECT:\n\nWITH\n  cte1 AS (SELECT ...),\n  cte2 AS (SELECT ...)\nSELECT * FROM cte1 JOIN cte2 ON ...;\n\nExample use: one CTE for employee count per dept, another for avg salary per dept, then join them."
+  },
+  {
+    "front": "What is a Window Function? How is it different from GROUP BY?",
+    "back": "Window functions perform calculations across a set of related rows (a 'window') WITHOUT collapsing them into a single row.\n\nGROUP BY → collapses rows into one per group\nWindow functions → keeps all rows, adds a calculated column\n\nSyntax: function() OVER (PARTITION BY ... ORDER BY ...)"
+  },
+  {
+    "front": "What does ROW_NUMBER() do?",
+    "back": "ROW_NUMBER() OVER (ORDER BY column) assigns a unique sequential integer to each row based on the ordering.\n\nNo ties — even if two rows have the same value, they get different row numbers.\n\nExample:\nSELECT employee_id, salary,\n  ROW_NUMBER() OVER (ORDER BY salary DESC) AS row_num\nFROM employees;"
+  },
+  {
+    "front": "What is the difference between RANK() and DENSE_RANK()?",
+    "back": "Both assign rankings based on ORDER BY, giving the same rank to tied values.\n\nRANK() — skips numbers after ties\nExample: 1, 2, 2, 4 (skips 3)\n\nDENSE_RANK() — no gaps, continuous numbers\nExample: 1, 2, 2, 3 (no skip)\n\nUse DENSE_RANK when you need clean ranking without gaps."
+  },
+  {
+    "front": "What does NTILE(n) do?",
+    "back": "NTILE(n) divides rows into n equal groups (buckets) and assigns each row a bucket number.\n\nExample: NTILE(4) OVER (ORDER BY salary) divides employees into 4 quartiles.\nQuartile 1 = lowest paid 25%, Quartile 4 = highest paid 25%.\n\nUsed for percentile analysis."
+  },
+  {
+    "front": "What does LAG() do? What is it used for?",
+    "back": "LAG(column, offset, default) OVER (ORDER BY ...) returns the value from a PREVIOUS row.\n\nExample: LAG(salary, 1, 0) OVER (ORDER BY salary)\n→ Returns the salary of the row before the current one; returns 0 if there is no previous row.\n\nUse: Comparing current value with previous (e.g., month-over-month sales change)."
+  },
+  {
+    "front": "What does LEAD() do?",
+    "back": "LEAD(column, offset, default) OVER (ORDER BY ...) returns the value from a NEXT/FOLLOWING row.\n\nExample: LEAD(salary, 1, 0) OVER (ORDER BY salary)\n→ Returns the salary of the next row; returns 0 if there is no next row.\n\nOpposite of LAG()."
+  },
+  {
+    "front": "How do you find the top N records per group using window functions?",
+    "back": "Use RANK() or ROW_NUMBER() with PARTITION BY in a CTE or subquery:\n\nWITH ranked AS (\n  SELECT employee_id, department_id, salary,\n    RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) AS rnk\n  FROM employees\n)\nSELECT * FROM ranked WHERE rnk <= 3;\n\nThis finds top 3 salaries per department."
+  },
+  {
+    "front": "What is a moving/rolling sum and how is it calculated?",
+    "back": "A moving sum includes values from surrounding rows (a sliding window).\n\nSyntax:\nSUM(salary) OVER (\n  ORDER BY salary\n  ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING\n)\n→ Sums the current row + the row before + the row after.\n\nUsed in: financial analysis, trend smoothing."
+  },
+  {
+    "front": "What is Normalization in database design?",
+    "back": "Normalization is the process of organizing database tables to:\n1. Remove data redundancy (no repeated information)\n2. Eliminate anomalies: Insertion, Update, and Deletion\n3. Ensure data consistency\n4. Make the database clean, efficient, and structured\n\nIt involves progressively applying rules: UNF → 1NF → 2NF → 3NF"
+  },
+  {
+    "front": "What are the three types of data anomalies that normalization solves?",
+    "back": "1. Insertion Anomaly — cannot add new data without adding unrelated data\n   (e.g., can't add a new course without a student enrolled)\n\n2. Update Anomaly — changing one fact requires updating many rows\n   (e.g., changing a dept name in 100 employee rows)\n\n3. Deletion Anomaly — deleting a record unintentionally removes other needed data"
+  },
+  {
+    "front": "What is UNF (Unnormalized Form)?",
+    "back": "UNF is the raw, unorganized form of data before normalization.\n\nProblems:\n- Contains REPEATING GROUPS (multi-valued attributes shown with curly braces {})\n- Multiple values in a single cell\n- Data from multiple entities mixed in one table\n\nExample: An employee row that contains multiple module codes and names within it."
+  },
+  {
+    "front": "What is 1NF (First Normal Form)? What problem does it solve?",
+    "back": "A table is in 1NF if:\n- Every column contains ATOMIC (indivisible) values\n- No REPEATING GROUPS — each row-column intersection has only one value\n- Each row is unique (has a primary key)\n\nSolution: Remove repeating groups by extracting them into a separate table with the original table's PK as a foreign key."
+  },
+  {
+    "front": "What is 2NF (Second Normal Form)? What problem does it solve?",
+    "back": "A table is in 2NF if:\n- It is already in 1NF\n- There are NO PARTIAL DEPENDENCIES — every non-key attribute depends on the WHOLE composite primary key, not just part of it\n\n2NF only applies when the primary key is COMPOSITE (more than one column).\n\nSolution: Extract attributes that depend on only part of the key into a new table."
+  },
+  {
+    "front": "What is a Partial Dependency?",
+    "back": "A partial dependency occurs when a non-key attribute depends on ONLY PART of a composite primary key (not the whole key).\n\nExample: Table(StudentID, CourseID, StudentName, Grade)\n- StudentName depends only on StudentID (not on CourseID)\n- This is a partial dependency — violates 2NF\n\nFix: Move StudentName to a separate Student table."
+  },
+  {
+    "front": "What is 3NF (Third Normal Form)? What problem does it solve?",
+    "back": "A table is in 3NF if:\n- It is already in 2NF\n- There are NO TRANSITIVE DEPENDENCIES — non-key attributes must depend ONLY on the primary key, not on other non-key attributes\n\nRule: Non-key → Non-key relationships are not allowed.\n\nSolution: Extract the transitively dependent attribute into its own table."
+  },
+  {
+    "front": "What is a Transitive Dependency?",
+    "back": "A transitive dependency is when a non-key attribute depends on ANOTHER non-key attribute (which in turn depends on the PK).\n\nExample: Table(BusNo, NoOfSeats, DestCode, DestDescription)\n- BusNo → DestCode (BusNo determines DestCode)\n- DestCode → DestDescription (non-key determining non-key!)\n\nFix: Create a separate Destination table with (DestCode, DestDescription)."
+  },
+  {
+    "front": "Walk through normalization stages for the Bus Booking system",
+    "back": "UNF:\nbus(busno, noofseat, descode, desdec, {date, custid, custname, custcontact})\n\n1NF (remove repeating group):\nbus-1(busno, noofseat, descode, desdec)\nbus_service-1(date, custid, custname, custcontact, busno*)\n\n2NF (remove partial dependency — custname depends only on custid):\nbus-2(busno, noofseat, descode, desdec)\ncustomer-2(custid, custname, custcontact)\nbus_service-2(date, custid*, busno*)\n\n3NF (remove transitive — desdec depends on descode, not busno):\nbus-3(busno, noofseat, descode*)\ndestination-3(descode, desdec)\ncustomer-3(custid, custname, custcontact)\nbus_service-3(date, custid*, busno*)"
+  },
+  {
+    "front": "Why might you choose NOT to fully normalize a database?",
+    "back": "Full normalization has trade-offs:\n- Queries require many JOINs → harder to write\n- Multiple JOINs on large tables → SLOWER performance\n- More complex database design and maintenance\n- Reporting and aggregations require more complex queries\n- Inserting data often requires updating multiple tables\n\nFor read-heavy applications (dashboards, reports), some denormalization may be preferred."
+  },
+  {
+    "front": "What is the difference between 1NF and 2NF violations?",
+    "back": "1NF violation — REPEATING GROUPS or non-atomic values (multiple values in one cell)\nExample: one row has multiple course codes in one field\n\n2NF violation — PARTIAL DEPENDENCY (with composite key): a non-key attribute depends on only part of the key\nExample: StudentName depends only on StudentID, not on (StudentID + CourseID)\n\nYou must fix 1NF before you can even check for 2NF."
+  },
+  {
+    "front": "What is a Primary Key?",
+    "back": "A Primary Key (PK) is a column (or set of columns) that UNIQUELY identifies each row in a table.\n\nRules:\n- Must be UNIQUE — no two rows can have the same PK value\n- Must NOT be NULL\n- A table can only have ONE primary key\n\nExample: employee_id in employees table"
+  },
+  {
+    "front": "What is a Foreign Key?",
+    "back": "A Foreign Key (FK) is a column in one table that references the PRIMARY KEY of another table.\n\nIt creates a LINK between two tables and enforces referential integrity.\n\nExample: employees.department_id references departments.department_id\n\nAn FK value must either exist in the referenced table or be NULL."
+  },
+  {
+    "front": "What is a Composite Primary Key?",
+    "back": "A primary key made up of TWO OR MORE columns. Together they uniquely identify a row, even though no single column alone is unique.\n\nExample: In a Booked_Seats table:\n(BookingNo, SeatNo) — neither column alone is unique, but together they are\n\nThis is common in junction/bridge tables that resolve many-to-many relationships."
+  },
+  {
+    "front": "What is an ER Diagram (ERD)?",
+    "back": "An Entity-Relationship Diagram is a visual representation of a database structure showing:\n- Entities (tables) — represented as rectangles\n- Attributes (columns) — listed inside or connected to entities\n- Relationships between entities — shown as lines\n- Cardinality — numbers/symbols on lines showing 1:1, 1:M, or M:M relationships\n- Primary and Foreign Keys"
+  },
+  {
+    "front": "What are the three types of relationships in an ERD?",
+    "back": "1. One-to-One (1:1) — one record in table A relates to exactly one in table B\n   Example: Person ↔ Passport\n\n2. One-to-Many (1:M) — one record in A relates to many in B\n   Example: Department → Employees (one dept has many employees)\n\n3. Many-to-Many (M:M) — many records in A relate to many in B\n   Example: Students ↔ Courses (must be resolved with a junction table)"
+  },
+  {
+    "front": "How do you resolve a Many-to-Many relationship in a relational database?",
+    "back": "You CANNOT directly store M:M in a relational database. You must create a JUNCTION TABLE (bridge/associative table) between the two entities.\n\nExample: Students ↔ Courses becomes:\n- Students (StudentID PK, ...)\n- Courses (CourseID PK, ...)\n- Enrollment (StudentID FK, CourseID FK) — composite PK\n\nThe junction table holds the relationship + any relationship attributes."
+  },
+  {
+    "front": "What is a Fan Trap in ER modeling?",
+    "back": "A fan trap occurs when a model has two one-to-many relationships 'fanning out' from the same entity, making it impossible to determine which items in one branch relate to items in another.\n\nExample: Department → Staff AND Department → Projects\nYou cannot determine which staff member works on which project.\n\nFix: Add a direct relationship between Staff and Projects."
+  },
+  {
+    "front": "What is a Chasm Trap in ER modeling?",
+    "back": "A chasm trap occurs when a path between entities becomes 'broken' because a relationship is optional (zero participation), causing loss of data in certain queries.\n\nExample: Branch → has → Staff → manages → Division\nIf some Branches have no Staff, you lose those Branches in queries traversing the path.\n\nFix: Add a direct relationship between Branch and Division."
+  },
+  {
+    "front": "What is the EXTRACT() function used for?",
+    "back": "EXTRACT(part FROM date) retrieves a specific component from a date.\n\nCommon parts: YEAR, MONTH, DAY, HOUR, MINUTE, SECOND\n\nExamples:\n- EXTRACT(YEAR FROM hire_date) → 2005\n- EXTRACT(MONTH FROM birth_date) → 8 (for August)\n\nReal use: Grouping employees by hire year, filtering by month for birthday wishes."
+  },
+  {
+    "front": "What does LAST_DAY() do?",
+    "back": "LAST_DAY(date) returns the last day of the month for the given date.\n\nExample: LAST_DAY(SYSDATE) → returns the last date of the current month\nLAST_DAY(TO_DATE('01-Feb-2024', 'DD-Mon-YYYY')) → 29-Feb-2024\n\nReal use: Payroll processing, generating end-of-month reports."
+  },
+  {
+    "front": "What is the TO_CHAR() number format model?",
+    "back": "TO_CHAR(number, format) converts a number to a formatted string.\n\nCommon format elements:\n- 9 = digit position\n- 0 = forces leading zeros\n- $ = dollar sign prefix\n- L = local currency symbol\n- , = comma separator\n- . = decimal point\n\nExample: TO_CHAR(salary, 'L99,999.99') → '£12,000.00'"
+  },
+  {
+    "front": "Describe the ORDER of SQL clause execution (logical processing order)",
+    "back": "SQL clauses execute in this logical order:\n1. FROM (identify tables)\n2. WHERE (filter rows)\n3. GROUP BY (group rows)\n4. HAVING (filter groups)\n5. SELECT (choose columns / compute)\n6. ORDER BY (sort results)\n\nThis is why you CANNOT use a SELECT alias in WHERE — WHERE executes before SELECT."
+  },
+  {
+    "front": "What is the DUAL table in Oracle?",
+    "back": "DUAL is a special single-row, single-column dummy table in Oracle, owned by SYS.\n\nUsed when you want to evaluate an expression or function without needing a real table.\n\nExamples:\n- SELECT SYSDATE FROM DUAL;\n- SELECT ROUND(45.923, 2) FROM DUAL;\n- SELECT 100 + 200 FROM DUAL;"
+  },
+  {
+    "front": "What is the difference between a subquery in WHERE vs. a subquery in FROM?",
+    "back": "Subquery in WHERE (most common):\nUsed to filter rows based on a computed result.\nSELECT * FROM employees WHERE salary > (SELECT AVG(salary) FROM employees)\n\nSubquery in FROM (inline view):\nThe subquery acts as a temporary table.\nSELECT * FROM (SELECT employee_id, salary FROM employees WHERE dept=50) sub WHERE sub.salary > 5000"
+  },
+  {
+    "front": "What is PARTITION BY in window functions? How is it different from GROUP BY?",
+    "back": "PARTITION BY divides rows into groups for window function calculation — but UNLIKE GROUP BY, it does NOT collapse the rows.\n\nEach row keeps its own identity while the function is calculated relative to its partition.\n\nExample: RANK() OVER (PARTITION BY department_id ORDER BY salary DESC)\n→ Ranks employees within each department separately."
+  },
+  {
+    "front": "What output does ROUND(786.456, -1) produce?",
+    "back": "ROUND(786.456, -1) → 790\n\nNegative precision rounds to the left of the decimal:\n- -1 → nearest 10 → 790\n- -2 → nearest 100 → 800\n- -3 → nearest 1000 → 1000\n\nNote: ROUND(786.456, 0) → 786 (rounds to whole number)"
+  },
+  {
+    "front": "What is the output of SUBSTR('FinalYearStudent', 1, INSTR('FinalYearStudent', 'a', 5))?",
+    "back": "Step 1: INSTR('FinalYearStudent', 'a', 5) = 9 (finds 'a' starting from position 5 — it finds 'a' in 'Year' at position 9)\n\nStep 2: SUBSTR('FinalYearStudent', 1, 9) = 'FinalYear'\n\nThis demonstrates nesting functions — using INSTR's result as SUBSTR's length argument."
+  },
+  {
+    "front": "Normalize Fig 1 (Teacher-Module table) to 1NF",
+    "back": "UNF problem: Saul Goodman has 1 address but it's multi-line (multi-valued); Rust Cohle teaches two modules (SG101, TG405) — repeating group of modules per teacher.\n\n1NF (remove repeating groups, ensure atomic values):\nTeacher(SN, TeacherName, Address, Email, ModuleCode, ModuleName, CreditHours)\n\nEach row gets one module. Address needs to be atomic — split into Address1, Address2 if needed. Each row is unique per teacher-module combination."
+  },
+  {
+    "front": "What makes the Teacher-Module table (Fig 1) violate 2NF after reaching 1NF?",
+    "back": "After 1NF, the composite key is (SN, ModuleCode).\n\nPartial dependencies:\n- TeacherName, Address, Email → depend only on SN (not ModuleCode)\n- ModuleName, CreditHours → depend only on ModuleCode (not SN)\n\n2NF fix: Split into:\n- Teacher(SN PK, TeacherName, Address, Email)\n- Module(ModuleCode PK, ModuleName, CreditHours)\n- TeacherModule(SN FK, ModuleCode FK) ← junction table"
+  },
+  {
+    "front": "What is the HNC Flower Arranging scenario (Workshop Q1) in normalized form?",
+    "back": "UNF: Course(CourseCode, CourseName, TutorID, TutorName, {StudentNo, StudentName, DOB, Gender, LastAttendanceDate})\n\n1NF: Separate the student repeating group:\n- Course(CourseCode PK, CourseName, TutorID, TutorName)\n- StudentEnrollment(CourseCode FK, StudentNo PK, StudentName, DOB, Gender, LastAttendanceDate)\n\n2NF: TutorName depends only on TutorID (partial dependency):\n- Course(CourseCode PK, CourseName, TutorID FK)\n- Tutor(TutorID PK, TutorName)\n- Student(StudentNo PK, StudentName, DOB, Gender, LastAttendanceDate, CourseCode FK)\n\n3NF: No transitive dependencies remain — already in 3NF."
+  },
+  {
+    "front": "Normalize the Super Soccer Supplies Invoice (Workshop Q2)",
+    "back": "UNF: Invoice(InvoiceNo, CustomerNo, CustomerName, CustomerAddress, Date, OrderNo, {ProductNo, ProductDesc, Quantity, UnitCost})\n\n1NF: Remove product repeating group:\n- Invoice(InvoiceNo PK, CustomerNo, CustomerName, CustomerAddress, Date, OrderNo)\n- InvoiceLine(InvoiceNo FK, ProductNo, ProductDesc, Quantity, UnitCost)\n\n2NF: CustomerName/Address depend only on CustomerNo; ProductDesc/UnitCost depend only on ProductNo:\n- Customer(CustomerNo PK, CustomerName, CustomerAddress)\n- Invoice(InvoiceNo PK, CustomerNo FK, Date, OrderNo)\n- Product(ProductNo PK, ProductDesc, UnitCost)\n- InvoiceLine(InvoiceNo FK, ProductNo FK, Quantity)\n\n3NF: No transitive dependencies — done."
+  },
+  {
+    "front": "What is the Student table (Workshop Q3) UNF problem?",
+    "back": "TABLE: STUDENT (ID, Name, Address, Faculty, Year, Subject)\n\nUNF problem: Subject is a REPEATING GROUP — each student appears multiple times, once per subject:\n- John appears 3 times (3 subjects)\n- Harry appears 2 times\n- Brad appears 2 times\n\n1NF fix: This table becomes two tables:\n- Student(ID PK, Name, Address, Faculty, Year)\n- StudentSubject(ID FK, Subject) with composite PK (ID, Subject)"
+  },
+  {
+    "front": "What is Fig 2 (Student-Module results) in UNF?",
+    "back": "UNF: The student info (ID, Name, Address) is stored in a header block, and the module results (ModuleCode, ModuleName, AssignmentType, Grade, Status) repeat as a group.\n\nFormatted as:\nStudentResult(StudentID, StudentName, StudentAddress, {ModuleCode, ModuleName, AssignmentType, Grade, Status})\n\nThe outer data (student info) and inner repeating group (assessments per module) must be separated."
+  },
+  {
+    "front": "What does the Cinema Booking normalization (Tutorial Week 7) produce at 2NF?",
+    "back": "After 1NF:\n- Booking(BookingNo PK, BookingDate, NoOfTickets, CustomerNo, CustomerName, CustomerContact, HallNo, MovieNo, MovieTitle, Language, Duration, TotalCharge)\n- BookedSeats(BookingNo FK, SeatNo, SeatCharge)\n\n2NF (composite key BookingNo+SeatNo in BookedSeats — SeatCharge depends on SeatNo alone):\n- Booking (unchanged)\n- Seat(SeatNo PK, SeatCharge)\n- BookedSeats(BookingNo FK, SeatNo FK)\n\nFor main Booking table — check if CustomerName/CustomerContact partially depend on CustomerNo."
+  },
+  {
+    "front": "What is functional dependency in the context of normalization?",
+    "back": "A functional dependency means that the value of one attribute DETERMINES the value of another.\n\nNotation: A → B (A determines B)\n\nExample: employee_id → first_name\n(Knowing the employee_id tells you exactly one first_name)\n\nFunctional dependencies drive all normalization decisions — you organize tables so each attribute depends on the key, the whole key, and nothing but the key."
+  },
+  {
+    "front": "What is the mantra for 3NF?",
+    "back": "A table is in 3NF when every non-key attribute depends on:\n\n'The key, the WHOLE key, and NOTHING BUT the key.'\n\n- 'The key' → satisfies 1NF (atomic, primary key exists)\n- 'The whole key' → satisfies 2NF (no partial dependencies)\n- 'Nothing but the key' → satisfies 3NF (no transitive dependencies)"
+  },
+  {
+    "front": "What is the difference between GROUP BY and PARTITION BY?",
+    "back": "GROUP BY:\n- Collapses rows into ONE row per group\n- Used with aggregate functions in regular queries\n- The detailed rows disappear\n\nPARTITION BY (in window functions):\n- Does NOT collapse rows — all rows remain\n- Window function calculates per partition but each row keeps its data\n- Allows ranking, running totals, etc. per group while keeping individual rows"
+  },
+  {
+    "front": "How do you find employees hired in a specific month across all years?",
+    "back": "Use EXTRACT or TO_CHAR on the hire_date:\n\nUsing EXTRACT:\nSELECT * FROM employees\nWHERE EXTRACT(MONTH FROM hire_date) = 8; -- August\n\nUsing TO_CHAR:\nSELECT * FROM employees\nWHERE TO_CHAR(hire_date, 'MONTH') = 'AUGUST';\n\nFor a specific month AND year:\nWHERE TO_CHAR(hire_date, 'MON-YYYY') = 'MAR-2005'"
+  },
+  {
+    "front": "What is REPLACE() in SQL?",
+    "back": "REPLACE(string, search_str, replacement_str) replaces ALL occurrences of a substring.\n\nExample: REPLACE('Hello World', 'World', 'SQL') → 'Hello SQL'\nREPLACE('Ha Ha Ha', 'Ha', 'Ho') → 'Ho Ho Ho'\n\nReal use: Sanitizing data, replacing placeholders, cleaning imported text."
+  },
+  {
+    "front": "What does DECODE() do in Oracle SQL?",
+    "back": "DECODE is Oracle's version of a CASE expression. It compares a value against a list of options.\n\nSyntax: DECODE(expression, value1, result1, value2, result2, ..., default)\n\nExample:\nDECODE(department_id, 10, 'Finance', 20, 'HR', 'Other')\n\nModern SQL prefers CASE WHEN for readability and standard compliance."
+  },
+  {
+    "front": "How does CASE WHEN work in SQL?",
+    "back": "CASE WHEN evaluates conditions and returns a value:\n\nSimple CASE:\nCASE department_id\n  WHEN 10 THEN 'Finance'\n  WHEN 20 THEN 'HR'\n  ELSE 'Other'\nEND\n\nSearched CASE:\nCASE\n  WHEN salary = (SELECT salary FROM employees WHERE employee_id = 100) THEN 'SAME AS 100'\n  ELSE TO_CHAR(salary)\nEND"
+  },
+  {
+    "front": "What does DISTINCT do in SQL?",
+    "back": "DISTINCT eliminates duplicate rows from query results.\n\nExample: SELECT DISTINCT department_id FROM employees;\n→ Returns each department_id only once, even if many employees are in that department.\n\nCan also be used inside aggregate functions:\nCOUNT(DISTINCT job_id) → counts unique job roles only"
+  },
+  {
+    "front": "How do you find the second highest salary without using window functions?",
+    "back": "Using a subquery:\nSELECT MAX(salary) FROM employees\nWHERE salary < (SELECT MAX(salary) FROM employees);\n\nAlternatively using NOT IN:\nSELECT MAX(salary) FROM employees\nWHERE salary NOT IN (SELECT MAX(salary) FROM employees);\n\nWith window functions (cleaner):\nSELECT salary FROM (\n  SELECT salary, DENSE_RANK() OVER (ORDER BY salary DESC) rnk FROM employees\n) WHERE rnk = 2;"
+  },
+  {
+    "front": "What is the difference between DELETE, TRUNCATE, and DROP?",
+    "back": "DELETE: Removes specific rows (can use WHERE), is logged, can be rolled back, table structure remains.\n\nTRUNCATE: Removes ALL rows quickly, minimal logging, cannot easily roll back, table structure remains.\n\nDROP: Removes the ENTIRE TABLE (structure + data), cannot be rolled back.\n\nMnemonic: DELETE = selective, TRUNCATE = wipe all data, DROP = destroy table."
+  },
+  {
+    "front": "What is referential integrity?",
+    "back": "Referential integrity is the rule that a foreign key value must match an existing primary key value in the referenced table (or be NULL).\n\nExample: You cannot insert an employee with department_id = 999 if department 999 doesn't exist in the departments table.\n\nEnforced by FOREIGN KEY constraints in the database."
+  },
+  {
+    "front": "What is the Pet Grooming System 2NF conversion?",
+    "back": "1NF tables:\n- Owner(OwnerId, OwnerName, OwnerAddress, OwnerContact, PetNo, PetName, Breed, Age, Gender)\n- Appointment(AppointmentNo, OwnerId*, AppointmentDate, AppointmentTime, TotalCharge)\n- ServiceAppointment(AppointmentNo, ServiceNo, ServiceType, ServiceCharge)\n\n2NF fix — Owner table has a partial dependency:\n- PetName, Breed, Age, Gender depend on PetNo (not OwnerId)\n\n2NF tables:\n- Owner(OwnerId PK, OwnerName, OwnerAddress, OwnerContact)\n- Pet(PetNo PK, OwnerId FK, PetName, Breed, Age, Gender)\n- Appointment(AppointmentNo PK, PetNo FK, AppointmentDate, AppointmentTime, TotalCharge)\n- ServiceAppointment(AppointmentNo FK, ServiceNo FK, ServiceType, ServiceCharge)"
+  },
+  {
+    "front": "What is the Pet Grooming System 3NF conversion?",
+    "back": "From 2NF ServiceAppointment(AppointmentNo, ServiceNo, ServiceType, ServiceCharge):\n\nTransitive dependency:\n- ServiceType and ServiceCharge depend on ServiceNo (non-key → non-key)\n\n3NF fix:\n- Service(ServiceNo PK, ServiceType, ServiceCharge)\n- ServiceAppointment(AppointmentNo FK, ServiceNo FK) ← junction table only\n\nFinal 3NF tables:\n- Owner(OwnerId PK, OwnerName, OwnerAddress, OwnerContact)\n- Pet(PetNo PK, OwnerId FK, PetName, Breed, Age, Gender)\n- Appointment(AppointmentNo PK, PetNo FK, AppointmentDate, AppointmentTime, TotalCharge)\n- Service(ServiceNo PK, ServiceType, ServiceCharge)\n- ServiceAppointment(AppointmentNo FK, ServiceNo FK)"
+  },
+  {
+    "front": "How do you count employees hired in each year?",
+    "back": "SELECT EXTRACT(YEAR FROM hire_date) AS hire_year,\n       COUNT(*) AS num_hired\nFROM employees\nGROUP BY EXTRACT(YEAR FROM hire_date)\nORDER BY hire_year;\n\nAlternative using TO_CHAR:\nGROUP BY TO_CHAR(hire_date, 'YYYY')"
+  },
+  {
+    "front": "How do you find departments with NO employees?",
+    "back": "Using NOT IN with subquery:\nSELECT * FROM departments\nWHERE department_id NOT IN (\n  SELECT DISTINCT department_id FROM employees\n  WHERE department_id IS NOT NULL\n);\n\nNote: The IS NOT NULL check is critical — if the subquery returns any NULL, NOT IN will return no rows!\n\nAlternative: LEFT JOIN with NULL check."
+  },
+  {
+    "front": "What is the Hospital Patient Bill 3NF result?",
+    "back": "UNF: Invoice(InvoiceNo, AccountNo, InvoiceDate, DueDate, HospitalName, PatientNo, PatientName, DateAdmitted, DateDischarged, {Code, Description, TotalCharge}, TotalChargesDue)\n\n3NF tables:\n- Patient(PatientNo PK, PatientName)\n- Invoice(InvoiceNo PK, AccountNo, InvoiceDate, DueDate, HospitalName, PatientNo FK, DateAdmitted, DateDischarged, TotalChargesDue)\n- ChargeItem(Code PK, Description)\n- InvoiceCharge(InvoiceNo FK, Code FK, TotalCharge)"
+  },
+  {
+    "front": "What is the OpenTable KOT system ER model key entities?",
+    "back": "Key Entities:\n1. Customer(CustomerID PK, Name, Contact, ...)\n2. Table(TableID PK, TableNo, Status, Capacity)\n3. Order/KOT(OrderID PK, CustomerID FK, TableID FK, OrderDate, OrderTime, Status[Pending/Preparing/Served])\n4. MenuItem(MenuItemID PK, Name, Price, Category)\n5. OrderItem(OrderID FK, MenuItemID FK, Quantity, SpecialRequest) ← resolves M:M between Order and MenuItem\n\nM:M relationship: One Order has many MenuItems; one MenuItem appears on many Orders → resolved by OrderItem junction table."
+  },
+  {
+    "front": "What is the Advanced Database course (Fig 3) UNF problem?",
+    "back": "UNF: The Course header (CourseName='Advanced Database', CourseLeader='Chris Brown', CreditHour=30) is stored separately from the repeating class schedule.\n\nProblems:\n- Tutorial has multiple teachers (Prashant KC, Sagun Thapa) — non-atomic!\n- The class schedule (ClassType, Teacher, Time, Day, Room) repeats per class type\n\nThe Course data and Class Schedule data are mixed and need to be separated."
+  },
+  {
+    "front": "What is a junction/bridge/associative table and when is it needed?",
+    "back": "A junction table is an intermediate table created to resolve a MANY-TO-MANY relationship between two entities.\n\nIt contains:\n- The PK of Table A as a FK\n- The PK of Table B as a FK\n- Together, these two FKs form the composite PK\n- May also contain attributes specific to the relationship\n\nExample: Student-Course → Enrollment(StudentID FK, CourseID FK, Grade, EnrollmentDate)"
+  },
+  {
+    "front": "How do you find employees whose salary is above the average salary of their OWN department?",
+    "back": "This requires a correlated subquery:\n\nSELECT * FROM employees e\nWHERE salary > (\n  SELECT AVG(salary) FROM employees\n  WHERE department_id = e.department_id\n);\n\nThe inner query runs once per employee, using that employee's department_id from the outer query."
+  },
+  {
+    "front": "How do you find the department with the MAXIMUM number of employees?",
+    "back": "SELECT first_name, last_name FROM employees\nWHERE department_id IN (\n  SELECT department_id FROM employees\n  GROUP BY department_id\n  HAVING COUNT(*) = (\n    SELECT MAX(COUNT(*)) FROM employees\n    GROUP BY department_id\n  )\n);\n\nNote the nested aggregate: MAX(COUNT(*)) — the outer MAX finds the largest group count."
+  },
+  {
+    "front": "What SQL query lists employees hired in March 2005?",
+    "back": "SELECT * FROM employees\nWHERE TO_CHAR(hire_date, 'MON-YYYY') = 'MAR-2005'\nORDER BY hire_date, last_name;\n\nAlternative:\nWHERE EXTRACT(MONTH FROM hire_date) = 3\nAND EXTRACT(YEAR FROM hire_date) = 2005\n\nAlternative with BETWEEN:\nWHERE hire_date BETWEEN '01-MAR-2005' AND '31-MAR-2005'"
+  },
+  {
+    "front": "Write a query to find employees who were hired BEFORE the earliest hire date in department 60",
+    "back": "SELECT * FROM employees\nWHERE hire_date < (\n  SELECT MIN(hire_date) FROM employees\n  WHERE department_id = 60\n);\n\nThis uses a single-row subquery that finds the earliest hire date in dept 60, then the outer query finds everyone hired before that date."
+  },
+  {
+    "front": "How do you display employee full name with commission status in one query?",
+    "back": "SELECT first_name || ' ' || last_name AS full_name,\n  NVL(TO_CHAR(commission_pct), 'NO Commission') AS commission_status\nFROM employees;\n\nOr using NVL2:\nSELECT first_name || ' ' || last_name,\n  NVL2(commission_pct, TO_CHAR(commission_pct), 'NO Commission') AS commission_status\nFROM employees;"
+  },
+  {
+    "front": "Write a query to assign salary quartiles to all employees",
+    "back": "SELECT employee_id, salary,\n  NTILE(4) OVER (ORDER BY salary) AS quartile\nFROM employees;\n\nQuartile 1 = lowest 25% of salaries\nQuartile 4 = highest 25% of salaries\n\nUse case: Salary band analysis, identifying underpaid/overpaid employees."
+  },
+  {
+    "front": "What is a moving/window sum with ROWS BETWEEN syntax?",
+    "back": "SUM(salary) OVER (\n  ORDER BY employee_id\n  ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING\n)\n\nThis computes: previous_row_salary + current_salary + next_row_salary\n\nOther options:\n- ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW → running total\n- ROWS BETWEEN 2 PRECEDING AND CURRENT ROW → 3-period moving average"
+  },
+  {
+    "front": "How do you extract the domain from an email address in SQL?",
+    "back": "Use SUBSTR and INSTR together:\n\nSELECT SUBSTR(email, INSTR(email, '@') + 1) AS domain\nFROM employees;\n\nFor 'student@college.edu':\n1. INSTR finds '@' at position 8\n2. +1 moves to position 9\n3. SUBSTR extracts from position 9 to end → 'college.edu'"
+  },
+  {
+    "front": "How do you left-pad employee ID with zeros to make it 5 digits?",
+    "back": "SELECT LPAD(employee_id, 5, '0') AS padded_id\nFROM employees;\n\nExamples:\n- Employee 45 → '00045'\n- Employee 102 → '00102'\n- Employee 7 → '00007'\n\nReal use: Badge numbers, account numbers, reference codes in reports and exports."
+  },
+  {
+    "front": "What does the Week 3 FYP Tutorial require you to do?",
+    "back": "For your Final Year Project database:\n1. Create one or more tables related to your FYP topic\n2. Write SQL to create a main feature table and a linked table with PRIMARY KEY\n3. Add text and number columns\n4. INSERT at least 3-5 rows of sample data\n5. Write queries to:\n   - Show all data (SELECT *)\n   - Show specific columns\n   - Filter by one condition (WHERE)\n   - Use OR for two conditions\n   - Combine AND/OR conditions"
+  },
+  {
+    "front": "What is the Fig 3 (Advanced Database course schedule) normalization challenge?",
+    "back": "Problem: Course info (name, leader, credit hours) repeats for every class type. Tutorial has multiple teachers — non-atomic.\n\n1NF: Make teacher atomic — create one row per teacher:\n- Course(CourseName PK, CourseLeader, CreditHour)\n- ClassSchedule(CourseName FK, ClassType, TeacherName, Time, Day, Room)\n\nIf Tutorial has multiple teachers, create:\n- ClassTeacher(CourseName FK, ClassType FK, TeacherName) as a separate table\n\n2NF/3NF: Check if ClassType → Room (room might be determined by class type, not the combo key)."
+  },
+  {
+    "front": "What does REPLACE() return if the search string is not found?",
+    "back": "REPLACE() returns the ORIGINAL string unchanged if the search string is not found — it does NOT return NULL or an error.\n\nExample: REPLACE('Hello World', 'SQL', 'Python') → 'Hello World'\n\nThis makes REPLACE() safe to use without conditional checks."
+  },
+  {
+    "front": "How do you display total years of experience for each employee?",
+    "back": "SELECT first_name || ' ' || last_name AS name,\n  TRUNC((SYSDATE - hire_date) / 365) AS years_experience\nFROM employees;\n\nUse TRUNC to avoid showing fractional years.\n\nAlternative: MONTHS_BETWEEN(SYSDATE, hire_date) / 12 gives more accurate result using the MONTHS_BETWEEN function."
+  },
+  {
+    "front": "What is the Apriori Algorithm (brief overview from workshop)?",
+    "back": "Apriori is a classic algorithm for Association Rule Mining (finding frequent itemsets in transaction data).\n\nKey concepts:\n- Support: How often items appear together (frequency)\n- Confidence: If A is bought, how often is B also bought\n- Lift: How much more likely than random\n\nApriori principle: If an itemset is frequent, ALL its subsets are also frequent.\nIt iteratively builds candidate itemsets, pruning infrequent ones at each step."
+  },
+  {
+    "front": "What is the FP-Growth Algorithm? How does it differ from Apriori?",
+    "back": "FP-Growth (Frequent Pattern Growth) also finds association rules but is more EFFICIENT than Apriori.\n\nKey difference:\n- Apriori: Scans database multiple times, generates many candidate itemsets\n- FP-Growth: Builds a compact FP-tree structure, scans database only TWICE, no candidate generation\n\nFP-Growth is faster on large datasets because it avoids repeated database scans."
+  },
+  {
+    "front": "How do you display the weekday name from a hire date?",
+    "back": "Use TO_CHAR with day format:\n\nSELECT first_name, TO_CHAR(hire_date, 'Day') AS day_of_week\nFROM employees;\n\nExamples of format codes:\n- 'Day' → 'Monday'\n- 'DY' → 'MON' (abbreviated)\n- 'D' → 1-7 (number, Sunday=1 in Oracle)\n\nFull textual format: TO_CHAR(hire_date, 'Day, DD-Month-YYYY') → 'Monday, 14-November-2025'"
+  },
+  {
+    "front": "What is the difference between COUNT(*) and COUNT(1)?",
+    "back": "They produce the same result — both count ALL rows in the group regardless of NULLs.\n\nCOUNT(*) → standard, counts all rows\nCOUNT(1) → also counts all rows (the '1' is just a constant expression, never NULL)\n\nBoth are equivalent in terms of results. COUNT(*) is the standard and more readable convention."
+  },
+  {
+    "front": "How do you find departments where total salary exceeds department 90?",
+    "back": "SELECT * FROM departments\nWHERE department_id IN (\n  SELECT department_id FROM employees\n  GROUP BY department_id\n  HAVING SUM(salary) > (\n    SELECT SUM(salary) FROM employees\n    WHERE department_id = 90\n  )\n);\n\nInner subquery calculates dept 90 total; HAVING compares each dept's total against it."
+  },
+  {
+    "front": "Write a CTE to find top 3 highest-paid employees per department",
+    "back": "WITH ranked_employees AS (\n  SELECT employee_id, department_id, salary,\n    RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) AS salary_rank\n  FROM employees\n)\nSELECT employee_id, department_id, salary\nFROM ranked_employees\nWHERE salary_rank <= 3;\n\nPARTITION BY restarts ranking for each department."
+  },
+  {
+    "front": "Write a CTE using two CTEs to show dept stats",
+    "back": "WITH\n  dept_count AS (\n    SELECT department_id, COUNT(*) AS total_employees\n    FROM employees\n    GROUP BY department_id\n  ),\n  dept_avg AS (\n    SELECT department_id, AVG(salary) AS avg_salary\n    FROM employees\n    GROUP BY department_id\n  )\nSELECT dc.department_id, dc.total_employees, da.avg_salary\nFROM dept_count dc\nJOIN dept_avg da ON dc.department_id = da.department_id;"
+  },
+  {
+    "front": "How do you display salary of the PREVIOUS employee using LAG?",
+    "back": "SELECT employee_id, salary,\n  LAG(salary, 1, 0) OVER (ORDER BY salary) AS prev_salary\nFROM employees;\n\nExplanation:\n- LAG(salary, 1, 0) → gets salary from 1 row before current\n- Default value is 0 (shown when there is no previous row)\n- ORDER BY salary determines the sequence"
+  },
+  {
+    "front": "What happens when you use a GROUP BY column that is NOT in SELECT?",
+    "back": "It is valid — you can GROUP BY a column even if it is not in the SELECT clause.\n\nExample:\nSELECT AVG(salary) FROM employees GROUP BY department_id;\n→ Shows average salary per department without showing department_id\n\nHowever, including the GROUP BY column in SELECT is usually more informative."
+  },
+  {
+    "front": "What does MONTHS_BETWEEN() do?",
+    "back": "MONTHS_BETWEEN(date1, date2) returns the number of months between two dates as a decimal number.\n\nExample: MONTHS_BETWEEN(SYSDATE, hire_date)\n→ Returns e.g., 14.5 (14 and a half months)\n\nIf date1 > date2, the result is positive.\nIf date1 < date2, the result is negative.\n\nUse TRUNC or FLOOR to get whole months."
+  },
+  {
+    "front": "What is normalization stage 2NF for the Student-Subject table (Workshop Q3)?",
+    "back": "After 1NF:\n- Student(ID PK, Name, Address, Faculty, Year)\n- StudentSubject(ID FK, Subject PK) ← composite PK\n\n2NF check on StudentSubject(ID, Subject):\n- No non-key attributes → already in 2NF (all attributes are part of the key)\n\n2NF check on Student(ID PK, Name, Address, Faculty, Year):\n- All attributes depend on ID → already in 2NF\n\nBut 3NF: Faculty → Year? (Does Faculty determine Year?) If not a dependency, we're done at 3NF."
+  },
+  {
+    "front": "What query lists employees with commission, ordered by commission descending?",
+    "back": "SELECT * FROM employees\nWHERE commission_pct IS NOT NULL\nORDER BY commission_pct DESC;\n\nKey points:\n- Use IS NOT NULL (not != NULL) to find non-null values\n- The ORDER BY comes last\n- This filters out all employees without commission"
+  },
+  {
+    "front": "How do you get all locations with postal code containing '902'?",
+    "back": "SELECT * FROM locations\nWHERE postal_code LIKE '%902%';\n\nThe % wildcard matches any characters before and after '902', so it finds postal codes that CONTAIN '902' anywhere in the string.\n\nExample matches: '90210', '19021', 'SW902AB'"
+  },
+  {
+    "front": "What query finds all regions where the region name ends with 'a'?",
+    "back": "SELECT * FROM regions\nWHERE region_name LIKE '%a';\n\nThe % before 'a' matches any characters before 'a', and no wildcard after means the string must END with 'a'.\n\nExample matches: 'Europe', 'Asia', 'America'\n(Note: LIKE is case-sensitive in some databases; use LOWER() if needed)"
+  },
+  {
+    "front": "What is the difference between a simple CTE and a subquery? When to use each?",
+    "back": "Subquery:\n- Embedded directly in the query\n- Can be harder to read for complex logic\n- Cannot be reused within the same query\n\nCTE (WITH clause):\n- Defined at the top, named, then referenced\n- Easier to read and maintain\n- Can be referenced MULTIPLE TIMES in the same query\n- Better for recursive queries\n\nUse CTE when: the logic is complex, the result is needed more than once, or readability matters."
+  },
+  {
+    "front": "What does DENSE_RANK vs RANK produce for salary values: 10000, 9000, 9000, 8000?",
+    "back": "RANK():\n1 → 10000\n2 → 9000\n2 → 9000\n4 → 8000 (skips 3 because positions 2 and 3 were both used by the tie)\n\nDENSE_RANK():\n1 → 10000\n2 → 9000\n2 → 9000\n3 → 8000 (no gap — consecutive regardless of ties)\n\nUse DENSE_RANK when you need clean sequential rankings."
+  },
+  {
+    "front": "What is the Fig 2 (Student William Ishee) normalized to 3NF?",
+    "back": "UNF: Student info (ID, Name, Address) + repeating group of (ModuleCode, ModuleName, AssignmentType, Grade, Status)\n\n1NF: Separate repeating group:\n- Student(StudentID PK, StudentName, StudentAddress)\n- Result(StudentID FK, ModuleCode, ModuleName, AssignmentType, Grade, Status) ← composite PK (StudentID, ModuleCode, AssignmentType)\n\n2NF: ModuleName depends only on ModuleCode (partial dependency):\n- Module(ModuleCode PK, ModuleName)\n- Result(StudentID FK, ModuleCode FK, AssignmentType, Grade, Status)\n\n3NF: Status depends on Grade? If Grade → Status (A=Pass, F=Fail), extract:\n- GradeStatus(Grade PK, Status)\n- Result(StudentID FK, ModuleCode FK, AssignmentType, Grade FK)"
+  },
+  {
+    "front": "How does the WHERE clause handle NULL values in comparisons?",
+    "back": "NULL comparisons with =, !=, >, < always return UNKNOWN (not TRUE or FALSE).\n\nSo: WHERE salary = NULL → returns NO rows (because UNKNOWN is treated as FALSE)\nCorrect: WHERE salary IS NULL\n\nAlso: WHERE salary != NULL → returns NO rows\nCorrect: WHERE salary IS NOT NULL\n\nNULL is 'unknown', so it cannot be equal to or not equal to anything."
+  },
+  {
+    "front": "Write a query to rewrite an avg salary > 60000 query using both subquery and CTE",
+    "back": "Subquery version:\nSELECT department_id, AVG(salary)\nFROM employees\nGROUP BY department_id\nHAVING AVG(salary) > 60000;\n\nCTE version:\nWITH dept_avg AS (\n  SELECT department_id, AVG(salary) AS avg_sal\n  FROM employees\n  GROUP BY department_id\n)\nSELECT department_id, avg_sal\nFROM dept_avg\nWHERE avg_sal > 60000;"
+  },
+  {
+    "front": "What are the main single-row character manipulation functions and their purpose?",
+    "back": "CONCAT(a,b) — joins two strings\nSUBSTR(s,p,l) — extracts part of a string\nLENGTH(s) — returns string length\nINSTR(s,sub,p,n) — finds position of substring\nLPAD(s,n,c) — left-pads with character\nRPAD(s,n,c) — right-pads with character\nTRIM(s) — removes leading/trailing spaces\nREPLACE(s,old,new) — replaces all occurrences of old with new"
+  },
+  {
+    "front": "What is the practical use case for LPAD() with zeros?",
+    "back": "LPAD(employee_id, 5, '0') → '00045'\n\nReal-world uses:\n- Display employee/student IDs with fixed width (e.g., on badges, certificates)\n- Bank account numbers that must be a fixed length\n- Invoice numbers, reference codes in exports\n- Sorting alphanumeric IDs correctly (without padding, '9' sorts after '10')\n\nPadding ensures consistent display and correct sorting."
+  },
+  {
+    "front": "What is the SQL query to display employees who report to manager ID 101?",
+    "back": "SELECT * FROM employees\nWHERE manager_id = 101;\n\nSimple equality comparison on manager_id column.\n\nTo also get the manager's name (JOIN required):\nSELECT e.*, m.first_name || ' ' || m.last_name AS manager_name\nFROM employees e\nJOIN employees m ON e.manager_id = m.employee_id\nWHERE e.manager_id = 101;"
+  },
+  {
+    "front": "What are the rules for placing aggregate functions in SQL clauses?",
+    "back": "Aggregate functions CAN be used in:\n✓ SELECT clause\n✓ HAVING clause\n✓ ORDER BY clause\n\nAggregate functions CANNOT be used in:\n✗ WHERE clause — use HAVING instead for group conditions\n\nExample of wrong: WHERE AVG(salary) > 10000 ← INVALID\nCorrect: HAVING AVG(salary) > 10000"
+  },
+  {
+    "front": "What are all possible outputs of ROUND(456.235) with no second argument?",
+    "back": "ROUND(456.235) → 456 (rounds to 0 decimal places by default)\n\nNote: ROUND(number) without specifying precision is equivalent to ROUND(number, 0)\n\nCompare:\n- ROUND(456.235, 0) → 456\n- ROUND(456.235, 1) → 456.2\n- ROUND(456.235, 2) → 456.24 (the 5 rounds up the 3)\n- ROUND(456.235, 3) → 456.235 (unchanged, already 3 decimal places)"
+  },
+  {
+    "front": "What is ADD_MONTHS('31-dec-2008', 2.5) — explain the rounding behavior",
+    "back": "Result: 28-FEB-2009\n\nReason:\n1. The decimal 2.5 is TRUNCATED to 2 (decimals are always truncated, not rounded)\n2. December 31 + 2 months = February 31\n3. February doesn't have 31 days, so Oracle returns the LAST DAY of February: 28-FEB-2009\n\nKey rules for ADD_MONTHS: fractional months are truncated, and if result day exceeds month length, last day of that month is returned."
+  },
+  {
+    "front": "How do you display each employee's next salary review date (6 months after hire)?",
+    "back": "SELECT first_name || ' ' || last_name AS name,\n  ADD_MONTHS(hire_date, 6) AS next_review_date\nFROM employees;\n\nADD_MONTHS(date, 6) correctly handles all month-length variations and leap years — much better than manually adding 182 days.\n\nReal use: HR systems for scheduling performance reviews, contract renewals."
+  },
+  {
+    "front": "Show current date/time and session timezone side by side — and explain practical use",
+    "back": "SELECT SYSDATE AS server_time,\n       CURRENT_DATE AS session_time,\n       SESSIONTIMEZONE AS tz\nFROM DUAL;\n\nPractical use:\n- Applications with users in multiple time zones\n- Audit trails showing both server time and user's local time\n- Debugging timezone conversion issues\n- Ensuring timestamps are recorded consistently in global systems"
+  },
+  {
+    "front": "What SQL query finds employees whose first name has fewer than 10 characters?",
+    "back": "SELECT * FROM employees\nWHERE LENGTH(first_name) < 10;\n\nLENGTH() counts all characters including spaces.\n\nAlternative display query:\nSELECT first_name, LENGTH(first_name) AS name_length\nFROM employees\nWHERE LENGTH(first_name) < 10;"
+  },
+  {
+    "front": "How does INSTR work with occurrence parameter?",
+    "back": "INSTR(string, substring, start, occurrence)\n\nOn 'FinalYearStudent':\n- INSTR('FinalYearStudent', 'a') → 4 (first 'a', at position 4 in 'Final')\n- INSTR('FinalYearStudent', 'a', 2, 2) → 9 (start from pos 2, find 2nd 'a')\n- INSTR('FinalYearStudent', 'a', 2, 3) → 14 (3rd 'a' from pos 2, found in 'Student')\n\nUseful for parsing structured strings like 'LAST,FIRST,MIDDLE'."
+  },
+  {
+    "front": "What is the practical use of padding functions (LPAD/RPAD) beyond aesthetics?",
+    "back": "LPAD uses:\n- Fixed-width ID display: LPAD(emp_id, 5, '0') → '00045'\n- Correct alphanumeric sorting: '00009' sorts before '00010'\n- Barcode/reference number generation\n\nRPAD uses:\n- Fixed-width product codes for flat-file exports (legacy systems)\n- Creating aligned columnar text reports without using a formatter\n- Generating fixed-width data files for bank/government systems\n\nBoth ensure consistent column widths in exported or printed data."
+  },
+  {
+    "front": "What does SELECT ROUND(45.923,-1) FROM DUAL return?",
+    "back": "Result: 50\n\nRound to the nearest 10:\n45.923 → The digit in the tens place is 4, and we look at the units digit (5)\n5 rounds UP the 4 → becomes 5 → result is 50\n\nMore examples:\n- ROUND(44.923, -1) → 40\n- ROUND(45.1, -1) → 50\n- ROUND(123.456, -2) → 100"
+  },
+  {
+    "front": "What does TRUNC(45.923, -2) produce?",
+    "back": "Result: 0\n\nTRUNC with negative precision truncates digits to the LEFT of the decimal:\n- TRUNC(45.923, -1) → 40 (truncates to nearest 10)\n- TRUNC(45.923, -2) → 0 (truncates to nearest 100 — 45 is less than 100, so result is 0)\n- TRUNC(123.456, -2) → 100\n\nTRUNC never rounds — it just cuts off, always toward zero."
+  },
+  {
+    "front": "What SQL query displays employees with first_name starting with 'S' AND second character of last_name is 't'?",
+    "back": "SELECT * FROM employees\nWHERE first_name LIKE 'S%'\nAND last_name LIKE '_t%';\n\nBreakdown:\n- 'S%' → starts with S (then any characters)\n- '_t%' → any one character, then t, then any characters\n  (The _ matches exactly one character, placing 't' at position 2)\n\nExample match: first='Susan', last='Atkins'"
+  },
+  {
+    "front": "What does SUBSTR with a negative start position do?",
+    "back": "A negative start position counts from the END of the string.\n\nExamples on 'FinalYearStudent' (16 chars):\n- SUBSTR('FinalYearStudent', -1, 3) → 't' (starts 1 from end; only 1 char available)\n- SUBSTR('FinalYearStudent', -2) → 'nt' (last 2 characters)\n- SUBSTR(FIRST_NAME, -2) → last 2 chars of first name (alternative to using LENGTH)\n\nThis avoids needing LENGTH() when you just want the end of a string."
+  },
+  {
+    "front": "What is the output of SUBSTR('FinalYearStudent', 1, -2)?",
+    "back": "Result: '' (empty string / NULL)\n\nWhen the length parameter is negative or zero in SUBSTR, Oracle returns an empty string (or NULL depending on version).\n\nThis is different from negative START position (which counts from end) — a negative LENGTH makes no logical sense and returns nothing."
+  },
+  {
+    "front": "What query finds the total salary paid under each manager?",
+    "back": "SELECT manager_id, SUM(salary) AS total_salary_paid\nFROM employees\nWHERE manager_id IS NOT NULL\nGROUP BY manager_id\nORDER BY manager_id;\n\nThe WHERE clause excludes employees with no manager (typically the CEO who has manager_id = NULL)."
+  },
+  {
+    "front": "How do you find unique job roles count per department?",
+    "back": "SELECT department_id, COUNT(DISTINCT job_id) AS unique_job_roles\nFROM employees\nGROUP BY department_id;\n\nKey: COUNT(DISTINCT job_id) counts only unique job_id values per department, ignoring duplicates.\n\nThis answers: 'How many different roles exist in each department?'"
+  },
+  {
+    "front": "Write the aggregate function summary query for the employees table",
+    "back": "SELECT\n  SUM(salary) AS total_salary,\n  AVG(salary) AS average_salary,\n  MAX(hire_date) AS most_recent_hire,\n  MIN(commission_pct) AS min_commission,\n  COUNT(DISTINCT manager_id) AS unique_managers\nFROM employees;\n\nAll these aggregate functions work on the entire table (no GROUP BY), producing a single summary row."
+  },
+  {
+    "front": "What are the Apriori algorithm's key metrics?",
+    "back": "Support = (Transactions containing itemset) / (Total transactions)\n→ How FREQUENT the itemset is\n\nConfidence = Support(A ∪ B) / Support(A)\n→ How often 'if A, then B' is true\n\nLift = Confidence(A→B) / Support(B)\n→ How much more likely B is given A, compared to random chance\nLift > 1 = positive association, Lift = 1 = independent, Lift < 1 = negative association"
+  },
+  {
+    "front": "What is the key advantage of FP-Growth over Apriori?",
+    "back": "FP-Growth scans the database only TWICE (vs. multiple scans in Apriori).\n\nApriori disadvantages:\n- Generates huge numbers of candidate itemsets\n- Requires multiple database passes (one per itemset size)\n- Slow on large, dense datasets\n\nFP-Growth advantages:\n- Compresses data into an FP-tree\n- No candidate generation needed\n- Much faster on large datasets\n- Memory efficient for sparse datasets"
+  },
+  {
+    "front": "What columns cannot be in SELECT with GROUP BY?",
+    "back": "Any column in SELECT that is NOT an aggregate function MUST appear in the GROUP BY clause.\n\nWrong:\nSELECT department_id, first_name, COUNT(*)\nFROM employees\nGROUP BY department_id;\n← ERROR: first_name not in GROUP BY\n\nCorrect:\nSELECT department_id, COUNT(*)\nFROM employees\nGROUP BY department_id;"
+  },
+  {
+    "front": "What are examples of real-world uses for Group/Aggregate Functions?",
+    "back": "Business analytics:\n- Total monthly revenue by product: SUM(amount) GROUP BY product\n- Average customer rating per restaurant: AVG(rating) GROUP BY restaurant\n- Number of orders per day: COUNT(*) GROUP BY order_date\n- Max temperature per city: MAX(temp) GROUP BY city\n\nIn an FYP: COUNT bookings per time slot, SUM scores per student, AVG rating per item — any summarization by category."
+  },
+  {
+    "front": "What is the difference between INNER JOIN and LEFT JOIN?",
+    "back": "INNER JOIN — returns only rows where there is a MATCH in BOTH tables.\n\nLEFT JOIN (LEFT OUTER JOIN) — returns ALL rows from the left table, with NULLs for unmatched right table columns.\n\nExample:\n- INNER JOIN departments ON employees.dept_id = departments.dept_id\n  → Only employees who HAVE a department\n\n- LEFT JOIN → Also includes employees with NULL department_id (unassigned employees)"
+  },
+  {
+    "front": "How do you find employees who have the same job as employee 101?",
+    "back": "SELECT * FROM employees\nWHERE job_id = (\n  SELECT job_id FROM employees\n  WHERE employee_id = 101\n)\nAND employee_id != 101; -- optional: exclude employee 101 themselves\n\nThis single-row subquery gets employee 101's job_id, then the outer query finds all employees with that same job_id."
+  },
+  {
+    "front": "How do you retrieve employees working in departments located in Seattle?",
+    "back": "SELECT first_name, last_name FROM employees\nWHERE department_id IN (\n  SELECT department_id FROM departments\n  WHERE location_id = (\n    SELECT location_id FROM locations\n    WHERE city = 'Seattle'\n  )\n);\n\nThis uses NESTED subqueries:\n1. Find Seattle's location_id\n2. Find departments in that location\n3. Find employees in those departments"
+  },
+  {
+    "front": "What are job history records and how do you query department 50 records?",
+    "back": "The JOB_HISTORY table tracks an employee's previous positions — when they changed departments or jobs.\n\nQuery:\nSELECT * FROM job_history\nWHERE department_id = 50\nORDER BY end_date;\n\nColumns typically: employee_id, start_date, end_date, job_id, department_id\n\nUse case: Tracking career progression, calculating time in each role."
+  },
+  {
+    "front": "What does 'atomic value' mean in the context of 1NF?",
+    "back": "An atomic value is INDIVISIBLE — it holds only one piece of information per cell.\n\nNOT atomic (violates 1NF):\n- Multiple phone numbers in one cell: '0771234, 0779876'\n- Multiple subjects in one cell: 'Math, English, Science'\n- Address split across multiple: '595 Green Lake Road, Black Lake | 9115 Lake Street, Harrietsfield' (two addresses)\n\nAtomic (satisfies 1NF):\n- One phone number per cell\n- One subject per row\n- One address per row (or split into Address1, Address2 columns)"
+  },
+  {
+    "front": "What makes a column a good Primary Key candidate?",
+    "back": "A good PK candidate:\n✓ UNIQUE — no two rows have the same value\n✓ NOT NULL — always has a value\n✓ STABLE — doesn't change over time\n✓ Simple — ideally a single column (numeric IDs preferred)\n\nPoor PK choices:\n✗ Name (can duplicate, can change)\n✗ Email (can change)\n✗ Date alone (many events per date)\n✗ Composite that could be simplified"
+  },
+  {
+    "front": "What is a surrogate key vs. a natural key?",
+    "back": "Natural Key — uses a real-world attribute that naturally uniquely identifies a row\nExample: Social Security Number, ISBN, License Plate\n\nSurrogate Key — a system-generated artificial ID with no business meaning\nExample: employee_id = 1,2,3,4... (auto-increment)\n\nSurrogate keys are usually preferred because:\n- Natural keys can change (emails, names)\n- Natural keys may be too long\n- Surrogate keys are stable and simple"
+  },
+  {
+    "front": "What is the weekly FYP Tutorial task for Week 1 per the workshop?",
+    "back": "Week 1 Workshop task:\n1. Verify tasks from Week 1 (completing initial setup and SQL basics)\n2. Research on Apriori Algorithm (association rule mining)\n3. Research on FP-Growth (frequent pattern mining alternative to Apriori)\n\nThis indicates the module covers both database design (SQL) and data mining concepts."
+  }
+]

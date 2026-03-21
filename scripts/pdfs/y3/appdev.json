@@ -1,0 +1,849 @@
+[
+  {"front": "What is the main role of frontend in a web application?", "back": "Frontend handles the user interface and user experience. It runs in the browser and manages how users interact with the application."},
+  {"front": "What is the main responsibility of backend in a web application?", "back": "Backend handles business logic, database operations, authentication, and server-side processing."},
+  {"front": "Where does frontend code execute?", "back": "Frontend code runs in the browser."},
+  {"front": "Where does backend code execute?", "back": "Backend code runs on the server."},
+  {"front": "How do frontend and backend communicate?", "back": "They communicate through APIs (Application Programming Interfaces)."},
+  {"front": "What is a Web App?", "back": "A Web App returns HTML pages and renders UI on the server."},
+  {"front": "What is a Web API?", "back": "A Web API returns data (usually JSON) and exposes endpoints without a UI."},
+  {"front": "Why are Web APIs important in modern applications?", "back": "They allow different clients like mobile apps and frontend frameworks to communicate with the backend."},
+  {"front": "What is ASP.NET Core?", "back": "A cross-platform, open-source framework used to build web apps and APIs using C#."},
+  {"front": "Why is ASP.NET Core considered high performance?", "back": "It uses the Kestrel web server optimized for handling many concurrent requests efficiently."},
+
+  {"front": "What is REST?", "back": "REST is an architectural style for designing scalable, stateless web services."},
+  {"front": "What does 'stateless' mean in REST?", "back": "Each request is independent and the server does not store client state."},
+  {"front": "What is a RESTful API?", "back": "An API that follows REST principles to allow communication between systems over HTTP."},
+  {"front": "What is meant by 'resource' in REST?", "back": "Any entity like user, product, or order identified by a URI."},
+  {"front": "What is a URI in REST?", "back": "A Uniform Resource Identifier that uniquely identifies a resource endpoint."},
+
+  {"front": "What are the main characteristics of REST APIs?", "back": "Statelessness, client-server architecture, resource-based design, and use of HTTP methods."},
+  {"front": "What is the client-server architecture?", "back": "Client sends requests and server responds with data or actions."},
+  {"front": "Why is REST scalable?", "back": "Because it is stateless and allows independent request handling."},
+  {"front": "What is caching in REST?", "back": "Storing responses so repeated requests can be served faster."},
+  {"front": "Why is REST language-independent?", "back": "Clients and servers can be built in different languages but communicate via HTTP."},
+
+  {"front": "What is HTTP?", "back": "A protocol used for communication between client and server over the web."},
+  {"front": "What does HTTP stand for?", "back": "HyperText Transfer Protocol."},
+  {"front": "Why is HTTP stateless?", "back": "Because each request is processed independently without memory of previous requests."},
+  {"front": "What are common HTTP methods?", "back": "GET, POST, PUT, PATCH, DELETE."},
+  {"front": "What is the purpose of HTTP methods?", "back": "They define the action to perform on a resource."},
+
+  {"front": "What does GET do?", "back": "Retrieves data from the server."},
+  {"front": "What does POST do?", "back": "Creates a new resource."},
+  {"front": "What does PUT do?", "back": "Updates an existing resource completely."},
+  {"front": "What does PATCH do?", "back": "Partially updates a resource."},
+  {"front": "What does DELETE do?", "back": "Removes a resource."},
+
+  {"front": "What is an HTTP request?", "back": "A message sent by the client to the server containing method, URL, headers, and optionally body."},
+  {"front": "What is an HTTP response?", "back": "A message returned by the server containing status code, headers, and data."},
+  {"front": "What is an HTTP status code?", "back": "A code indicating the result of a request (e.g., success or error)."},
+  {"front": "What does status code 200 mean?", "back": "Request was successful."},
+  {"front": "What does status code 201 mean?", "back": "Resource was successfully created."},
+
+  {"front": "What does status code 400 mean?", "back": "Bad request due to client error or validation failure."},
+  {"front": "What does status code 401 mean?", "back": "Unauthorized, authentication is required."},
+  {"front": "What does status code 403 mean?", "back": "Forbidden, access denied."},
+  {"front": "What does status code 404 mean?", "back": "Resource not found."},
+  {"front": "What does status code 500 mean?", "back": "Internal server error."},
+
+  {"front": "What is a controller in ASP.NET Core?", "back": "A class that handles HTTP requests and returns responses."},
+  {"front": "Why are controllers important?", "back": "They act as entry points for API requests."},
+  {"front": "What is an action method?", "back": "A public method in a controller that handles a specific request."},
+  {"front": "What determines which action method is called?", "back": "Routing and HTTP method."},
+  {"front": "What attribute marks a class as an API controller?", "back": "[ApiController]"},
+
+  {"front": "What does [Route] attribute do?", "back": "Defines the URL pattern for accessing a controller or action."},
+  {"front": "What is ControllerBase?", "back": "A base class for API controllers that returns data instead of views."},
+  {"front": "What is routing?", "back": "Mapping incoming requests to the correct controller and action method."},
+  {"front": "What is conventional routing?", "back": "Routing defined centrally using predefined patterns."},
+  {"front": "What is attribute routing?", "back": "Routing defined directly on controllers using attributes."},
+
+  {"front": "Why is attribute routing preferred?", "back": "It gives more flexibility and control over routes."},
+  {"front": "What are route templates?", "back": "Patterns used to define URLs with placeholders."},
+  {"front": "What is a route token?", "back": "A placeholder like [controller] or [action] replaced dynamically."},
+  {"front": "What is IActionResult?", "back": "A return type that allows flexible HTTP responses."},
+  {"front": "What is ActionResult<T>?", "back": "Combines a return type with HTTP response information."},
+
+  {"front": "What does Ok() return?", "back": "200 OK response with data."},
+  {"front": "What does Created() return?", "back": "201 Created response."},
+  {"front": "What does NoContent() return?", "back": "204 response with no data."},
+  {"front": "What does BadRequest() return?", "back": "400 error response."},
+  {"front": "What does NotFound() return?", "back": "404 error response."},
+
+  {"front": "What is model binding?", "back": "Mapping HTTP request data to method parameters or objects."},
+  {"front": "Why is model binding useful?", "back": "It automatically converts request data into usable .NET objects."},
+  {"front": "What are simple types in model binding?", "back": "Primitive types like int, string, bool, DateTime."},
+  {"front": "What are complex types?", "back": "Objects with multiple properties like classes."},
+  {"front": "What is binding from body?", "back": "Reading data from request body (usually JSON)."},  
+
+  {"front": "What is [FromQuery] used for?", "back": "To bind data from query string."},
+  {"front": "What is [FromRoute] used for?", "back": "To bind data from URL path parameters."},
+  {"front": "What is [FromBody] used for?", "back": "To bind data from request body."},
+  {"front": "What is [FromHeader] used for?", "back": "To bind data from HTTP headers."},
+  {"front": "What is query string?", "back": "Key-value pairs in URL used for filtering or pagination."},
+
+  {"front": "What is a route parameter?", "back": "A value embedded in the URL path to identify a resource."},
+  {"front": "What is matrix parameter?", "back": "Parameters inside URL segments separated by semicolons."},
+  {"front": "What is a fragment in URL?", "back": "Part after # used for client-side navigation only."},
+  {"front": "What is model validation?", "back": "Ensuring data meets defined rules before processing."},
+  {"front": "What does [Required] do?", "back": "Ensures a field is not empty."},
+
+  {"front": "What does [StringLength] do?", "back": "Defines min and max length for a string."},
+  {"front": "What does [Range] do?", "back": "Defines allowed numeric range."},
+  {"front": "What does [EmailAddress] validate?", "back": "Ensures valid email format."},
+  {"front": "What does [Phone] validate?", "back": "Ensures valid phone number format."},
+  {"front": "What does [Url] validate?", "back": "Ensures valid URL format."},
+
+  {"front": "What is Swagger UI?", "back": "A tool that visually displays and tests API endpoints."},
+  {"front": "Why is Swagger useful?", "back": "It helps understand and test APIs without reading code."},
+  {"front": "What does Swagger show?", "back": "Endpoints, methods, parameters, and responses."},
+  {"front": "What is Program.cs?", "back": "Entry point of ASP.NET Core application."},
+  {"front": "What does Program.cs configure?", "back": "Services, middleware pipeline, and app startup."},
+
+  {"front": "What is middleware?", "back": "Components that process HTTP requests in a pipeline."},
+  {"front": "What is Dependency Injection?", "back": "A design pattern for providing dependencies to classes."},
+  {"front": "What is Kestrel?", "back": "A lightweight web server used by ASP.NET Core."},
+  {"front": "What is appsettings.json?", "back": "Configuration file for settings like DB connection strings."},
+  {"front": "What is launchSettings.json?", "back": "Defines how the app runs during development."},
+
+  {"front": "What is CRUD?", "back": "Create, Read, Update, Delete operations."},
+  {"front": "Which HTTP method is used for Create?", "back": "POST"},
+  {"front": "Which HTTP method is used for Read?", "back": "GET"},
+  {"front": "Which HTTP method is used for Update?", "back": "PUT or PATCH"},
+  {"front": "Which HTTP method is used for Delete?", "back": "DELETE"},
+
+  {"front": "What is file upload in API?", "back": "Sending files from client to server using multipart/form-data."},
+  {"front": "What is IFormFile?", "back": "Represents a single uploaded file."},
+  {"front": "What is IEnumerable<IFormFile>?", "back": "Represents multiple uploaded files."},
+  {"front": "What is multipart/form-data?", "back": "A format used for uploading files."},
+  {"front": "Why use HTTPS?", "back": "To encrypt data during transmission for security."},
+
+  {
+    "front": "What is .NET?",
+    "back": ".NET is a free, open-source, cross-platform ecosystem for building applications. It supports multiple languages (C#, F#, Visual Basic) and runs on Windows, Linux, macOS, mobile, cloud, and IoT. It provides a consistent API across all platforms and uses NuGet for package management."
+  },
+  {
+    "front": "What is C# and when was it introduced?",
+    "back": "C# (pronounced 'C Sharp') is a modern, object-oriented programming language designed by Anders Hejlsberg at Microsoft. It was announced in 2000 at the Professional Developers Conference and first released in January 2002 with .NET Framework 1.0."
+  },
+  {
+    "front": "What is the two-step compilation process in .NET?",
+    "back": "1. Source code is compiled to CIL (Common Intermediate Language) - a universal intermediate code. 2. At runtime, the CLR (Common Language Runtime) uses a JIT (Just-In-Time) compiler to convert CIL into native machine code for the specific platform. This enables cross-platform execution."
+  },
+  {
+    "front": "What are the core components of .NET Runtime?",
+    "back": "1. CLR (Common Language Runtime) - manages execution, memory, and security. 2. BCL (Base Class Library) - provides pre-built functionality. 3. JIT (Just-In-Time) Compiler - optimizes and compiles code for the specific running machine."
+  },
+  {
+    "front": "What makes .NET stand out?",
+    "back": "Universal & Open (cross-platform), Build Anything Anywhere (web, mobile, games, desktop), Familiar C-family syntax, Safe Performance (memory-safe), Multi-Paradigm (OOP + functional), Industry-Backed by Microsoft, Thriving Ecosystem with 3.4M+ GitHub repositories."
+  },
+  {
+    "front": "How do you create and run a C# project using CLI?",
+    "back": "1. Create: dotnet new console -n <project_name> 2. Navigate: cd /path/to/project 3. Build: dotnet build 4. Run: dotnet run. You can edit Program.cs using any text editor."
+  },
+  {
+    "front": "What is the difference between Value types and Reference types in C#?",
+    "back": "Value types (int, bool, float, struct) store data directly on the stack. When passed to methods, a copy is made. Reference types (class, string, array) store a reference (memory address) on the heap. When passed, the reference is copied but the object can be modified through it."
+  },
+  {
+    "front": "What is the difference between const and readonly in C#?",
+    "back": "const: Value must be assigned at declaration, implicitly static, compile-time constant. readonly: Value can be assigned at declaration or in constructor, instance-level, runtime constant. const cannot be modified after compilation; readonly can be set during object creation."
+  },
+  {
+    "front": "What is the difference between int.Parse() and int.TryParse()?",
+    "back": "int.Parse() throws an exception if the conversion fails. int.TryParse() returns a boolean indicating success/failure and outputs the parsed value through an out parameter. TryParse is safer for user input as it does not crash on invalid input."
+  },
+  {
+    "front": "What is a class in C#?",
+    "back": "A class is a blueprint or template for creating objects. It defines the data (fields/properties) and behavior (methods) that objects of that type will have. Classes are reference types and support encapsulation, inheritance, and polymorphism."
+  },
+  {
+    "front": "What is an object in C#?",
+    "back": "An object is an instance of a class created using the 'new' keyword. It occupies memory and contains actual values for the fields defined in its class. Multiple objects can be created from the same class, each with its own state."
+  },
+  {
+    "front": "What is the difference between instance fields and static fields?",
+    "back": "Instance fields belong to each object (each has its own copy). Static fields belong to the class itself (shared across all instances). Static fields are accessed using ClassName.FieldName, while instance fields use objectName.FieldName."
+  },
+  {
+    "front": "What is a constructor in C#?",
+    "back": "A constructor is a special method that runs automatically when an object is created. It has the same name as the class, no return type, and is used to initialize object fields. Types: Default (no parameters), Parameterized (takes arguments), Static (runs once for the class)."
+  },
+  {
+    "front": "What is method overloading?",
+    "back": "Method overloading allows multiple methods with the same name but different parameter lists (different number, types, or order of parameters) in the same class. The compiler determines which method to call based on the arguments provided."
+  },
+  {
+    "front": "What are the different types of method parameters in C#?",
+    "back": "1. Value (default) - passes a copy. 2. ref - passes reference, variable must be initialized. 3. out - passes reference for multiple return values, must be assigned in method. 4. params - accepts variable number of arguments. 5. Optional - has default value. 6. Named - passed by parameter name."
+  },
+  {
+    "front": "What is the difference between ref and out parameters?",
+    "back": "ref: Variable must be initialized before passing. out: Variable does not need initialization but MUST be assigned inside the method. Both pass by reference and allow the method to modify the original variable."
+  },
+  {
+    "front": "What are the rules for using params keyword?",
+    "back": "1. Must be a single-dimensional array. 2. Must be the last parameter in the method signature. 3. Only one params parameter allowed per method. 4. Allows passing variable number of arguments."
+  },
+  {
+    "front": "What is the rule for optional parameters?",
+    "back": "Optional parameters (with default values) must be defined AFTER all required parameters in the method signature. This is because C# cannot determine which parameter receives the value if optional comes first."
+  },
+  {
+    "front": "What is a local function in C#?",
+    "back": "A local function is a method defined inside another method. It can only be called from within its containing method. Useful for organizing code and creating helper logic that does not need to be exposed outside."
+  },
+  {
+    "front": "What is a recursive function?",
+    "back": "A recursive function is a method that calls itself to solve a problem by breaking it into smaller subproblems. Must have a base case to stop recursion, otherwise causes stack overflow. Example: Factorial calculation, Fibonacci sequence."
+  },
+  {
+    "front": "What is an enum in C#?",
+    "back": "An enum (enumeration) is a value type that defines a set of named constants. It makes code more readable by giving meaningful names to numeric values. Underlying type is int by default but can be changed. Example: enum DayType { Weekday, Weekend }"
+  },
+  {
+    "front": "What is a record in C#?",
+    "back": "A record is a reference type introduced in C# 9.0 for creating immutable data models. It provides value-based equality, built-in ToString(), and with-expressions for creating modified copies. Ideal for DTOs and data transfer objects."
+  },
+  {
+    "front": "What is encapsulation in OOP?",
+    "back": "Encapsulation is the bundling of data (fields) and methods that operate on that data within a single unit (class), while restricting direct access to some components. Achieved through access modifiers (private, public, protected) and properties."
+  },
+  {
+    "front": "What is a property in C#?",
+    "back": "A property is a member that provides a flexible mechanism to read, write, or compute the value of a private field. It uses get and set accessors. Can have different access levels (public get, private set) and validation logic."
+  },
+  {
+    "front": "What is inheritance in OOP?",
+    "back": "Inheritance allows a class (derived/child) to inherit fields, properties, and methods from another class (base/parent). It promotes code reusability and establishes an 'is-a' relationship. In C#, use ':' to inherit and a class can only inherit from one base class."
+  },
+  {
+    "front": "What is the base keyword used for?",
+    "back": "The base keyword is used to access members of the base class from the derived class. Common uses: 1. Call base class constructor: base(parameters) 2. Access base class methods: base.MethodName() 3. Access base class fields: base.fieldName"
+  },
+  {
+    "front": "What is polymorphism in OOP?",
+    "back": "Polymorphism means 'many forms'. It allows objects of different classes to be treated as objects of a common base class. Two types: 1. Compile-time (method overloading) 2. Runtime (method overriding using virtual/override)."
+  },
+  {
+    "front": "What is the difference between method overloading and overriding?",
+    "back": "Overloading: Same method name, different parameters, same class, compile-time polymorphism. Overriding: Same method signature, different implementation, parent-child classes, requires virtual/override keywords, runtime polymorphism."
+  },
+  {
+    "front": "What is an abstract class?",
+    "back": "An abstract class is a class that cannot be instantiated and is meant to be inherited. It can contain abstract methods (without implementation) that derived classes must override, and concrete methods (with implementation). Use 'abstract' keyword."
+  },
+  {
+    "front": "What is an interface in C#?",
+    "back": "An interface defines a contract with only method signatures, properties, events (no implementation). Classes implement interfaces using ': IInterfaceName'. A class can implement multiple interfaces. Used for abstraction and loose coupling."
+  },
+  {
+    "front": "What is the difference between abstract class and interface?",
+    "back": "Abstract class: Can have implementation, single inheritance, can have fields/constructors, access modifiers allowed. Interface: No implementation (until C# 8), multiple inheritance allowed, no fields/constructors, members are public by default."
+  },
+  {
+    "front": "What is the sealed keyword?",
+    "back": "The sealed keyword prevents a class from being inherited or a method from being overridden. When applied to a class, no other class can derive from it. When applied to a method (with override), no further overriding is allowed in derived classes."
+  },
+  {
+    "front": "What is the virtual keyword?",
+    "back": "The virtual keyword marks a method, property, or indexer in a base class that CAN be overridden in derived classes. It provides a default implementation that can be changed by derived classes using the override keyword."
+  },
+  {
+    "front": "What is the override keyword?",
+    "back": "The override keyword is used in a derived class to provide a new implementation for a virtual or abstract method inherited from the base class. The overridden method must have the same signature as the base method."
+  },
+  {
+    "front": "What is the new keyword used for in method hiding?",
+    "back": "The new keyword explicitly hides a method inherited from the base class. Unlike override which extends behavior, new creates a completely separate method. Use when you want to replace (not extend) the base class method's behavior."
+  },
+  {
+    "front": "What is downcasting and upcasting?",
+    "back": "Upcasting: Converting derived class to base class (implicit, safe). Example: BaseClass obj = new DerivedClass(). Downcasting: Converting base class to derived class (explicit, may throw exception). Use 'as' keyword or type checking with 'is' for safety."
+  },
+  {
+    "front": "What is a delegate in C#?",
+    "back": "A delegate is a type that represents references to methods with a specific parameter list and return type. It is like a function pointer in C/C++. Delegates are used to pass methods as arguments to other methods and for event handling."
+  },
+  {
+    "front": "What are built-in delegates in C#?",
+    "back": "1. Action<T> - delegates with void return type, 0-16 parameters. 2. Func<T, TResult> - delegates with return type, 0-16 input parameters. 3. Predicate<T> - delegates that return bool, used for conditions. 4. EventHandler - for event handling."
+  },
+  {
+    "front": "What is a lambda expression?",
+    "back": "A lambda expression is an anonymous function that can be used to create delegates or expression trees. Syntax: (parameters) => expression or (parameters) => { statements }. Example: x => x * x, (x, y) => x + y."
+  },
+  {
+    "front": "What is LINQ?",
+    "back": "LINQ (Language Integrated Query) is a set of language extensions in C# that provides query capabilities for objects, databases, XML, and more. It allows writing SQL-like queries directly in C# code using method syntax or query syntax."
+  },
+  {
+    "front": "What are the main LINQ operators?",
+    "back": "1. Where - filtering. 2. Select - projection/transformation. 3. OrderBy/OrderByDescending - sorting. 4. First/FirstOrDefault - get first element. 5. Last/LastOrDefault - get last element. 6. Single/SingleOrDefault - get single element. 7. Any/All - quantifiers."
+  },
+  {
+    "front": "What are LINQ aggregation methods?",
+    "back": "1. Count() - number of elements. 2. Sum() - total of numeric values. 3. Average() - arithmetic mean. 4. Min() - minimum value. 5. Max() - maximum value. 6. Aggregate() - custom aggregation. These reduce a collection to a single value."
+  },
+  {
+    "front": "What is the difference between First() and FirstOrDefault()?",
+    "back": "First() throws an exception if no element is found or the source is empty. FirstOrDefault() returns the default value (null for reference types, 0 for numeric) if no element is found. FirstOrDefault is safer when the element might not exist."
+  },
+  {
+    "front": "What is the difference between Any() and All() in LINQ?",
+    "back": "Any() returns true if at least one element satisfies the condition (or if collection is non-empty when no condition). All() returns true only if ALL elements satisfy the condition. Any() returns false for empty collections; All() returns true for empty collections."
+  },
+  {
+    "front": "What is an expression-bodied member?",
+    "back": "An expression-bodied member is a shorthand syntax for methods, properties, constructors, and other members that consist of a single expression. Uses => instead of a block body. Example: public int Square(int x) => x * x;"
+  },
+  {
+    "front": "What is exception handling in C#?",
+    "back": "Exception handling is the mechanism to handle runtime errors gracefully using try-catch-finally blocks. try: code that might throw exception. catch: handles specific exceptions. finally: always executes (cleanup code). throw: manually raises an exception."
+  },
+  {
+    "front": "What is the difference between throw and throw ex?",
+    "back": "throw: Re-throws the original exception preserving the stack trace. throw ex: Throws a new exception, resetting the stack trace to the current location. Always use 'throw' to preserve debugging information."
+  },
+  {
+    "front": "What are common exception types in C#?",
+    "back": "1. NullReferenceException - accessing null object. 2. ArgumentException - invalid argument. 3. InvalidOperationException - invalid operation for object's state. 4. FormatException - invalid format. 5. OverflowException - arithmetic overflow. 6. DivideByZeroException - division by zero."
+  },
+  {
+    "front": "What is the using statement in C#?",
+    "back": "The using statement ensures that IDisposable objects are properly disposed of after use, even if an exception occurs. It automatically calls the Dispose() method. Can be used with braces (using statement) or without (using declaration in C# 8+)."
+  },
+  {
+    "front": "What is the difference between Array and List<T>?",
+    "back": "Array: Fixed size, created with specific length, more memory efficient for known sizes. List<T>: Dynamic size, grows automatically, more flexible with Add/Remove methods. List<T> is generally preferred when the number of elements is unknown or changes frequently."
+  },
+  {
+    "front": "What is a Dictionary<TKey, TValue>?",
+    "back": "A Dictionary is a generic collection that stores key-value pairs. Each key must be unique. Provides O(1) average time complexity for lookups by key. Use TryGetValue() for safe retrieval. Example: Dictionary<int, string> students = new();"
+  },
+  {
+    "front": "What is the difference between == and Equals()?",
+    "back": "==: For value types, compares values. For reference types, compares memory addresses (unless overloaded). Equals(): Virtual method that can be overridden for custom equality comparison. For strings, both compare values due to string interning and overloading."
+  },
+  {
+    "front": "What is string interpolation in C#?",
+    "back": "String interpolation allows embedding expressions directly in string literals using $ prefix. Example: $'Hello, {name}! You are {age} years old.' More readable than string concatenation or String.Format()."
+  },
+  {
+    "front": "What is the null-coalescing operator (??)?",
+    "back": "The ?? operator returns the left-hand operand if it is not null, otherwise returns the right-hand operand. Example: string name = input ?? 'Default'; If input is null, name becomes 'Default'. Useful for providing fallback values."
+  },
+  {
+    "front": "What is the null-coalescing assignment operator (??=)?",
+    "back": "The ??= operator assigns the right-hand value to the left-hand variable only if the left-hand variable is null. Example: name ??= 'Default'; // Only assigns if name is null. Introduced in C# 8.0."
+  },
+  {
+    "front": "What is the null-conditional operator (?.)?",
+    "back": "The ?. operator safely accesses members of an object that might be null. Returns null if the object is null, otherwise returns the member value. Example: int? length = name?.Length; Avoids NullReferenceException."
+  },
+  {
+    "front": "What is the ternary operator in C#?",
+    "back": "The ternary operator (?:) is a shorthand for if-else. Syntax: condition ? value_if_true : value_if_false. Example: string result = age >= 18 ? 'Adult' : 'Minor'; Must return values of compatible types."
+  },
+  {
+    "front": "What is the difference between break and continue?",
+    "back": "break: Exits the entire loop immediately. continue: Skips the rest of the current iteration and moves to the next iteration. Both work with for, while, do-while, and foreach loops."
+  },
+  {
+    "front": "What is a switch expression (C# 8+)?",
+    "back": "A switch expression is a concise way to use switch logic with => syntax. Returns a value directly. Example: var dayType = day switch { 'Saturday' or 'Sunday' => 'Weekend', _ => 'Weekday' }; The _ is the discard pattern for default case."
+  },
+  {
+    "front": "What is pattern matching in C#?",
+    "back": "Pattern matching is a feature that tests if a value has a certain shape and extracts information. Types: 1. Type pattern: obj is string s. 2. Property pattern: p is { Age: > 18 }. 3. Tuple pattern: (x, y) is (0, 0). 4. Relational pattern: n is > 0 and < 100."
+  },
+  {
+    "front": "What is the difference between DateTime and TimeSpan?",
+    "back": "DateTime represents a specific point in time (date and time). TimeSpan represents a duration or interval of time. You can subtract two DateTimes to get a TimeSpan. Example: TimeSpan age = DateTime.Now - birthDate;"
+  },
+  {
+    "front": "What is dependency injection (DI)?",
+    "back": "Dependency Injection is a design pattern where dependencies are provided to a class from external sources rather than the class creating them itself. It promotes loose coupling, testability, and maintainability. Dependencies are 'injected' through constructor, property, or method."
+  },
+  {
+    "front": "What are the service lifetimes in ASP.NET Core DI?",
+    "back": "1. Transient: New instance created every time requested. 2. Scoped: Same instance within a single request/scope. 3. Singleton: Same instance for the entire application lifetime. Choose based on whether service needs to maintain state and thread safety requirements."
+  },
+  {
+    "front": "How do you register services in ASP.NET Core?",
+    "back": "In Program.cs or Startup.cs using the IServiceCollection: services.AddTransient<IService, ServiceImplementation>(); services.AddScoped<IService, ServiceImplementation>(); services.AddSingleton<IService, ServiceImplementation>(); The interface is registered along with its implementation."
+  },
+  {
+    "front": "What is the difference between synchronous and asynchronous programming?",
+    "back": "Synchronous: Code executes sequentially, blocking the thread until completion. Asynchronous: Code can pause and resume, freeing the thread to do other work while waiting. Async uses async/await keywords and Task/ValueTask return types."
+  },
+  {
+    "front": "What are async and await keywords?",
+    "back": "async: Marks a method as asynchronous, allowing await inside it. await: Pauses execution until the awaited Task completes, then returns the result. The method returns control to caller while waiting, improving responsiveness and scalability."
+  },
+  {
+    "front": "What is a Task in C#?",
+    "back": "A Task represents an asynchronous operation that may or may not have completed yet. It is a promise of a future result. Use Task for void-returning async methods, Task<T> for methods that return a value. Tasks can be awaited, chained, and combined."
+  },
+  {
+    "front": "What is the difference between Task.Run and async/await?",
+    "back": "Task.Run: Offloads work to a thread pool thread (use for CPU-bound work). async/await: Enables asynchronous I/O operations without blocking threads (use for I/O-bound work). Do not use Task.Run for I/O operations as it wastes thread pool resources."
+  },
+  {
+    "front": "What is ConfigureAwait(false)?",
+    "back": "ConfigureAwait(false) tells the await to not capture the current synchronization context. Used in library code to avoid deadlocks and improve performance. In UI applications, you typically want to capture context (default behavior) to resume on UI thread."
+  },
+  {
+    "front": "What is ASP.NET Core?",
+    "back": "ASP.NET Core is a cross-platform, high-performance, open-source framework for building modern web applications and APIs using .NET and C#. It is designed for large-scale applications, uses Kestrel web server, and consistently ranks among the fastest web frameworks."
+  },
+  {
+    "front": "What is the difference between Web App and Web API?",
+    "back": "Web App: Returns HTML pages, server renders UI, traditional MVC applications. Web API: Returns data (usually JSON), no UI, exposes HTTP endpoints, consumed by mobile apps and frontend frameworks like React/Blazor."
+  },
+  {
+    "front": "What is a RESTful API?",
+    "back": "REST (Representational State Transfer) is an architectural style for designing networked applications. RESTful APIs use HTTP methods for CRUD operations, are stateless, resource-based (identified by URIs), and typically return JSON data."
+  },
+  {
+    "front": "What are the characteristics of REST API?",
+    "back": "1. Client-Server Architecture: Separation of concerns. 2. Stateless: Each request is independent. 3. Resource-Based: Everything is a resource with URI. 4. Uniform Interface: Uses standard HTTP methods. 5. Cacheable: Responses can be cached. 6. Language Independent: Any client can consume."
+  },
+  {
+    "front": "What HTTP methods are used in REST API for CRUD?",
+    "back": "GET: Read/Retrieve data. POST: Create new resource. PUT: Update entire resource. PATCH: Partial update. DELETE: Remove resource. These map to CRUD operations: Create (POST), Read (GET), Update (PUT/PATCH), Delete (DELETE)."
+  },
+  {
+    "front": "What is the ASP.NET Core request pipeline?",
+    "back": "The request pipeline is a sequence of middleware components that process HTTP requests and responses. Each middleware can handle the request, pass it to the next middleware, and process the response on the way back. Configured using app.Use... methods in Program.cs."
+  },
+  {
+    "front": "What is middleware in ASP.NET Core?",
+    "back": "Middleware is software that handles requests and responses in the ASP.NET Core pipeline. Each middleware component chooses whether to pass the request to the next component and can perform work before and after the next component. Examples: Authentication, Logging, Exception Handling."
+  },
+  {
+    "front": "What is a Controller in ASP.NET Core?",
+    "back": "A Controller is a class that handles HTTP requests and returns responses. It contains action methods that map to HTTP verbs. Inherits from ControllerBase. Routes are defined using [Route], [HttpGet], [HttpPost] attributes or convention-based routing."
+  },
+  {
+    "front": "What is the difference between Controller and ControllerBase?",
+    "back": "Controller: Includes View support, used for MVC applications with views. ControllerBase: Lightweight, no view support, used for Web APIs. For API development, inherit from ControllerBase and add [ApiController] attribute."
+  },
+  {
+    "front": "What is the [ApiController] attribute?",
+    "back": "[ApiController] is applied to controller classes to enable API-specific behaviors: 1. Automatic model validation errors (400 response). 2. Automatic HTTP 400 for invalid models. 3. Binding source parameter inference. 4. ProblemDetails for error responses."
+  },
+  {
+    "front": "What is model binding in ASP.NET Core?",
+    "back": "Model binding automatically maps HTTP request data to action method parameters or model properties. It can bind from route data, query strings, form data, and request body. Use [FromRoute], [FromQuery], [FromBody], [FromForm] to specify source explicitly."
+  },
+  {
+    "front": "What is the [FromBody] attribute?",
+    "back": "[FromBody] indicates that a parameter should be bound from the HTTP request body, typically JSON. Required for complex types in POST/PUT requests. ASP.NET Core uses System.Text.Json or Newtonsoft.Json to deserialize the JSON to the parameter type."
+  },
+  {
+    "front": "What is the [FromRoute] attribute?",
+    "back": "[FromRoute] indicates that a parameter should be bound from route data (URL path parameters). Example: [HttpGet('users/{id}')] public IActionResult GetUser([FromRoute] int id). The id parameter is extracted from the URL."
+  },
+  {
+    "front": "What is IActionResult and ActionResult<T>?",
+    "back": "IActionResult is an interface representing the result of an action method. ActionResult<T> combines the return type with an IActionResult, allowing returning either the typed result or HTTP status codes like NotFound(), BadRequest()."
+  },
+  {
+    "front": "What are common IActionResult types?",
+    "back": "Ok(): 200 success. NotFound(): 404 not found. BadRequest(): 400 bad request. Created(): 201 created. NoContent(): 204 no content. Unauthorized(): 401 unauthorized. Forbid(): 403 forbidden. StatusCode(): Custom status code."
+  },
+  {
+    "front": "What is Swagger/OpenAPI in ASP.NET Core?",
+    "back": "Swagger (OpenAPI) is a tool that automatically generates interactive API documentation. It provides a UI to test API endpoints, shows request/response schemas, and helps developers understand and consume the API. Added via Swashbuckle NuGet package."
+  },
+  {
+    "front": "What is Entity Framework Core?",
+    "back": "Entity Framework Core (EF Core) is an Object-Relational Mapper (ORM) for .NET. It allows working with databases using .NET objects, eliminating the need for most data-access code. Supports LINQ queries, change tracking, migrations, and multiple database providers."
+  },
+  {
+    "front": "What is Code-First vs Database-First in EF Core?",
+    "back": "Code-First: Write C# classes first, EF Core generates database schema. Database-First: Generate C# classes from existing database. Code-First is preferred for new projects as it gives full control over the domain model."
+  },
+  {
+    "front": "What is a DbContext in EF Core?",
+    "back": "DbContext is the main class in EF Core that manages database connections and operations. It represents a session with the database, allows querying (through DbSet<T>), saving changes, and configuring the model. You create a derived class for your application."
+  },
+  {
+    "front": "What is a DbSet<T> in EF Core?",
+    "back": "DbSet<T> represents a collection of entities of a specific type in the database. It allows querying, adding, updating, and deleting entities. Each entity type in your model has a corresponding DbSet property in the DbContext."
+  },
+  {
+    "front": "What are EF Core Migrations?",
+    "back": "Migrations are a way to version control your database schema. They track changes to your model and generate SQL scripts to update the database. Commands: Add-Migration <Name>, Update-Database, Remove-Migration. Enable code-based schema evolution."
+  },
+  {
+    "front": "What is lazy loading vs eager loading in EF Core?",
+    "back": "Lazy Loading: Related data is loaded automatically when accessed (requires proxy). Eager Loading: Related data is loaded in a single query using Include(). Explicit Loading: Related data is loaded manually using Load(). Eager loading is usually preferred to avoid N+1 problem."
+  },
+  {
+    "front": "What is the N+1 problem in EF Core?",
+    "back": "The N+1 problem occurs when you execute one query for the main entities and then N additional queries for related entities (one per main entity). Caused by lazy loading in loops. Solution: Use eager loading with Include() or projection with Select()."
+  },
+  {
+    "front": "What is Identity Framework in ASP.NET Core?",
+    "back": "ASP.NET Core Identity is a membership system that adds login functionality to applications. It handles user authentication, authorization, password management, roles, claims, external logins (Google, Facebook), and two-factor authentication."
+  },
+  {
+    "front": "What is JWT authentication?",
+    "back": "JWT (JSON Web Token) is a compact, self-contained way to transmit information between parties as a JSON object. Used for stateless authentication. Structure: Header.Payload.Signature. Client sends JWT in Authorization header; server validates and extracts claims."
+  },
+  {
+    "front": "What is the difference between Authentication and Authorization?",
+    "back": "Authentication: Verifies WHO you are (identity verification, login). Authorization: Determines WHAT you can do (permissions, access control). Authentication happens first, then authorization. Example: Login = AuthN, Admin access = AuthZ."
+  },
+  {
+    "front": "What are Claims in ASP.NET Core Identity?",
+    "back": "Claims are key-value pairs that represent user attributes (name, email, role, etc.). They are stored in the authentication token and used for authorization decisions. More flexible than roles as a user can have multiple claims."
+  },
+  {
+    "front": "What is the [Authorize] attribute?",
+    "back": "[Authorize] restricts access to controllers or actions to authenticated users only. Can specify roles: [Authorize(Roles = 'Admin')]. Can specify policies: [Authorize(Policy = 'CanEdit')]. Applied at controller level or action level."
+  },
+  {
+    "front": "What is the [AllowAnonymous] attribute?",
+    "back": "[AllowAnonymous] allows unauthenticated access to a controller or action, overriding the [Authorize] attribute. Used for login, register, and public endpoints within controllers that otherwise require authentication."
+  },
+  {
+    "front": "What is CORS in ASP.NET Core?",
+    "back": "CORS (Cross-Origin Resource Sharing) is a security feature that controls how web pages can request resources from a different domain. Configured in Program.cs with services.AddCors() and app.UseCors(). Allows specifying which origins, headers, and methods are permitted."
+  },
+  {
+    "front": "What is appsettings.json?",
+    "back": "appsettings.json is a configuration file in ASP.NET Core that stores application settings like connection strings, logging levels, and custom configurations. It is JSON-based and supports different environments (appsettings.Development.json, appsettings.Production.json)."
+  },
+  {
+    "front": "How do you read configuration in ASP.NET Core?",
+    "back": "1. Inject IConfiguration into constructor. 2. Access values: _configuration['Section:Key']. 3. Use Options Pattern: Create a class, bind configuration section to it using services.Configure<T>(), inject IOptions<T>. Recommended for strongly-typed configuration."
+  },
+  {
+    "front": "What is the Options Pattern in ASP.NET Core?",
+    "back": "The Options Pattern uses classes to represent related settings and provides strongly-typed access to configuration. Steps: 1. Create a class matching config structure. 2. Register: services.Configure<MyOptions>(configuration.GetSection('MySection')). 3. Inject IOptions<MyOptions> or IOptionsSnapshot<MyOptions>."
+  },
+  {
+    "front": "What is logging in ASP.NET Core?",
+    "back": "ASP.NET Core includes built-in logging framework. Log levels: Trace, Debug, Information, Warning, Error, Critical, None. Use ILogger<T> injected into classes. Configure in appsettings.json or programmatically. Supports multiple providers (Console, Debug, EventLog, third-party)."
+  },
+  {
+    "front": "What is the difference between ILogger and ILogger<T>?",
+    "back": "ILogger: Generic logger interface, category name must be specified manually. ILogger<T>: Logger with category automatically set to the fully qualified name of type T. ILogger<T> is preferred as it provides better organization and filtering of log messages."
+  },
+  {
+    "front": "What is Blazor?",
+    "back": "Blazor is a .NET web framework for building interactive web UIs using C# instead of JavaScript. It allows sharing code between client and server, using existing .NET libraries, and provides a component-based architecture similar to React."
+  },
+  {
+    "front": "What are the Blazor hosting models?",
+    "back": "1. Blazor Server: UI runs on server, UI updates sent via SignalR. 2. Blazor WebAssembly: App runs in browser using WebAssembly. 3. Blazor Hybrid: Native app with embedded WebView (MAUI Blazor Hybrid). Each has different trade-offs in latency, offline support, and scalability."
+  },
+  {
+    "front": "What is .NET MAUI Blazor Hybrid?",
+    "back": ".NET MAUI Blazor Hybrid combines native .NET MAUI apps with Blazor web UI. It allows building cross-platform native apps (iOS, Android, Windows, macOS) using web technologies (HTML, CSS, Razor) for the UI while accessing native device features through .NET MAUI."
+  },
+  {
+    "front": "What is a Razor component?",
+    "back": "A Razor component is a self-contained piece of UI with HTML, CSS, and C# code in a single .razor file. It can receive parameters, handle events, and maintain state. Components can be nested and reused throughout the application."
+  },
+  {
+    "front": "What is the @code block in Razor?",
+    "back": "The @code block in a .razor file contains C# code for the component - fields, properties, methods, and event handlers. Alternatively, use partial class (ComponentName.razor.cs) to separate code from markup for better organization."
+  },
+  {
+    "front": "What is data binding in Blazor?",
+    "back": "Data binding connects UI elements to C# properties. One-way: @property displays value. Two-way: @bind-value='property' syncs input with property. Event binding: @onclick='MethodName' handles events. Blazor automatically updates UI when bound data changes."
+  },
+  {
+    "front": "What is the [Parameter] attribute in Blazor?",
+    "back": "[Parameter] marks a property in a Razor component as a parameter that can be set from parent components. Allows passing data from parent to child. Example: [Parameter] public string Title { get; set; }. Parameters are read-only after component initialization."
+  },
+  {
+    "front": "What is @Body in Blazor layouts?",
+    "back": "@Body is a placeholder in a layout component (MainLayout.razor) where the content of the current page is rendered. When a page uses a layout, its content replaces the @Body directive in the layout template."
+  },
+  {
+    "front": "What is EditForm in Blazor?",
+    "back": "EditForm is a Blazor component for creating forms with validation support. It wraps form elements and provides Model binding, validation, and submission handling. Uses DataAnnotations for validation rules and calls OnValidSubmit when form is valid."
+  },
+  {
+    "front": "What is DataAnnotations validation?",
+    "back": "DataAnnotations are attributes applied to model properties for validation: [Required], [StringLength(50)], [Range(1, 100)], [EmailAddress], [RegularExpression]. Blazor's EditForm automatically validates using these rules and displays validation messages."
+  },
+  {
+    "front": "What is NavigationManager in Blazor?",
+    "back": "NavigationManager is a service for programmatic navigation in Blazor. Inject it to navigate between pages: Navigation.NavigateTo('/path'). Also provides Uri, BaseUri properties and LocationChanged event for detecting navigation."
+  },
+  {
+    "front": "What is @page directive in Blazor?",
+    "back": "@page directive defines the route for a Razor component. Example: @page '/products' makes the component accessible at /products URL. Multiple routes can be defined. Route parameters: @page '/product/{id}'."
+  },
+  {
+    "front": "What is the difference between @onclick and @bind?",
+    "back": "@onclick: Event handler that executes method when element is clicked. @bind: Two-way data binding that syncs input value with a property. @bind automatically handles onchange event and updates both directions."
+  },
+  {
+    "front": "What is StateHasChanged() in Blazor?",
+    "back": "StateHasChanged() notifies the component that its state has changed and it should re-render. Normally called automatically by Blazor, but needed when state changes outside of normal UI events (like in async callbacks or timers)."
+  },
+  {
+    "front": "What is a Service Layer?",
+    "back": "A Service Layer is a set of classes that contains business logic, manages data operations, and acts as a bridge between UI and data source. It promotes separation of concerns, code reusability, and testability by keeping UI code clean and logic centralized."
+  },
+  {
+    "front": "Why use a Service Layer?",
+    "back": "Benefits: 1. Clean UI code - no business logic in views. 2. Reusable logic - same service used by multiple UI components. 3. Easy testing - can unit test services independently. 4. Easy maintenance - changes in one place. 5. Loose coupling - UI does not depend on data source directly."
+  },
+  {
+    "front": "What is the Repository Pattern?",
+    "back": "The Repository Pattern abstracts data access by providing a collection-like interface for domain objects. It separates business logic from data access logic, making the application more testable and allowing easy switching of data sources (SQL, NoSQL, mock)."
+  },
+  {
+    "front": "What is Unit of Work pattern?",
+    "back": "Unit of Work maintains a list of objects affected by a business transaction and coordinates writing out changes. It ensures all changes are committed together (atomic) or rolled back if any fails. Often used with Repository Pattern in EF Core."
+  },
+  {
+    "front": "What is SOLID principles?",
+    "back": "SOLID is an acronym for five design principles: S - Single Responsibility Principle. O - Open/Closed Principle. L - Liskov Substitution Principle. I - Interface Segregation Principle. D - Dependency Inversion Principle. These promote maintainable and scalable code."
+  },
+  {
+    "front": "What is Single Responsibility Principle (SRP)?",
+    "back": "A class should have only one reason to change, meaning it should have only one job or responsibility. If a class handles multiple responsibilities, changes to one may affect the other, leading to tight coupling and fragility."
+  },
+  {
+    "front": "What is Open/Closed Principle (OCP)?",
+    "back": "Software entities should be open for extension but closed for modification. You should be able to add new functionality without changing existing code. Achieved through inheritance, interfaces, and polymorphism."
+  },
+  {
+    "front": "What is Liskov Substitution Principle (LSP)?",
+    "back": "Objects of a superclass should be replaceable with objects of subclasses without affecting the correctness of the program. Derived classes must be substitutable for their base classes without altering the desirable properties of the program."
+  },
+  {
+    "front": "What is Interface Segregation Principle (ISP)?",
+    "back": "Clients should not be forced to depend on interfaces they do not use. Instead of one large interface, create multiple smaller, specific interfaces. This prevents implementing unnecessary methods and reduces coupling."
+  },
+  {
+    "front": "What is Dependency Inversion Principle (DIP)?",
+    "back": "High-level modules should not depend on low-level modules; both should depend on abstractions. Abstractions should not depend on details; details should depend on abstractions. Achieved through interfaces and dependency injection."
+  },
+  {
+    "front": "What is the difference between IEnumerable and IQueryable?",
+    "back": "IEnumerable: In-memory collection, LINQ operations execute on client side. IQueryable: Queryable data source, LINQ operations translate to SQL and execute on server side. Use IQueryable for database queries to optimize performance."
+  },
+  {
+    "front": "What is deferred execution in LINQ?",
+    "back": "Deferred execution means LINQ queries are not executed when defined, but when enumerated (iterated). The query builds an expression tree and executes when ToList(), Count(), First(), or foreach is called. Allows query composition and optimization."
+  },
+  {
+    "front": "What is immediate execution in LINQ?",
+    "back": "Immediate execution methods execute the query immediately and return a result: ToList(), ToArray(), Count(), Sum(), Average(), First(), Single(), etc. These methods force the query to execute and materialize results."
+  },
+  {
+    "front": "What is the difference between Single() and First()?",
+    "back": "First(): Returns first element matching condition, throws if no elements. Single(): Returns only element matching condition, throws if zero OR more than one element matches. Use Single when you expect exactly one result."
+  },
+  {
+    "front": "What is SelectMany in LINQ?",
+    "back": "SelectMany flattens a collection of collections into a single collection. It is used when each element of a sequence produces a sequence, and you want a flat result. Example: Flattening a list of orders where each order has multiple items."
+  },
+  {
+    "front": "What is GroupBy in LINQ?",
+    "back": "GroupBy groups elements of a sequence based on a key selector function. Returns a collection of IGrouping<TKey, TElement>. Useful for organizing data into categories. Example: Group customers by country, group orders by date."
+  },
+  {
+    "front": "What is Join in LINQ?",
+    "back": "Join performs an inner join between two sequences based on matching keys. Syntax: sequence1.Join(sequence2, key1 => key1.Id, key2 => key2.ForeignId, (s1, s2) => result). Similar to SQL INNER JOIN."
+  },
+  {
+    "front": "What is the difference between == and .Equals() for strings?",
+    "back": "For strings in C#, both == and .Equals() compare values (not references) due to operator overloading. However, .Equals() allows specifying StringComparison options for culture-aware or case-insensitive comparison. == always uses ordinal comparison."
+  },
+  {
+    "front": "What is StringBuilder and when to use it?",
+    "back": "StringBuilder is a mutable string class for efficiently building strings. Use it when performing multiple string modifications (concatenations, appends) in loops. Much more efficient than string concatenation which creates new objects each time."
+  },
+  {
+    "front": "What is the difference between const and static readonly?",
+    "back": "const: Compile-time constant, value embedded in IL, cannot be changed, implicit static, only value types and strings. static readonly: Runtime constant, initialized in static constructor or declaration, can use complex types, more flexible."
+  },
+  {
+    "front": "What is boxing and unboxing?",
+    "back": "Boxing: Converting a value type to a reference type (object). Creates a copy on heap. Unboxing: Converting a boxed object back to value type. Requires explicit cast. Both have performance cost; avoid in performance-critical code."
+  },
+  {
+    "front": "What is a generic type in C#?",
+    "back": "Generics allow defining type-safe classes, interfaces, methods, and delegates with placeholder types (T, TKey, TValue). Type is specified when used. Benefits: Type safety, code reuse, performance (no boxing). Examples: List<T>, Dictionary<TKey, TValue>, IEnumerable<T>."
+  },
+  {
+    "front": "What are generic constraints?",
+    "back": "Generic constraints limit what types can be used as type arguments: where T : class (reference type), where T : struct (value type), where T : new() (parameterless constructor), where T : BaseClass (inheritance), where T : IInterface (interface implementation)."
+  },
+  {
+    "front": "What is the where T : new() constraint?",
+    "back": "The new() constraint requires the type argument to have a public parameterless constructor. This allows creating instances of T inside the generic class using new T(). Must be the last constraint in the list."
+  },
+  {
+    "front": "What is covariance and contravariance?",
+    "back": "Covariance (out): Allows using a more derived type than originally specified. Example: IEnumerable<Cat> can be assigned to IEnumerable<Animal>. Contravariance (in): Allows using a more generic type. Example: IComparer<Animal> can be assigned to IComparer<Cat>."
+  },
+  {
+    "front": "What is the yield keyword?",
+    "back": "The yield keyword creates an iterator that returns elements one at a time without creating the entire collection in memory. Used with IEnumerable return type. When yield return is reached, current value is returned and state is preserved for next iteration."
+  },
+  {
+    "front": "What is the difference between foreach and for?",
+    "back": "foreach: Iterates over any IEnumerable, read-only iteration, simpler syntax, cannot modify collection during iteration. for: Index-based iteration, allows modifying elements, can iterate backwards, more control over iteration logic."
+  },
+  {
+    "front": "What is the difference between Array.Copy and Clone?",
+    "back": "Array.Copy: Copies elements from one array to another (can be different types, partial copy). Clone: Creates a shallow copy of the entire array (same type, complete copy). Both perform shallow copy for reference types."
+  },
+  {
+    "front": "What is a tuple in C#?",
+    "back": "A tuple is a lightweight data structure that groups multiple values together without creating a class. Syntax: (int, string) person = (1, 'John'); or named: (int Id, string Name) person = (1, 'John'). Access: person.Item1 or person.Id."
+  },
+  {
+    "front": "What is deconstruction in C#?",
+    "back": "Deconstruction extracts values from tuples or objects into separate variables. Example: var (id, name) = GetPerson(); or (int id, string name) = person; Classes can support deconstruction by implementing Deconstruct method."
+  },
+  {
+    "front": "What is the discard pattern (_) in C#?",
+    "back": "The discard (_) is a placeholder for values you do not care about. Used in deconstruction, out parameters, switch expressions, and pattern matching. Example: var (x, _) = point; // Ignore y coordinate. Improves code readability."
+  },
+  {
+    "front": "What is the nameof operator?",
+    "back": "nameof returns the string name of a variable, type, or member. Useful for error messages, logging, and avoiding magic strings. Compile-time safe - refactoring renames the string too. Example: nameof(customer.Name) returns 'Name'."
+  },
+  {
+    "front": "What is the is operator?",
+    "back": "The is operator checks if an object is of a specific type and optionally casts it. Pattern matching: if (obj is string s) { /* use s */ }. Can also use with type, constant, and relational patterns. Replaces old: if (obj is string) { var s = (string)obj; }"
+  },
+  {
+    "front": "What is the as operator?",
+    "back": "The as operator attempts to cast an object to a type and returns null if the cast fails (instead of throwing). Only works with reference types and nullable value types. Example: var s = obj as string; if (s != null) { /* use s */ }"
+  },
+  {
+    "front": "What is the difference between is and as?",
+    "back": "is: Checks type, returns bool, can combine with pattern matching and casting. as: Attempts cast, returns null on failure, only for reference types. Use is for type checking; use as when you expect the cast might fail and want to avoid exceptions."
+  },
+  {
+    "front": "What is a namespace in C#?",
+    "back": "A namespace organizes related classes, interfaces, structs, enums, and delegates. It prevents naming conflicts and makes code more organized. Use 'using' directive to import namespaces. Can be nested and use aliases: using MyAlias = Namespace.Type."
+  },
+  {
+    "front": "What is the internal access modifier?",
+    "back": "internal makes a member or type accessible only within the same assembly (project). It is the default accessibility for classes and structs. More restrictive than public but less than private. Use for implementation details shared within a project."
+  },
+  {
+    "front": "What is the protected internal access modifier?",
+    "back": "protected internal makes a member accessible within the same assembly OR in derived classes (even in different assemblies). It is the union of protected and internal accessibility, not the intersection."
+  },
+  {
+    "front": "What is the private protected access modifier?",
+    "back": "private protected (C# 7.2+) makes a member accessible only within the same class AND in derived classes within the same assembly. It is the intersection of private and protected - more restrictive than both individually."
+  },
+  {
+    "front": "What is an extension method?",
+    "back": "An extension method adds new methods to existing types without modifying them. Defined as static method in static class, with 'this' keyword before first parameter. Example: public static bool IsEven(this int number) => number % 2 == 0;"
+  },
+  {
+    "front": "What are the rules for extension methods?",
+    "back": "1. Must be in static class. 2. Must be static method. 3. First parameter must have 'this' keyword. 4. Cannot override existing methods. 5. Can be called as if instance method. 6. Can extend sealed classes and interfaces."
+  },
+  {
+    "front": "What is an anonymous type?",
+    "back": "An anonymous type is a compiler-generated class with read-only properties, created using 'new' without type name. Example: var person = new { Name = 'John', Age = 30 }; Useful for LINQ projections when you do not need a formal class."
+  },
+  {
+    "front": "What is a dynamic type in C#?",
+    "back": "The dynamic type bypasses compile-time type checking. Type resolution happens at runtime. Useful for COM interop, dynamic languages, and when type is unknown at compile time. Loses IntelliSense and compile-time safety."
+  },
+  {
+    "front": "What is the difference between var and dynamic?",
+    "back": "var: Compile-time type inference, type is determined at compile time, IntelliSense works, compile-time errors. dynamic: Runtime type resolution, type checked at runtime, no IntelliSense, runtime errors. var is strongly typed; dynamic is not."
+  },
+  {
+    "front": "What is reflection in C#?",
+    "back": "Reflection allows examining and manipulating types, methods, properties, and assemblies at runtime. Types in System.Reflection namespace. Can inspect metadata, create instances, invoke methods, and access private members. Has performance overhead."
+  },
+  {
+    "front": "What is an attribute in C#?",
+    "back": "An attribute is metadata attached to code elements (classes, methods, properties). Used for declarative programming. Examples: [Obsolete], [Serializable], [HttpGet]. Custom attributes inherit from Attribute class. Retrieved via reflection."
+  },
+  {
+    "front": "What is serialization?",
+    "back": "Serialization converts objects to a format that can be stored or transmitted (JSON, XML, binary). Deserialization converts back to objects. Common serializers: System.Text.Json, Newtonsoft.Json, XmlSerializer, BinaryFormatter."
+  },
+  {
+    "front": "What is the difference between deep copy and shallow copy?",
+    "back": "Shallow copy: Creates new object, copies value-type fields, copies references for reference types (both objects share referenced objects). Deep copy: Creates new object and recursively copies all referenced objects (completely independent)."
+  },
+  {
+    "front": "What is the ICloneable interface?",
+    "back": "ICloneable defines a Clone() method for creating copies of objects. Implementation can be shallow or deep copy. Not generic, returns object (requires casting). Many recommend avoiding it in favor of explicit copy constructors or methods."
+  },
+  {
+    "front": "What is IDisposable and the Dispose pattern?",
+    "back": "IDisposable is for releasing unmanaged resources (file handles, database connections, memory). Implement Dispose() to clean up. Use 'using' statement for automatic disposal. For classes with both managed and unmanaged resources, implement full Dispose pattern with finalizer."
+  },
+  {
+    "front": "What is a finalizer (destructor) in C#?",
+    "back": "A finalizer (~ClassName()) is called by the garbage collector before reclaiming memory. Used for cleaning up unmanaged resources when Dispose was not called. Not guaranteed when it runs. Should always call GC.SuppressFinalize(this) in Dispose to prevent double cleanup."
+  },
+  {
+    "front": "What is the difference between Dispose and Finalize?",
+    "back": "Dispose: Explicit cleanup, deterministic, called by developer using 'using' or directly, releases managed and unmanaged resources. Finalize: Implicit cleanup, non-deterministic, called by GC, only for unmanaged resources, backup for when Dispose was not called."
+  },
+  {
+    "front": "What is the GC (Garbage Collector)?",
+    "back": "The Garbage Collector automatically manages memory by reclaiming memory occupied by objects that are no longer reachable. Runs automatically but can be hinted with GC.Collect(). Uses generations (0, 1, 2) to optimize collection frequency."
+  },
+  {
+    "front": "What is a memory leak in C#?",
+    "back": "A memory leak occurs when objects are no longer needed but remain referenced, preventing GC from reclaiming memory. Common causes: Event handlers not unsubscribed, static collections growing indefinitely, not disposing IDisposable objects, circular references with event handlers."
+  },
+  {
+    "front": "What is the using declaration (C# 8)?",
+    "back": "Using declaration (without braces) disposes the object at the end of the enclosing scope, not immediately after statement. Example: using var stream = File.OpenRead('file.txt'); // disposed at end of method. Cleaner syntax for single-resource scenarios."
+  },
+  {
+    "front": "What is a nullable reference type?",
+    "back": "Nullable reference types (C# 8+) help prevent NullReferenceException by distinguishing between nullable (string?) and non-nullable (string) reference types. Compiler provides warnings when dereferencing potentially null values. Enabled with #nullable enable or project setting."
+  },
+  {
+    "front": "What is the null-forgiving operator (!)?",
+    "back": "The null-forgiving operator (!) tells the compiler that an expression is not null, suppressing nullable warnings. Use when you know a value will not be null but the compiler cannot determine it. Example: string name = GetName()!;"
+  },
+  {
+    "front": "What is a record struct (C# 10)?",
+    "back": "A record struct combines record features (value-based equality, immutability, with-expressions) with struct characteristics (value type, stack allocation). More efficient than record class for small, immutable data structures. Example: public record struct Point(int X, int Y);"
+  },
+  {
+    "front": "What is file-scoped namespace (C# 10)?",
+    "back": "File-scoped namespace declares that all types in a file belong to the same namespace without braces. Reduces indentation. Example: namespace MyNamespace; // Everything below is in this namespace. Can only have one per file."
+  },
+  {
+    "front": "What is global using (C# 10)?",
+    "back": "Global using makes namespaces available throughout the entire project without repeating in each file. Add 'global' before using: global using System.Linq;. Typically placed in a separate file like GlobalUsings.cs or using implicit usings feature."
+  },
+  {
+    "front": "What is required modifier for properties (C# 11)?",
+    "back": "The required modifier ensures that a property or field must be initialized during object creation. The compiler enforces this, preventing partially initialized objects. Works with object initializers and constructors. Example: public required string Name { get; set; }"
+  },
+  {
+    "front": "What is raw string literals (C# 11)?",
+    "back": "Raw string literals use triple quotes to define strings without escaping. Multi-line strings preserve formatting. Interpolation uses $$ with {{ }}. Example: var json = $$'''{ \"name\": \"{{name}}\" }'''; No need to escape quotes or backslashes."
+  },
+  {
+    "front": "What is list pattern matching (C# 11)?",
+    "back": "List patterns match arrays or lists against patterns. Syntax: [1, 2, 3] matches exact list, [1, .., 5] matches with slice pattern, [var first, ..] captures elements. Useful for deconstructing and matching collections."
+  },
+  {
+    "front": "What is static abstract members in interfaces (C# 11)?",
+    "back": "C# 11 allows interfaces to declare static abstract members that implementing types must provide. Enables generic math and operators in interfaces. Example: static abstract T operator +(T a, T b); Allows T.Add(a, b) in generic code."
+  }
+]
