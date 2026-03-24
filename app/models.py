@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 class Sem(models.IntegerChoices):
     ONE = 1, 'semester 1'
@@ -108,7 +109,7 @@ class Profile(models.Model):
     last_streak = models.DateField(null=True, blank=True)
     year = models.IntegerField(choices=Year.choices, null=True, blank=True)
     sem = models.IntegerField(choices=Sem.choices, null=True, blank=True)
-    section = models.IntegerField( null=True, blank=True)
+    section = models.IntegerField( null=True, blank=True, validators=[MinValueValidator(1),MaxValueValidator(20)])
     legit = models.BooleanField(default=False)
 
     def __str__(self):

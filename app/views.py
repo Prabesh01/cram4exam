@@ -421,7 +421,7 @@ def top_answers(request, question_id):
 
 @login_required
 def cwteam(request):
-    selected_gcid = request.GET.get('gcid')
+    selected_gcid = request.GET.get('gcid') or request.POST.get('gcid')
     grp_courseworks = GroupCousework.objects.filter(
         Q(module__sem=request.user.profile.sem) | Q(module__year_long=True),
         Q(module__year=request.user.profile.year)
@@ -441,11 +441,18 @@ def cwteam(request):
 
     teams = []
     teams_query = Team.objects.filter(group_coursework__gcid=selected_gcid)
-    teams = teams_query.prefetch_related('teammembership_set__user')
 
     users_looking_for_team = Designation.objects.filter(group_coursework__gcid=selected_gcid)
 
-    return render(request, 'cwteam.html', {'userteam': user_team, 'grp_courseworks': grp_courseworks, 'selected_gcid': selected_gcid, 'teams': teams, 'current_section': section_filter, "roles": Role.choices, "user_role":user_role, "users_looking_for_team":users_looking_for_team})
+    only_my_section = request.POST.get('only_my_section') == 'on'
+    if only_my_section:
+        user_section = request.user.profile.section
+        teams_query = teams_query.filter(teammembership__user__profile__section=user_section).distinct()
+        users_looking_for_team = users_looking_for_team.filter(user__profile__section=user_section)
+
+    teams = teams_query.prefetch_related('teammembership_set__user')
+
+    return render(request, 'cwteam.html', {'userteam': user_team, 'grp_courseworks': grp_courseworks, 'selected_gcid': selected_gcid, 'teams': teams, 'current_section': section_filter, "roles": Role.choices, "user_role":user_role, "users_looking_for_team":users_looking_for_team, 'only_my_section': only_my_section})
 
 def set_cw_status(request):
     selected_gcid = int(request.POST.get('gcid'))

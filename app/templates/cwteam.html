@@ -390,8 +390,16 @@
                 </form>
             </div>
 <hr>
-        <h4>Other Teams</h4>
+        <h4>Teams</h4>
 {% endif %}
+<form method="POST" action="">
+    {% csrf_token %}
+    <input type="hidden" name="gcid" value="{{ selected_gcid }}">
+    <label style="cursor: pointer; font-weight: bold; margin-bottom: 15px; display: block;">
+        <input type="checkbox" name="only_my_section" onchange="this.form.submit();" {% if only_my_section %}checked{% endif %}>
+        Display only my sections
+    </label>
+</form>
 
 <!-- teams [Create your team] -->
      <div class="team-card-grid {% if user_role.0.open_for %}single-view{% endif %}" id="cardContainer">
@@ -428,6 +436,14 @@
 <hr>
 <!-- users looking to join a team -->
 <h4>Classmates Looking for a Team</h4>
+<form method="POST" action="">
+    {% csrf_token %}
+    <input type="hidden" name="gcid" value="{{ selected_gcid }}">
+    <label style="cursor: pointer; font-weight: bold; margin-bottom: 15px; display: block;">
+        <input type="checkbox" name="only_my_section" onchange="this.form.submit();" {% if only_my_section %}checked{% endif %}>
+        Display only my sections
+    </label>
+</form>
 {% if not users_looking_for_team %}
 No users looking for team...
 {% endif %}
