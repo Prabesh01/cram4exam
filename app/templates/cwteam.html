@@ -411,7 +411,7 @@
 {% endif %}
  {% for team in teams %}
 {% if team.looking_for and not userteam %}
-<a href="https://mail.google.com/mail/?authuser={{request.user.email}}&view=cm&to={{team.user.email}}&su=Interested to join {{ team.name }}&body=Hey, I noticed your team is looking for someone to handle '{{team.looking_for}}' role. I can fill-in. Let me know." target="_blank" class="team-card team-card-link" data-value="{{ value }}">
+<a href="#" data-email="{{team.user.email}}" data-name="{{ team.name }}" data-for="{{team.looking_for}}" target="_blank" class="contact-link team-card team-card-link" data-value="{{ value }}">
 {% else %}
              <div class="team-card"
                  data-value="{{ value }}">
@@ -461,7 +461,7 @@ No users looking for team...
 
 {% for designation in users_looking_for_team %}
 {% if userteam.looking_for or not userteam %}
-<a href="https://mail.google.com/mail/?authuser={{request.user.email}}&view=cm&to={{designation.user.email}}&su=Let's team up for this coursework!&body=Hi, I saw that you are looking to join a team. Interested to team up with me?" target="_blank" class="team-card-link">
+<a href="#" data-email="{{designation.user.email}}" target="_blank" class="contact-link team-card-link">
 {% endif %}
 <div class="user-card">
     <h3 class="team-name">{{ designation.user.username }}</h3>
@@ -494,5 +494,26 @@ function toggleCreateTeam() {
             create_q.textContent = "Create your own team ?";
         }
     }
+
+document.querySelectorAll('.contact-link').forEach(link => {
+    const email = encodeURIComponent(link.getAttribute('data-email'));
+    const name = encodeURIComponent(link.getAttribute('data-name'));
+    const dataFor = encodeURIComponent(link.getAttribute('data-for'));
+
+    var subject="Let's team up for this coursework!"
+    var body="Hi, I saw that you are looking to join a team. Interested to team up with me?"
+
+    if (name!="null"){
+        subject=`Interested to join ${name}`
+        body=`Hey, I noticed your team is looking for someone to handle '${dataFor}' role. I can fill-in. Let me know.`
+    }
+
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+if (isMobile) {
+        link.href = `mailto:${email}?subject=${subject}&body=${body}`;
+    } else {
+        link.href = `https://mail.google.com/mail/?authuser={{request.user.email}}&view=cm&to=${email}&su=${subject}&body=${body}`;
+    }
+});
 </script>
 {% endblock %}
