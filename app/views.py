@@ -433,16 +433,19 @@ def cwteam(request):
     selected_gcid = int(selected_gcid)
 
     section_filter = request.GET.get('section')
-    membership = TeamMembership.objects.filter(user=request.user, team__group_coursework__gcid=selected_gcid).select_related('team').first()
+
+    current_year = timezone.now().year
+
+    membership = TeamMembership.objects.filter(user=request.user, team__group_coursework__gcid=selected_gcid, team__created_at__year=current_year).select_related('team').first()
     if membership:
         user_team = membership.team
     else:
-        user_role=Designation.objects.filter(user=request.user,group_coursework__gcid=selected_gcid)
+        user_role=Designation.objects.filter(user=request.user,group_coursework__gcid=selected_gcid, created_at__year=current_year)
 
     teams = []
-    teams_query = Team.objects.filter(group_coursework__gcid=selected_gcid)
+    teams_query = Team.objects.filter(group_coursework__gcid=selected_gcid, created_at__year=current_year)
 
-    users_looking_for_team = Designation.objects.filter(group_coursework__gcid=selected_gcid)
+    users_looking_for_team = Designation.objects.filter(group_coursework__gcid=selected_gcid, created_at__year=current_year)
 
     only_my_section = request.POST.get('only_my_section') == 'on'
     if only_my_section:

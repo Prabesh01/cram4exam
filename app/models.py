@@ -58,6 +58,7 @@ class Designation(models.Model):
     group_coursework = models.ForeignKey(GroupCousework, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     open_for = models.CharField(choices=Role.choices, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 class Question(models.Model):
     qid = models.AutoField(primary_key=True)

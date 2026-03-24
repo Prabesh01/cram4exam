@@ -397,7 +397,7 @@
     <input type="hidden" name="gcid" value="{{ selected_gcid }}">
     <label style="cursor: pointer; font-weight: bold; margin-bottom: 15px; display: block;">
         <input type="checkbox" name="only_my_section" onchange="this.form.submit();" {% if only_my_section %}checked{% endif %}>
-        Display only my sections
+        Display my section only
     </label>
 </form>
 
@@ -441,7 +441,7 @@
     <input type="hidden" name="gcid" value="{{ selected_gcid }}">
     <label style="cursor: pointer; font-weight: bold; margin-bottom: 15px; display: block;">
         <input type="checkbox" name="only_my_section" onchange="this.form.submit();" {% if only_my_section %}checked{% endif %}>
-        Display only my sections
+        Display my section only
     </label>
 </form>
 {% if not users_looking_for_team %}
