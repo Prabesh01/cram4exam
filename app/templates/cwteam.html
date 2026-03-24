@@ -14,7 +14,11 @@
     gap: 15px;
     transition: all 0.3s ease;
 }
-
+.team-card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
 /* Container: flexible and responsive */
 .user-card-grid {
     display: grid;
@@ -81,7 +85,6 @@
     border: 2px solid #e0e0e0;
     border-radius: 12px;
     padding: 20px;
-    cursor: pointer;
     overflow: hidden;
     background: #fff;
     text-align: center;
@@ -407,9 +410,12 @@
 <p>No teams available...</p>
 {% endif %}
  {% for team in teams %}
+{% if team.looking_for and not userteam %}
+<a href="https://mail.google.com/mail/?authuser={{request.user.email}}&view=cm&to={{team.user.email}}&su=Interested to join {{ team.name }}&body=Hey, I noticed your team is looking for someone to handle '{{team.looking_for}}' role. I can fill-in. Let me know." target="_blank" class="team-card team-card-link" data-value="{{ value }}">
+{% else %}
              <div class="team-card"
                  data-value="{{ value }}">
-
+{% endif %}
 <div class="team-header">
     <h3 class="team-name">{{ team.name }}</h3>
     {% if team.looking_for %}
@@ -430,7 +436,11 @@
     </li>
     {% endfor %}
 </ul>
+{% if team.looking_for and not userteam %}
+</a>
+{% else %}
 </div>
+{% endif %}
  {% endfor %}
  </div>
 <hr>
@@ -450,6 +460,9 @@ No users looking for team...
 <div class="user-card-grid">
 
 {% for designation in users_looking_for_team %}
+{% if userteam.looking_for or not userteam %}
+<a href="https://mail.google.com/mail/?authuser={{request.user.email}}&view=cm&to={{designation.user.email}}&su=Let's team up for this coursework!&body=Hi, I saw that you are looking to join a team. Interested to team up with me?" target="_blank" class="team-card-link">
+{% endif %}
 <div class="user-card">
     <h3 class="team-name">{{ designation.user.username }}</h3>
     <span class="badge badge-looking-for">
@@ -459,6 +472,9 @@ No users looking for team...
         Open for "{{ designation.open_for }}"
     </span>
 </div>
+{% if userteam.looking_for or not userteam %}
+</a>
+{% endif %}
 {% endfor %}
     </div>
 
