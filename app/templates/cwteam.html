@@ -329,12 +329,12 @@
                     
                     <div class="mb-3">
                         <label class="form-label">Team Name</label>
-                        <input type="text" name="team_name" class="form-control" value="{{ userteam.name|default:'My Team' }}" required>
+                        <input type="text" name="team_name" class="form-control" value="{{ userteam.name|default:'My Team' }}" required  {% if userteam.user != request.user %}disabled{% endif %}>
                     </div>
 
             <div class="mb-3">
                 <label class="form-label">You team is Looking For...</label>
-                <select class="form-select" name="looking_for">
+                <select class="form-select" name="looking_for" {% if userteam.user != request.user %}disabled{% endif %}>
                     <option value="">-- select --</option>
                     {% for value, text in roles %}
                         <option value="{{ value }}"  {% if userteam.looking_for == value %}selected{% endif %}>{{ text }}</option>
@@ -346,10 +346,10 @@
                     {% for membership in userteam.teammembership_set.all %}
                         <div class="row mb-2">
                             <div class="col-md-5">
-                                <input type="email" class="form-control" value="{{ membership.user.email }}" {% if membership.user == userteam.user %}readonly{% endif %}>
+                                <input type="email" class="form-control" value="{{ membership.user.email }}" {% if membership.user == userteam.user %}readonly{% endif %}  {% if userteam.user != request.user %}disabled{% endif %}>
                             </div>
                             <div class="col-md-5">
-                                <select name="role_{{ membership.user.id }}" class="form-select">
+                                <select name="role_{{ membership.user.id }}" class="form-select"  {% if userteam.user != request.user %}disabled{% endif %}>
                                     {% for value, text in roles %}
                                         <option value="{{ value }}" {% if membership.position == value %}selected{% endif %}>{{ text }}</option>
                                     {% endfor %}
