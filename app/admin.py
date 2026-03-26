@@ -16,15 +16,34 @@ class ModuleAdmin(admin.ModelAdmin):
     list_filter = ('year', 'sem', 'year_long')
     search_fields = ('code', 'name')
 
+class UserAnswerAdmin(admin.ModelAdmin):
+    list_display = ('user','question__qid')
+
+class GroupCouseworkAdmin(admin.ModelAdmin):
+    list_display = ('module__code','name')
+
+class TeanAdmin(admin.ModelAdmin):
+    list_display = ('user','name','group_coursework__module__code','created_at_year')
+
+    def created_at_year(self, obj):
+        return obj.created_at.year
+    created_at_year.short_description = 'Year'
+
+class TeamMembershipAdmin(admin.ModelAdmin):
+    list_display = ('team','user')
+
+class DesignationAdmin(admin.ModelAdmin):
+    list_display = ('group_coursework__gcid','user')
+
 admin.site.register(Module, ModuleAdmin)
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(DailyQuestion)
-admin.site.register(UserAnswer)
+admin.site.register(UserAnswer, UserAnswerAdmin)
 admin.site.register(Profile)
 admin.site.register(Bookmark)
 admin.site.register(Upvote)
 
-admin.site.register(GroupCousework)
-admin.site.register(Team)
-admin.site.register(TeamMembership)
-admin.site.register(Designation)
+admin.site.register(GroupCousework, GroupCouseworkAdmin)
+admin.site.register(Team, TeanAdmin)
+admin.site.register(TeamMembership, TeamMembershipAdmin)
+admin.site.register(Designation, DesignationAdmin)

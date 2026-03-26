@@ -41,6 +41,8 @@ class GroupCousework(models.Model):
     gcid = models.AutoField(primary_key=True)
     module = models.ForeignKey(Module, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
+    def __str__(self):
+        return f"{self.module} - {self.name}"
 
 class Team(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -48,6 +50,9 @@ class Team(models.Model):
     group_coursework = models.ForeignKey(GroupCousework, on_delete=models.CASCADE)
     looking_for = models.CharField(choices=Role.choices, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.user}"
 
 class TeamMembership(models.Model):
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
