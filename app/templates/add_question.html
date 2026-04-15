@@ -166,8 +166,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     <input type="hidden" name="option_ids[]" value="${optionId}">
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" id="check-${optionId}" type="checkbox" name="correct_option_ids[]" value="${optionId}">
-                    <label class="form-check-label" for="check-${optionId}">Correct Answer</label>
+                  <label class="form-check-label">
+                    <input class="form-check-input" type="checkbox" name="correct_option_ids[]" value="${optionId}">
+                    Correct Answer
+                  </label>
                 </div>
                 <button type="button" class="btn btn-sm btn-outline-danger mt-2 remove-option" data-id="${optionId}">
                     <i class="bi bi-trash"></i> Remove
@@ -204,6 +206,39 @@ document.addEventListener('DOMContentLoaded', function() {
             // Shift+Enter will work normally (creates new line)
         });
     });
+});
+</script>
+<script>
+document.addEventListener('keydown', function(e) {
+    // We only care about the Tab key
+    if (e.key === 'Tab') {
+        const textInputs = Array.from(document.querySelectorAll('#optionsList input[type="text"]'));
+        const checkboxes = Array.from(document.querySelectorAll('#optionsList .form-check-input'));
+        
+        const activeElem = document.activeElement;
+
+        // 1. Shift + Tab: Navigate only between Checkboxes
+        if (e.shiftKey) {
+            if (checkboxes.includes(activeElem) || textInputs.includes(activeElem)) {
+                e.preventDefault(); // Stop default tab behavior
+                let currentIndex = checkboxes.indexOf(activeElem);
+                // If focus is currently on a text input, jump to the first checkbox
+                // Otherwise, move to the next checkbox in the loop
+                let nextIndex = (currentIndex + 1) % checkboxes.length;
+                checkboxes[nextIndex].focus();
+            }
+        } 
+        // 2. Tab only: Navigate only between Text Inputs
+        else {
+            if (textInputs.includes(activeElem) || checkboxes.includes(activeElem)) {
+                e.preventDefault(); // Stop default tab behavior
+                let currentIndex = textInputs.indexOf(activeElem);
+                // Move to the next text input in the loop
+                let nextIndex = (currentIndex + 1) % textInputs.length;
+                textInputs[nextIndex].focus();
+            }
+        }
+    }
 });
 </script>
 {% endblock %}
