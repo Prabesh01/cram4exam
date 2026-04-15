@@ -169,6 +169,7 @@ def add_question(request):
     if 'module' in request.GET:
         selected_module = get_object_or_404(Module, code=request.GET['module'])
 
+    is_mcq=sem=no_two=None
     if request.method == 'POST':
             is_mcq = 'is_mcq' in request.POST
 
@@ -200,7 +201,8 @@ def add_question(request):
                 if len(options)>3 and options[3].strip() == '':
                     options[3] = 'None of the above'
                 if len(options)>2:
-                    for i in range(2, len(options)-1):
+                    no_two=True
+                    for i in range(len(options) - 1, 1, -1):
                         if options[i].strip() == '':
                             del options[i]
                             del option_ids[i]
@@ -222,6 +224,7 @@ def add_question(request):
         "selected_module": selected_module,
         "all_modules": all_modules,
         "semesters": Sem.choices,
+        "is_mcq": is_mcq, "no_two": no_two, "sem": sem
     })
 
 @login_required

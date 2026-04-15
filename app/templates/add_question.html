@@ -38,7 +38,8 @@
                                 {% for sem_num, sem_lvl in semesters %}
                                     <option value="{{ sem_num }}"
                                         {% if selected_module and selected_module.sem == sem_num %}selected{% endif %}
-                                        {% if question and question.sem == sem_num %}selected{% endif %}>
+                                        {% if question and question.sem == sem_num %}selected{% endif %}
+                                        {% if sem|add:"0" == sem_num|add:"0" %}selected{% endif %}>
                                         {{ sem_lvl }}
                                     </option>
                                 {% endfor %}
@@ -180,6 +181,9 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById(`option-${optionId}`).remove();
         });
     }
+
+    {% if is_mcq %} isMcqCheckbox.checked = true; isMcqCheckbox.dispatchEvent(new Event('change'));{% endif %}
+    {% if no_two %} addOptionBtn.click(); {%endif %}
 
     // Initialize existing remove buttons
     document.querySelectorAll('.remove-option').forEach(btn => {
