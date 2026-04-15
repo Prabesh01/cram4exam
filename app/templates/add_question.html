@@ -166,8 +166,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     <input type="hidden" name="option_ids[]" value="${optionId}">
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="correct_option_ids[]" value="${optionId}">
-                    <label class="form-check-label">Correct Answer</label>
+                    <input class="form-check-input" id="check-${optionId}" type="checkbox" name="correct_option_ids[]" value="${optionId}">
+                    <label class="form-check-label" for="check-${optionId}">Correct Answer</label>
                 </div>
                 <button type="button" class="btn btn-sm btn-outline-danger mt-2 remove-option" data-id="${optionId}">
                     <i class="bi bi-trash"></i> Remove
