@@ -322,5 +322,469 @@
   {
     "front": "What is a transaction log (write-ahead log) and why is it important for recovery?",
     "back": "A transaction log records ALL changes made by every transaction BEFORE they are applied to the database.\n\nEach log entry contains:\n- Transaction ID\n- Data item changed\n- Old value (before image) — used for UNDO\n- New value (after image) — used for REDO\n\nImportance: On system failure, the log is used to UNDO incomplete transactions and REDO committed ones, restoring database consistency."
+  },
+  {
+    "front": "What is database concurrency?",
+    "back": "The ability of multiple users or transactions to access and modify the same database simultaneously.\n\nWithout proper control, concurrent access causes problems: lost updates, dirty reads, and inconsistent retrieval."
+  },
+  {
+    "front": "What are the 3 main concurrency problems?",
+    "back": "1. Lost Update – two transactions read and overwrite the same data; one update is lost\n2. Dirty Read (Uncommitted Dependency) – a transaction reads data written by another that later rolls back\n3. Inconsistent Retrieval – a transaction reads a mix of old and new values while another is mid-update"
+  },
+  {
+    "front": "What is the Lost Update problem? Give an example.",
+    "back": "Two transactions read the same value and both write back changes — the second write overwrites the first.\n\nBalance = 500\n- T_A reads 500, adds 200, writes 700\n- T_B also read 500 (before T_A wrote), subtracts 300, writes 200\n\nResult: 200. T_A's +200 is completely lost."
+  },
+  {
+    "front": "What is a Dirty Read (Uncommitted Dependency)?",
+    "back": "T_B reads data written by T_A before T_A commits. If T_A later rolls back, T_B acted on invalid (dirty) data.\n\nExample: T_A writes balance = 700, T_B reads 700, T_A rolls back to 500. T_B already used the dirty value."
+  },
+  {
+    "front": "What is Inconsistent Retrieval? Give an example.",
+    "back": "A transaction reads values while another is modifying them, producing a mix of before and after values.\n\nExample: T_A sums Tower(10) + Moorgate(15) + Eden(5) = 30. While T_A reads, T_B transfers 2 from Tower to Eden. T_A reads Eden AFTER the transfer → gets 8+15+7 = 32. Incorrect total."
+  },
+  {
+    "front": "What is locking in DBMS?",
+    "back": "A concurrency control mechanism where a transaction must acquire a lock on a data item before accessing it.\n\n- Prevents incompatible concurrent access\n- Two types: Shared (S) and Exclusive (X)\n- Released on COMMIT or ROLLBACK"
+  },
+  {
+    "front": "What is a Shared Lock (S lock)?",
+    "back": "Allows a transaction to READ a data item.\n\n- Multiple transactions can hold S locks on the same item at once\n- Used for FETCH / SELECT operations\n- Blocks X lock requests from other transactions"
+  },
+  {
+    "front": "What is an Exclusive Lock (X lock)?",
+    "back": "Allows a transaction to READ and WRITE a data item.\n\n- Only ONE transaction can hold an X lock at a time\n- No other S or X lock can be granted while it is held\n- Used for UPDATE, INSERT, DELETE operations"
+  },
+  {
+    "front": "What is the S/X lock compatibility matrix?",
+    "back": "Shows whether two locks can be held on the same item simultaneously:\n\n       S      X\nS   | Yes  | No  |\nX   | No   | No  |\n\nTwo readers can coexist. Any writer must have exclusive access."
+  },
+  {
+    "front": "How does locking solve the Lost Update problem?",
+    "back": "T_A acquires an X lock before reading/writing. T_B must wait until T_A commits and releases.\n\nT_B then reads the UPDATED value (700), not the original (500). Both updates are applied correctly — no update is lost."
+  },
+  {
+    "front": "How does locking solve the Dirty Read problem?",
+    "back": "T_A holds an X lock while writing uncommitted data. T_B's S lock request is blocked.\n\nT_B can only read AFTER T_A commits or rolls back — it never sees a dirty (uncommitted) value."
+  },
+  {
+    "front": "How does locking solve Inconsistent Retrieval?",
+    "back": "T_A holds S locks on all items it reads. T_B needs X locks to write → blocked until T_A finishes reading.\n\nT_A gets a fully consistent snapshot. No mix of old and new values."
+  },
+  {
+    "front": "What is Two-Phase Locking (2PL)?",
+    "back": "A protocol that guarantees serializability with two strict phases:\n\n1. Growing Phase – acquire locks only, release none\n2. Shrinking Phase – release locks only, acquire none\n\nThe peak (holding all locks) is the lock point. No lock may be acquired after any lock is released."
+  },
+  {
+    "front": "What is Strict 2PL?",
+    "back": "A variation of 2PL where all EXCLUSIVE (X) locks are held until the transaction COMMITS or ABORTS — not just until the shrinking phase begins.\n\nPrevents dirty reads and cascading rollbacks. Most real-world databases use Strict 2PL."
+  },
+  {
+    "front": "What is a deadlock in a database?",
+    "back": "A situation where two or more transactions each wait for a lock held by the other — none can proceed.\n\nExample:\n- T1 holds X on A, waiting for B\n- T2 holds X on B, waiting for A\n→ Both are stuck permanently."
+  },
+  {
+    "front": "What is a Wait-For-Graph (WFG)?",
+    "back": "A directed graph used to detect deadlocks:\n\n- Each active transaction is a node\n- Arrow T1 → T2 means T1 is WAITING for a lock held by T2\n\nCycle present → deadlock exists\nNo cycle → no deadlock"
+  },
+  {
+    "front": "How is a deadlock resolved once detected?",
+    "back": "Choose a VICTIM transaction from the cycle and roll it back. This releases its locks, allowing the others to proceed.\n\nVictim selection criteria:\n- Youngest transaction\n- Fewest resources held\n- Lowest rollback cost"
+  },
+  {
+    "front": "What are common deadlock prevention strategies?",
+    "back": "1. Wait-Die – older waits; younger is aborted (dies) if it needs a lock held by an older transaction\n2. Wound-Wait – older forces younger to abort (wounds it); older waits if held by older\n3. Ordered locking – all transactions acquire locks in a fixed global order\n4. No-wait – abort immediately if a lock cannot be obtained"
+  },
+  {
+    "front": "What is timestamping as a concurrency control technique?",
+    "back": "A non-locking method where each transaction gets a unique timestamp when it enters the system.\n\n- Older transactions (smaller timestamp) have higher priority\n- Guarantees serializability and is deadlock-free\n- Conflict → younger transaction is rolled back and restarted with a new timestamp"
+  },
+  {
+    "front": "What are the two timestamps stored on each data item in TSO?",
+    "back": "Each data item Q stores:\n\n- Read-TS(Q): timestamp of the youngest transaction that successfully READ Q\n- Write-TS(Q): timestamp of the youngest transaction that successfully WROTE Q\n\nThese are compared against the current transaction's timestamp to detect ordering violations."
+  },
+  {
+    "front": "What is the TSO rule for a READ operation?",
+    "back": "When T_i wants to READ item Q:\n\n- If Ts(T_i) < Write-TS(Q): T_i is too old — it missed a newer write. ROLLBACK T_i.\n- Otherwise: Allow the read. Update Read-TS(Q) = max(Read-TS(Q), Ts(T_i))."
+  },
+  {
+    "front": "What is the TSO rule for a WRITE operation?",
+    "back": "When T_i wants to WRITE item Q:\n\n- If Ts(T_i) < Read-TS(Q): a newer transaction already read Q. ROLLBACK T_i.\n- If Ts(T_i) < Write-TS(Q): a newer write already exists. ROLLBACK T_i.\n- Otherwise: Allow the write. Update Write-TS(Q) = Ts(T_i)."
+  },
+  {
+    "front": "Why is the Timestamp Ordering Protocol always deadlock-free?",
+    "back": "Because it uses NO LOCKS — there is no circular waiting.\n\nWhen a conflict arises, one transaction is immediately rolled back rather than waiting. The precedence graph always has arcs going from smaller to larger timestamps, so cycles are impossible."
+  },
+  {
+    "front": "What is the difference between 2PL and Timestamping?",
+    "back": "2PL:\n- Uses locks\n- Can cause deadlocks (needs detection/prevention)\n- Blocks conflicting transactions (they wait)\n\nTimestamping:\n- No locks used\n- Deadlock-free by design\n- Resolves conflicts by rolling back (younger loses)\n- Can cause starvation if a transaction keeps restarting"
+  },
+  {
+    "front": "What is multiple granularity locking?",
+    "back": "A locking scheme where locks can be applied at different levels of a hierarchy:\n\nDatabase → Area → File → Record\n\n- Lock a higher level → implicitly locks everything below it\n- Lock a lower level → only that specific item is locked\n- Balances concurrency (fine) vs overhead (coarse)"
+  },
+  {
+    "front": "What are intention locks (IS, IX, SIX)?",
+    "back": "Locks placed at higher levels to signal intent before locking lower levels:\n\n- IS (Intention Shared): will S-lock something below\n- IX (Intention Exclusive): will X-lock something below\n- SIX (Shared + Intention Exclusive): S-lock at this level + IX for lower\n\nAllows checking compatibility at the top without scanning all child locks."
+  },
+  {
+    "front": "What is a serial schedule?",
+    "back": "A schedule where transactions execute ONE AT A TIME — completely, with no interleaving.\n\nAlways produces correct results but has poor performance (only one transaction runs at a time)."
+  },
+  {
+    "front": "What is a serializable schedule?",
+    "back": "A concurrent schedule whose outcome is EQUIVALENT to some serial execution of the same transactions.\n\nAllows interleaving (better performance) while still guaranteeing correctness. The goal of all concurrency control."
+  },
+  {
+    "front": "What is a precedence graph (serialization graph)?",
+    "back": "A directed graph used to test conflict-serializability:\n\n- One node per transaction\n- Arc T_i → T_j if T_i's operation conflicts with T_j's and T_i goes first\n\nNo cycle → conflict-serializable (correct)\nCycle → NOT serializable (incorrect)"
+  },
+  {
+    "front": "What are conflicting operations?",
+    "back": "Two operations conflict if:\n1. They belong to DIFFERENT transactions\n2. They access the SAME data item\n3. At least ONE is a WRITE\n\nRead-Read: not a conflict\nRead-Write or Write-Write: conflict"
+  },
+  {
+    "front": "What is Discretionary Access Control (DAC)?",
+    "back": "A security model where the DATA OWNER controls access to their own data.\n\n- Implemented in SQL using GRANT and REVOKE\n- Owners can pass privileges to others (WITH GRANT OPTION)\n- Flexible but privileges can spread uncontrollably\n- Standard SQL security model"
+  },
+  {
+    "front": "What is Mandatory Access Control (MAC)?",
+    "back": "A security model controlled by a CENTRAL AUTHORITY using security classification levels.\n\n- Data and users are both assigned levels (e.g., Top Secret, Secret, Public)\n- Users can only access data at or below their clearance\n- Not controlled by data owners\n- Used in military/government systems. More rigid than DAC."
+  },
+  {
+    "front": "What is an Access Matrix in database security?",
+    "back": "A table showing which privileges each user has on each database object:\n\n            | Customers | Orders  | Products |\nUser1       | SEL, INS  | SEL,UPD |  INS     |\nUser2       |           |         | SEL,UPD  |\n\nRows = users, Columns = objects, Cells = permitted operations."
+  },
+  {
+    "front": "SQL: Create two users User1 and User2",
+    "back": "```sql\nCREATE USER 'User1' IDENTIFIED BY 'password1';\nCREATE USER 'User2' IDENTIFIED BY 'password2';\n```"
+  },
+  {
+    "front": "What does WITH GRANT OPTION do?",
+    "back": "Allows the recipient to pass their privilege on to other users.\n\n```sql\nGRANT SELECT ON Students TO 'alice' WITH GRANT OPTION;\n```\n\nNow alice can run `GRANT SELECT ON Students TO 'charlie'`. Without WITH GRANT OPTION, she cannot share it."
+  },
+  {
+    "front": "What is the difference between database security and database integrity?",
+    "back": "Security: protects data from UNAUTHORIZED ACCESS — controlling who can do what.\nEnforced with: GRANT, REVOKE, authentication, encryption.\n\nIntegrity: ensures data remains ACCURATE and CONSISTENT — controlling what values are valid.\nEnforced with: PRIMARY KEY, FOREIGN KEY, CHECK constraints, ACID properties."
+  },
+  {
+    "front": "What is encryption in database security?",
+    "back": "Converting data into an unreadable format (ciphertext) so only authorized parties with the decryption key can read it.\n\nUse cases:\n- Password hashing (bcrypt, SHA-256)\n- Encrypting sensitive columns (credit cards, SSNs)\n- TLS/SSL for data in transit\n\nProtects data even if an attacker gains physical access to the disk."
+  },
+  {
+    "front": "SQL: How do you revoke all privileges from a user?",
+    "back": "```sql\nREVOKE ALL PRIVILEGES ON database.* FROM 'User1';\nREVOKE ALL PRIVILEGES ON database.* FROM 'User2';\n```\n\nTo revoke a specific privilege:\n```sql\nREVOKE INSERT ON Students FROM 'User1';\n```"
+  },
+  {
+    "front": "What is REVOKE CASCADE vs REVOKE RESTRICT?",
+    "back": "CASCADE: also revokes the privilege from anyone who received it via WITH GRANT OPTION from this user.\n\nRESTRICT: fails if the user has already granted the privilege to others — prevents accidental cascade.\n\n```sql\nREVOKE SELECT ON Students FROM 'alice' CASCADE;\n```"
+  },
+  {
+    "front": "What is a SQL role?",
+    "back": "A named collection of privileges that can be assigned to multiple users.\n\n```sql\nCREATE ROLE manager;\nGRANT SELECT, INSERT ON Employees TO manager;\nGRANT manager TO 'alice';\n```\n\nChanging the role's privileges automatically affects all users with that role. Simplifies privilege management."
+  },
+  {
+    "front": "What are the three types of database failures?",
+    "back": "1. Transaction Failure – single transaction aborts due to logic error, deadlock, or cancel\n2. System Failure – OS crash, power failure, hardware fault. All active transactions lose their RAM buffers, but disk is intact.\n3. Media Failure – physical disk damage. Disk data is destroyed. Requires backup restore."
+  },
+  {
+    "front": "What is the Write-Ahead Logging (WAL) rule?",
+    "back": "A log record MUST be written to stable storage BEFORE the corresponding database change is applied to disk.\n\nThis guarantees that on failure, the log always has enough information to UNDO incomplete changes and REDO committed ones. Foundation of database recovery."
+  },
+  {
+    "front": "What does a log entry contain?",
+    "back": "Each log record contains:\n- Transaction ID\n- Data item changed\n- Before Image (old value) → used for UNDO\n- After Image (new value) → used for REDO\n- Log Sequence Number (LSN)\n- Operation type: BEGIN, UPDATE, COMMIT, ABORT"
+  },
+  {
+    "front": "What is the difference between before image and after image?",
+    "back": "Before Image: the value of a data item BEFORE a transaction modified it.\n→ Used during UNDO to restore the old value.\n\nAfter Image: the value AFTER a transaction modified it.\n→ Used during REDO to reapply a committed change that was lost in a crash."
+  },
+  {
+    "front": "What is cascading rollback?",
+    "back": "When transaction T_A rolls back, any transaction that READ T_A's uncommitted data must ALSO roll back.\n\nCause: dirty reads — T_B used data from T_A before it committed.\n\nPrevented by: Strict 2PL (holds X locks until commit) and the READ COMMITTED isolation level."
+  },
+  {
+    "front": "What is the full recovery procedure using checkpoints?",
+    "back": "1. Find the most recent CHECKPOINT in the log\n2. All transactions completed BEFORE the checkpoint → Do Nothing\n3. Scan forward from checkpoint\n4. Build UNDO list: transactions still active at crash time (no COMMIT found)\n5. Build REDO list: transactions that COMMITTED after the checkpoint\n6. REDO all in REDO list (re-apply changes in order)\n7. UNDO all in UNDO list (reverse changes)"
+  },
+  {
+    "front": "What is media failure recovery?",
+    "back": "Physical disk damage — cannot be fixed from the log alone.\n\nRecovery steps:\n1. Restore from most recent full BACKUP (dump)\n2. Replay the transaction log from the backup point forward\n3. REDO all committed transactions since the backup\n\nMost severe failure type. Requires both a backup AND an archived log."
+  },
+  {
+    "front": "What is a COMMIT statement?",
+    "back": "```sql\nCOMMIT;\n```\nPermanently saves all changes made by the current transaction.\n\nAfter COMMIT:\n- Changes are durable (survive crashes — the D in ACID)\n- All held locks are released\n- Transaction moves to COMMITTED → TERMINATED state"
+  },
+  {
+    "front": "What is a ROLLBACK statement?",
+    "back": "```sql\nROLLBACK;\n```\nUndoes ALL changes made since the last COMMIT.\n\nUsed when: an error occurs, a constraint is violated, the user cancels, or the DBMS chooses this transaction as a deadlock victim.\n\nAll locks are released after ROLLBACK."
+  },
+  {
+    "front": "What is a SAVEPOINT?",
+    "back": "```sql\nSAVEPOINT checkpoint_name;\nROLLBACK TO checkpoint_name;\n```\nA marker within a transaction enabling PARTIAL rollback — only undoes changes after the savepoint, not the entire transaction.\n\nUseful in long transactions where only a portion needs to be retried."
+  },
+  {
+    "front": "What is the relational model?",
+    "back": "A data model where all data is stored in TABLES (relations):\n- Rows = tuples (records)\n- Columns = attributes (fields)\n- Tables linked via foreign keys\n\nInvented by E.F. Codd (1970). Basis of Oracle, MySQL, PostgreSQL, SQL Server."
+  },
+  {
+    "front": "What is the difference between a relation, tuple, and attribute?",
+    "back": "Relation = TABLE (the whole structure)\nTuple = ROW (one record)\nAttribute = COLUMN (one field)\n\nIn a Students table:\n- Relation: the Students table itself\n- Tuple: (53688, 'Smith', 'smith@ee', 18)\n- Attribute: `name` or `age`"
+  },
+  {
+    "front": "What is the degree and cardinality of a relation?",
+    "back": "Degree: the NUMBER OF COLUMNS (attributes)\nCardinality: the NUMBER OF ROWS (tuples)\n\nExample: Students table with 4 columns and 100 students:\n- Degree = 4\n- Cardinality = 100"
+  },
+  {
+    "front": "What is a candidate key?",
+    "back": "A MINIMAL set of attributes that uniquely identifies every tuple in a relation.\n\n- A table can have multiple candidate keys\n- One is chosen as the PRIMARY KEY; the rest are ALTERNATE KEYS\n\nExample: In Students, both `sid` and `email` may uniquely identify a student — both are candidate keys."
+  },
+  {
+    "front": "What is a composite key?",
+    "back": "A primary key made of TWO OR MORE attributes that together uniquely identify a row, but neither alone is sufficient.\n\nExample: `(student_id, course_id)` in an Enrollment table.\n\n```sql\nPRIMARY KEY (student_id, course_id)\n```"
+  },
+  {
+    "front": "What is the full order of SQL clause execution?",
+    "back": "Logical execution order (not the order you write them):\n\n1. FROM\n2. WHERE\n3. GROUP BY\n4. HAVING\n5. SELECT\n6. ORDER BY\n7. LIMIT / FETCH"
+  },
+  {
+    "front": "What aggregate functions are available in SQL?",
+    "back": "```sql\nCOUNT(*)      -- number of rows\nCOUNT(col)    -- non-NULL values\nSUM(col)      -- total\nAVG(col)      -- average\nMAX(col)      -- largest value\nMIN(col)      -- smallest value\n```\n\nUsed with GROUP BY. Cannot be used in WHERE — use HAVING instead."
+  },
+  {
+    "front": "SQL: What is GROUP BY and when is it required?",
+    "back": "Groups rows with the same values in specified columns so aggregates apply per group.\n\n```sql\nSELECT degree, COUNT(*) AS total\nFROM Students\nGROUP BY degree;\n```\n\nRule: every non-aggregate column in SELECT must appear in GROUP BY."
+  },
+  {
+    "front": "SQL: Give an example of HAVING with GROUP BY",
+    "back": "```sql\nSELECT degree, COUNT(*) AS total\nFROM Students\nGROUP BY degree\nHAVING COUNT(*) > 5;\n```\n\nOnly shows degrees with more than 5 students. HAVING filters GROUPS; WHERE filters ROWS."
+  },
+  {
+    "front": "What is an INNER JOIN?",
+    "back": "Returns only rows where the join condition is TRUE in BOTH tables. Rows without a match are excluded.\n\n```sql\nSELECT * FROM Students\nINNER JOIN Marks ON Students.sid = Marks.sid;\n```\n\nRA equivalent: Students ⋈ (condition) Marks"
+  },
+  {
+    "front": "What is a LEFT JOIN?",
+    "back": "Returns ALL rows from the LEFT table plus matching rows from the right table. If no match, right-side columns are NULL.\n\n```sql\nSELECT s.name, m.score\nFROM Students s\nLEFT JOIN Marks m ON s.sid = m.sid;\n```\n\nUse when you want all students, even those with no marks."
+  },
+  {
+    "front": "What is a CROSS JOIN (Cartesian Product)?",
+    "back": "Returns every combination of rows from two tables.\n\n```sql\nSELECT * FROM A CROSS JOIN B;\n-- or: SELECT * FROM A, B;\n```\n\nIf A has 3 rows and B has 4 rows → 12 result rows.\nRA equivalent: A × B. Rarely used directly — the basis of all joins."
+  },
+  {
+    "front": "What is a subquery (nested query)?",
+    "back": "A SELECT statement inside another SQL statement.\n\n```sql\nSELECT name FROM Students\nWHERE sid IN (\n  SELECT sid FROM Marks WHERE mark = 'A'\n);\n```\n\nCan appear in SELECT, FROM, or WHERE. Types: scalar, row, table, correlated."
+  },
+  {
+    "front": "What is the EXISTS operator in SQL?",
+    "back": "Returns TRUE if a subquery produces ANY rows.\n\n```sql\nSELECT name FROM Students s\nWHERE EXISTS (\n  SELECT 1 FROM Marks m\n  WHERE m.sid = s.sid AND m.mark = 'A'\n);\n```\n\nOften more efficient than IN for large datasets. Use NOT EXISTS for the inverse."
+  },
+  {
+    "front": "What is the DISTINCT keyword?",
+    "back": "Removes duplicate rows from the result.\n\n```sql\nSELECT DISTINCT course FROM Current_Marks;\n```\n\nAlso works in aggregates:\n```sql\nSELECT COUNT(DISTINCT student) FROM Current_Marks;\n```"
+  },
+  {
+    "front": "What is the LIKE operator?",
+    "back": "Pattern matching for strings in WHERE clauses.\n\n```sql\nWHERE name LIKE 'S%'   -- starts with S\nWHERE name LIKE '%th'  -- ends with th\nWHERE name LIKE '_m%'  -- second character is m\n```\n\n`%` = any number of characters\n`_` = exactly one character"
+  },
+  {
+    "front": "What is the BETWEEN operator?",
+    "back": "Returns rows where a value falls within an inclusive range.\n\n```sql\nSELECT * FROM Students WHERE age BETWEEN 18 AND 25;\n```\n\nEquivalent to `age >= 18 AND age <= 25`. Also works with dates and strings."
+  },
+  {
+    "front": "What is the IN operator?",
+    "back": "Tests if a value matches any value in a list.\n\n```sql\nSELECT * FROM Students WHERE degree IN ('BIT', 'CIS', 'BCA');\n```\n\nAlso accepts a subquery:\n```sql\nWHERE sid IN (SELECT sid FROM Marks WHERE mark = 'A')\n```"
+  },
+  {
+    "front": "What is a CHECK constraint?",
+    "back": "Enforces domain integrity by restricting the values allowed in a column.\n\n```sql\nCREATE TABLE Booking (\n  status VARCHAR(10) CHECK (status IN ('Pending','Confirmed','Cancelled')),\n  price  DECIMAL(10,2) CHECK (price > 0)\n);\n```\n\nInsert/update rejected if the value violates the CHECK."
+  },
+  {
+    "front": "What is a DEFAULT constraint?",
+    "back": "Automatically assigns a value when no value is provided during INSERT.\n\n```sql\nCREATE TABLE Orders (\n  status    VARCHAR(20) DEFAULT 'Pending',\n  order_date DATE DEFAULT SYSDATE\n);\n```"
+  },
+  {
+    "front": "What is a UNIQUE constraint?",
+    "back": "Ensures all values in a column (or column combination) are distinct.\n\n```sql\nCREATE TABLE Students (\n  sid   INT PRIMARY KEY,\n  email VARCHAR(100) UNIQUE\n);\n```\n\nDifference from PRIMARY KEY: UNIQUE allows NULL values; PRIMARY KEY does not."
+  },
+  {
+    "front": "What is a NOT NULL constraint?",
+    "back": "Prevents a column from containing NULL — a value is always required.\n\n```sql\nCREATE TABLE Students (\n  sid  INT PRIMARY KEY,\n  name VARCHAR(50) NOT NULL,\n  age  INT NOT NULL\n);\n```"
+  },
+  {
+    "front": "What are ON DELETE actions for a FOREIGN KEY?",
+    "back": "Defines what happens to child rows when the referenced parent is deleted:\n\n- CASCADE: automatically delete child rows\n- SET NULL: set FK column to NULL in child rows\n- RESTRICT / NO ACTION: block deletion if children exist\n- SET DEFAULT: set FK to its default value\n\n```sql\nFOREIGN KEY (dept_id) REFERENCES Department(dept_id) ON DELETE CASCADE\n```"
+  },
+  {
+    "front": "What is a self-join?",
+    "back": "A table joined with ITSELF using aliases to distinguish the two copies.\n\n```sql\nSELECT a.name AS employee, b.name AS manager\nFROM Employees a\nJOIN Employees b ON a.manager_id = b.emp_id;\n```\n\nUsed for hierarchical data stored in one table (employees and their managers)."
+  },
+  {
+    "front": "What is an alias (AS) in SQL?",
+    "back": "A temporary name for a table or column within a query.\n\n```sql\nSELECT s.name AS student_name, m.score AS grade\nFROM Students AS s\nJOIN Marks AS m ON s.sid = m.sid;\n```\n\nRA equivalent: ρ (rho) rename operator."
+  },
+  {
+    "front": "What is the INTERSECT operator?",
+    "back": "Returns only rows that appear in BOTH result sets.\n\n```sql\nSELECT student FROM Y3_student\nINTERSECT\nSELECT student FROM Y2_student;\n```\n\nRA equivalent: ∩ (Intersection). Removes duplicates. Both queries must have the same number and compatible column types."
+  },
+  {
+    "front": "What is the difference between UNION and INTERSECT?",
+    "back": "UNION: combines ALL rows from both queries (removes duplicates).\n\nINTERSECT: returns only rows that appear in BOTH queries.\n\nExample: UNION gives all BIT students from Y2 and Y3; INTERSECT would only give students who appear in BOTH year groups."
+  },
+  {
+    "front": "What is a functional dependency?",
+    "back": "X → Y means: knowing X uniquely determines Y.\n\nExample: student_id → student_name (the ID tells you the name)\n\nNote: X → Y does NOT imply Y → X.\nFunctional dependencies are the basis for all normal forms."
+  },
+  {
+    "front": "What is a partial dependency and which normal form eliminates it?",
+    "back": "A non-key attribute depends on PART of a composite primary key (not the whole key).\n\nExample: In (student_id, course_id) → student_name: student_name depends only on student_id.\n\nEliminated by 2NF — split into a separate Student table."
+  },
+  {
+    "front": "What is a transitive dependency and which normal form eliminates it?",
+    "back": "A non-key attribute depends on another NON-KEY attribute.\n\nExample: student_id → dept_id → dept_name\n(dept_name depends on dept_id, not directly on student_id)\n\nEliminated by 3NF — move dept_name to a separate Department table."
+  },
+  {
+    "front": "What is BCNF (Boyce-Codd Normal Form)?",
+    "back": "Stricter than 3NF: for every non-trivial functional dependency X → Y, X must be a SUPERKEY.\n\nDifference from 3NF: BCNF removes anomalies that 3NF permits when a non-superkey determines a prime attribute.\n\nBCNF decomposition may not preserve all functional dependencies."
+  },
+  {
+    "front": "What is an ER diagram and what are its main symbols?",
+    "back": "A visual tool for conceptual database design:\n\n- Rectangle: Entity (e.g., Student, Course)\n- Oval: Attribute (property of an entity)\n- Diamond: Relationship between entities\n- Lines: connections showing cardinality (1:1, 1:N, M:N)\n\nUsed in the conceptual design phase before creating actual tables."
+  },
+  {
+    "front": "What are the cardinality types in ER modeling?",
+    "back": "1:1 (One-to-One): each person has one passport\n1:N (One-to-Many): one department has many employees\nM:N (Many-to-Many): students enroll in many courses; courses have many students\n\nM:N requires a JUNCTION TABLE when converted to relational tables."
+  },
+  {
+    "front": "How is a Many-to-Many (M:N) relationship implemented in SQL?",
+    "back": "Using a JUNCTION TABLE with foreign keys to both entities:\n\n```sql\nCREATE TABLE Enrollment (\n  student_id INT,\n  course_id  INT,\n  PRIMARY KEY (student_id, course_id),\n  FOREIGN KEY (student_id) REFERENCES Student(sid),\n  FOREIGN KEY (course_id)  REFERENCES Course(cid)\n);\n```"
+  },
+  {
+    "front": "What is participation constraint in ER modeling?",
+    "back": "Specifies whether all or some entity instances must participate in a relationship:\n\nTotal Participation (mandatory): every entity MUST be in the relationship\n→ Double line in ER, implemented as NOT NULL FK\n\nPartial Participation (optional): some entities may not participate\n→ Single line, FK can be NULL"
+  },
+  {
+    "front": "What is a weak entity?",
+    "back": "An entity that CANNOT be uniquely identified by its own attributes alone — depends on an owner (strong) entity.\n\n- Has a PARTIAL KEY (dashed oval in ER diagram)\n- Full identity = partial key + owner's PK\n- Shown as a double rectangle\n\nExample: Room 101 is ambiguous without knowing the Building."
+  },
+  {
+    "front": "What is normalization and what anomalies does it prevent?",
+    "back": "Normalization organizes tables to minimize redundancy. It prevents:\n\n1. Update anomaly – same fact in multiple places, must update everywhere\n2. Insert anomaly – cannot add data without adding unrelated data\n3. Delete anomaly – deleting one fact accidentally removes another\n\nSolution: store each fact ONCE in the right table."
+  },
+  {
+    "front": "What is a stored procedure?",
+    "back": "A pre-compiled, named block of SQL stored in the database and called by name.\n\n```sql\nCREATE PROCEDURE get_student(IN p_sid INT)\nBEGIN\n  SELECT * FROM Students WHERE sid = p_sid;\nEND;\n\nCALL get_student(53688);\n```\n\nAdvantages: reusable, pre-compiled (faster), encapsulated, reduces network traffic."
+  },
+  {
+    "front": "What is a trigger in SQL?",
+    "back": "A block of SQL that executes AUTOMATICALLY in response to an event on a table.\n\n```sql\nCREATE TRIGGER log_update\nAFTER UPDATE ON Students\nFOR EACH ROW\nBEGIN\n  INSERT INTO AuditLog VALUES (OLD.sid, NOW());\nEND;\n```\n\nEvents: INSERT, UPDATE, DELETE\nTiming: BEFORE or AFTER\nUse cases: audit logging, enforcing complex business rules."
+  },
+  {
+    "front": "What is a data warehouse?",
+    "back": "A centralized repository of integrated historical data optimized for ANALYTICAL queries.\n\nCharacteristics:\n- Subject-oriented (by topic, not by operation)\n- Non-volatile (history is preserved)\n- Time-variant (tracks changes over time)\n- Integrated (combines multiple sources)\n\nUses OLAP, star/snowflake schemas, and feeds business intelligence tools."
+  },
+  {
+    "front": "What is the difference between a fact table and a dimension table?",
+    "back": "Fact Table:\n- Central table in star/snowflake schema\n- Stores measurable data (sales amount, quantity)\n- Has FKs to dimension tables\n- Typically very large\n\nDimension Table:\n- Describes context (who, what, where, when)\n- Examples: Date, Product, Customer, Store\n- Smaller than fact tables"
+  },
+  {
+    "front": "What is SQL injection and how is it prevented?",
+    "back": "An attack where malicious SQL is embedded in user input to manipulate queries.\n\nExample: entering `' OR 1=1 --` in a login form bypasses authentication.\n\nPrevention:\n- Prepared statements / parameterized queries\n- Input validation\n- Principle of least privilege\n- Stored procedures"
+  },
+  {
+    "front": "What is a prepared statement?",
+    "back": "A SQL template with placeholders — user input is passed separately and treated as DATA, never as SQL.\n\n```sql\nPREPARE stmt FROM 'SELECT * FROM Students WHERE sid = ?';\nEXECUTE stmt USING @user_input;\n```\n\nPrevents SQL injection because the input can never alter the query structure."
+  },
+  {
+    "front": "What is a surrogate key?",
+    "back": "An artificial primary key (usually an auto-incrementing integer) added when no natural unique identifier exists.\n\n```sql\nid INT PRIMARY KEY AUTO_INCREMENT\n```\n\nAdvantage: stable, never changes, no business meaning that can shift.\nDisadvantage: carries no real-world meaning."
+  },
+  {
+    "front": "What is the difference between NULL and an empty string?",
+    "back": "NULL: ABSENCE of a value — unknown or not applicable.\n- NULL ≠ NULL (comparisons with NULL return UNKNOWN)\n- Use IS NULL / IS NOT NULL\n\nEmpty string (''): a known value with zero characters.\n- `'' = ''` is TRUE\n- Takes up space in the database"
+  },
+  {
+    "front": "How do you check for NULL in SQL?",
+    "back": "```sql\nSELECT * FROM Students WHERE email IS NULL;\nSELECT * FROM Students WHERE email IS NOT NULL;\n```\n\nNEVER use `= NULL` — it always returns UNKNOWN, not TRUE.\n\nUse COALESCE to substitute a default:\n```sql\nSELECT COALESCE(email, 'no email') FROM Students;\n```"
+  },
+  {
+    "front": "What is the ORDER BY clause?",
+    "back": "Sorts the result set by one or more columns.\n\n```sql\nSELECT name, age FROM Students\nORDER BY age DESC, name ASC;\n```\n\n- ASC = ascending (default)\n- DESC = descending\n- Executes LAST in SQL processing order"
+  },
+  {
+    "front": "What is optimistic concurrency control?",
+    "back": "Assumes conflicts are RARE — allows transactions to proceed without locking, then validates before committing:\n\n1. Read Phase: read data freely\n2. Validation Phase: check if any conflict occurred\n3. Write Phase: commit if valid; rollback if conflict found\n\nBetter when conflicts are rare; worse when they are frequent."
+  },
+  {
+    "front": "What is a clustered vs non-clustered index?",
+    "back": "Clustered Index:\n- Data rows are PHYSICALLY sorted on disk by this key\n- Only ONE per table\n- Fast for range queries\n- Usually the primary key\n\nNon-Clustered Index:\n- Separate structure with pointers to data rows\n- Multiple per table\n- Slower than clustered but faster than full scan"
+  },
+  {
+    "front": "What are the SQL transaction isolation levels (lowest to highest)?",
+    "back": "1. READ UNCOMMITTED – can read dirty data (least safe)\n2. READ COMMITTED – only reads committed data\n3. REPEATABLE READ – same row reads same value within transaction\n4. SERIALIZABLE – full isolation, prevents all anomalies (slowest)\n\nHigher isolation = fewer anomalies + lower concurrency."
+  },
+  {
+    "front": "What is a phantom read?",
+    "back": "A transaction re-runs a query and gets DIFFERENT ROWS because another transaction inserted/deleted rows in between.\n\nExample: T1 counts all BIT students → 3. T2 inserts a new BIT student. T1 counts again → 4.\n\nPrevented by SERIALIZABLE isolation level."
+  },
+  {
+    "front": "What is authentication vs authorization in databases?",
+    "back": "Authentication: verifying WHO the user IS.\n→ Username + password check. 'Are you really alice?'\n\nAuthorization: controlling WHAT the user CAN DO.\n→ Privilege checking. 'Alice can SELECT but not DELETE.'\n\nBoth are required for complete database security."
+  },
+  {
+    "front": "What is a FULL OUTER JOIN?",
+    "back": "Returns ALL rows from BOTH tables. Unmatched rows from either side get NULL for missing columns.\n\n```sql\nSELECT * FROM A FULL OUTER JOIN B ON A.id = B.id;\n```\n\nUse when you want all records from both tables regardless of matching."
+  },
+  {
+    "front": "What is the COALESCE function?",
+    "back": "Returns the FIRST non-NULL value from a list of arguments.\n\n```sql\nSELECT COALESCE(phone, email, 'No contact') AS contact\nFROM Customers;\n```\n\nUseful for providing defaults when a column might be NULL."
+  },
+  {
+    "front": "What is a materialized view?",
+    "back": "A view that physically STORES query results on disk (unlike a regular view, which is just a saved query).\n\nAdvantages: very fast reads (pre-computed results)\nDisadvantages: data can go stale; requires periodic REFRESH\n\nUsed in data warehousing for expensive aggregation queries."
+  },
+  {
+    "front": "What is a schema?",
+    "back": "The STRUCTURE or blueprint of a database — defines tables, columns, data types, constraints, and relationships.\n\nSchema = structure (DDL changes it)\nData = content (DML changes it)\n\nChanging the schema is separate from changing the data it holds."
+  },
+  {
+    "front": "What is the DBMS buffer manager?",
+    "back": "Manages the transfer of data between disk and RAM (buffer pool):\n\n- Brings pages from disk into memory when needed\n- Writes dirty pages back to disk when memory is needed\n- Caches frequently accessed pages\n\nPages in RAM not yet flushed to disk are LOST on a crash — this is why WAL and recovery are critical."
+  },
+  {
+    "front": "What is a dirty page in database recovery?",
+    "back": "A memory page that has been modified but NOT yet written to disk.\n\nOn a crash, dirty pages are lost. This is why:\n- REDO is needed for committed transactions whose dirty pages hadn't flushed\n- The WAL rule forces the log to be written first"
+  },
+  {
+    "front": "What is a natural join?",
+    "back": "Automatically joins tables on ALL columns with the same name.\n\n```sql\nSELECT * FROM Students NATURAL JOIN Marks;\n```\n\nRA equivalent: ⋈ on matching attribute names.\n\nCaution: unexpected results if unintended column names match. Explicit JOIN...ON is safer."
+  },
+  {
+    "front": "SQL: What is a RIGHT JOIN?",
+    "back": "Returns ALL rows from the RIGHT table and matching rows from the left table. Unmatched left-side rows get NULL.\n\n```sql\nSELECT s.name, m.score\nFROM Students s\nRIGHT JOIN Marks m ON s.sid = m.sid;\n```\n\nLess commonly used — can usually be rewritten as a LEFT JOIN by swapping table order."
+  },
+  {
+    "front": "What is the RA DIVIDE (÷) operation in SQL?",
+    "back": "Finds all values in R associated with ALL values in S.\n\nExample: find students who took EVERY available course.\n\nNo direct SQL equivalent — implemented with double NOT EXISTS:\n\n```sql\nSELECT DISTINCT student FROM Current_Marks cm1\nWHERE NOT EXISTS (\n  SELECT course FROM Course\n  WHERE NOT EXISTS (\n    SELECT * FROM Current_Marks cm2\n    WHERE cm2.student = cm1.student\n      AND cm2.course = Course.course\n  )\n);\n```"
+  },
+  {
+    "front": "What is the violation of integrity constraints concurrency problem?",
+    "back": "Interleaved transactions produce a state that violates a database constraint, even though each transaction alone was valid.\n\nExample: Balance must stay ≥ 0. T_A reads 500 and writes 700 (adds 200). T_B reads the original 500 and writes 200 (subtracts 300). T_A then rolls back. Balance is now 200, but T_B subtracted from a value that was undone — the actual balance should be 200 only if the +200 was real."
+  },
+  {
+    "front": "How does 2PL guarantee serializability?",
+    "back": "The LOCK POINT — the moment a transaction holds all its locks simultaneously — creates a total ordering of transactions.\n\nExecuting transactions in lock-point order is equivalent to a serial schedule. Since the actual concurrent execution follows the same order of lock points, the result is identical to a correct serial execution."
+  },
+  {
+    "front": "What is the granularity trade-off in locking?",
+    "back": "Fine granularity (e.g., row-level locks):\n- Higher concurrency (more transactions can run simultaneously)\n- Higher overhead (many locks to manage)\n\nCoarse granularity (e.g., table-level lock):\n- Lower overhead (one lock covers everything)\n- Lower concurrency (other transactions must wait longer)\n\nDBMSs typically use row-level locking with intent locks on tables."
+  },
+  {
+    "front": "What is a schedule and what makes it 'correct'?",
+    "back": "A schedule is the ORDER in which operations from concurrent transactions execute.\n\nA schedule is CORRECT (valid) if it is SERIALIZABLE — its outcome is identical to some serial execution of the same transactions.\n\nThe DBMS is responsible for ensuring all schedules are serializable."
+  },
+  {
+    "front": "What is the purpose of the DBMS transaction manager?",
+    "back": "Responsible for:\n- Ensuring ACID properties\n- Managing the transaction log\n- Coordinating concurrency control (locking / timestamping)\n- Handling crash recovery (UNDO / REDO)\n- Scheduling and ordering transactions"
   }
 ]
