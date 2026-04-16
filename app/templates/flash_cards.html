@@ -292,21 +292,27 @@ function renderCards() {
 }
 
 next.addEventListener("click", function(e) {
+go_next();
+});
+function go_next(){
   if (currentCard >= cards.length) {
     return;
   }
 
   currentCard++;
   cardFly();
-});
+}
 
 prev.addEventListener("click", function(e) {
+go_prev();
+});
+function go_prev(){
   if (currentCard - 1 <= 0) {
     return;
   }
   currentCard--;
   cardFly();
-});
+}
 
 function cardFly() {
     counter.textContent = currentCard;
@@ -317,5 +323,21 @@ function cardFly() {
     card.classList.remove('flipped');
 });
 }
+
+document.addEventListener('keydown', function (e) {
+  const ignoredKeys = [' ', 'ArrowLeft', 'ArrowRight'];
+
+  if (ignoredKeys.includes(e.key)) {
+  e.preventDefault();
+      if (e.key==' '){
+const allCards = document.querySelectorAll('.card');
+const activeCard = allCards[currentCard - 1];
+activeCard.classList.toggle('flipped');
+     }else if (e.key=='ArrowLeft'){
+        go_prev();
+    }else{ go_next(); }
+  }
+});
+
 </script>
 {% endblock %}
