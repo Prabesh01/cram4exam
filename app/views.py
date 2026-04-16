@@ -276,7 +276,8 @@ def view_question(request, question_id):
         if 'text_answer' in request.POST:
             answer = request.POST.get('text_answer')
             # save answer
-            if not question.is_mcq:
+            #if not question.is_mcq:
+            if True:
                 UserAnswer.objects.create(
                     user=request.user,
                     question=question,
