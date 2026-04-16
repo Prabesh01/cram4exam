@@ -192,13 +192,15 @@ No questions available for this module.<br>
 
             <p>#{{ forloop.counter }}</p>
             {% if q.is_mcq %}
+<ul class="mcq-group" onchange="evaluateMCQ(this)" style="list-style: none; padding: 0;">
                 {% for option in q.option_set.all %}
                  <li>
                    <label>
-                   <input type="checkbox" value="{{ option.option }}"> {{ option.option }}</input><br>
+                   <input type="checkbox" value="{{ option.option }}" data-correct="{{ option.correct|yesno:'true,false' }}"> {{ option.option }}</input><br>
                    </label>
                 </li>
                 {% endfor %}
+</ul>
             {% endif %}
             </summary>
             <dl>
@@ -213,6 +215,11 @@ No questions available for this module.<br>
                     {% endif %}
                     </li>
                     {% endfor %}
+
+                    {%if q.answer %}
+                    <i>Explaination Available...</i>
+                    {% endif %}
+
                 {%else%}
                     {%if q.answer %}
                     <i>Provided Answer: </i>
@@ -355,6 +362,25 @@ Array.from(document.getElementsByClassName("load-more")).forEach(e => {
     const hr = document.createElement('hr');
     hr.className = 'toggle-hr';
     button.parentNode.replaceChild(hr, button);
+}
+</script>
+<script>
+function evaluateMCQ(container) {
+    // Get all checkboxes inside this specific question
+    const checkboxes = Array.from(container.querySelectorAll('input[type="checkbox"]'));
+    
+    // Check our conditions
+    const anyWrongChecked = checkboxes.some(cb => cb.dataset.correct === 'false' && cb.checked);
+    const allRightChecked = checkboxes.filter(cb => cb.dataset.correct === 'true').every(cb => cb.checked);
+
+    // Apply colors based on your rules
+    if (anyWrongChecked) {
+        container.style.color = 'red';
+    } else if (allRightChecked) {
+        container.style.color = 'green';
+    } else {
+        container.style.color = 'inherit'; // Resets color if they uncheck things
+    }
 }
 </script>
 {% endblock %}
