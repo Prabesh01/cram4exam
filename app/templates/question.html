@@ -263,7 +263,7 @@
                 {% if question.is_mcq %}
                 {% for option in question.option_set.all %}
                 {% if option.correct %}
-                   <input type="checkbox" value="{{ option.option }}" checked disabled>{{ option.option }}</input><br>
+                   <input type="checkbox" value="{{ option.option }}" checked disabled> <strong>{{ forloop.counter0|add:65|stringformat:"c" }}.</strong> {{ option.option }}</input><br>
                 {% endif %}
                 </li>
                 {% endfor %}
