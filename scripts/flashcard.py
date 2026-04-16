@@ -1,6 +1,7 @@
 # prompt:
 # from this pdf, create as much quality flash cards as you can atleast 50. make those useful for studying than redundant. give me json list of flashcards containing "front" and optionally, "back". make explainations easy to understand.
 # focus on technical part / conceptual part
+# in the texts, dont use any html or escape elements. Can only use backticks and \n. Use triple backticks for code blocks, Double newlines (\n\n) for paragraph breaks, single \n for line break and single backticks for Inline code strictly only when necessary.
 # used: chatgpt, claude
 
 import json
