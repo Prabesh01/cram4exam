@@ -193,7 +193,10 @@ No questions available for this module.<br>
             <p>#{{ forloop.counter }}</p>
             {% if q.is_mcq %}
                 {% for option in q.option_set.all %}
-                   <input type="checkbox" value="{{ option.option }}">{{ option.option }}</input><br>
+                 <li>
+                   <label>
+                   <input type="checkbox" value="{{ option.option }}"> {{ option.option }}</input><br>
+                   </label>
                 </li>
                 {% endfor %}
             {% endif %}
@@ -206,7 +209,7 @@ No questions available for this module.<br>
                     <i>Provided Answer: </i><br>
                     {% for option in q.option_set.all %}
                     {% if option.correct %}
-                       <input type="checkbox" value="{{ option.option }}" checked disabled>{{ option.option }}</input><br>
+                       <input type="checkbox" value="{{ option.option }}" checked disabled> <strong>{{ forloop.counter0|add:65|stringformat:"c" }}.</strong> {{ option.option }}</input><br>
                     {% endif %}
                     </li>
                     {% endfor %}
