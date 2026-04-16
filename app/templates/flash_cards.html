@@ -51,7 +51,55 @@ used code from:
     line-height: 1.4;
     word-break: break-word;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    flex-direction: column;
   }
+
+
+/* Short cards still look centered: add this helper */
+.card div > .card-inner {
+  width: 100%;
+  margin: auto;
+}
+
+/* Code blocks */
+.card pre {
+  background: #f4f4f4;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  overflow-x: auto;
+  white-space: pre;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin: 0.5rem 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.card code {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.88em;
+  background: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 1px 5px;
+}
+
+.card pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+}
+
+.card p {
+  margin: 0 0 0.5rem;
+}
+
+.card p:last-child {
+  margin-bottom: 0;
+}
 
   .card .back {
     transform: rotateX(180deg);
@@ -188,6 +236,38 @@ function decodeHtmlEntities(text) {
   return textarea.value;
 }
 
+function escHtml(s) {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function formatContent(raw) {
+  const decoded = decodeHtmlEntities(raw);
+
+  // Split on fenced code blocks first to avoid touching their content
+  const parts = decoded.split(/(```[\w]*\n?[\s\S]*?```)/g);
+
+  return '<div class="card-inner">' + parts.map(part => {
+    const fenced = part.match(/^```(\w*)\n?([\s\S]*?)```$/);
+    if (fenced) {
+      return `<pre><code>${escHtml(fenced[2].trim())}</code></pre>`;
+    }
+
+    // Inline code
+    let s = part.replace(/`([^`\n]+)`/g, (_, c) => `<code>${escHtml(c)}</code>`);
+
+    // Paragraphs from double newlines, single newlines become <br>
+    s = s
+      .split(/\n{2,}/)
+      .map(para => `<p>${para.replace(/\n/g, '<br>')}</p>`)
+      .join('');
+
+    return s;
+  }).join('') + '</div>';
+}
+
 function renderCards() {
   carousel.style.width = `${cards.length}00vw`;
   qid.value = cards[0].qid;
@@ -200,14 +280,12 @@ function renderCards() {
     front.classList.add("front");
     let back = document.createElement("div");
     back.classList.add("back");
-    front.textContent = decodeHtmlEntities(el.front);
-    back.textContent = decodeHtmlEntities(el.back);
+    front.innerHTML = formatContent(el.front);
+    back.innerHTML = formatContent(el.back);
     div.appendChild(front);
     div.appendChild(back);
     div.addEventListener("click", function(e) {
-      if (e.target === div || e.target === front || e.target === back) {
         this.classList.toggle("flipped");
-    }
     });
     carousel.appendChild(div);
   });
