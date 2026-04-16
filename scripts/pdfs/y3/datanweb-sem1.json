@@ -618,5 +618,5 @@
   {
     "front": "What is a surrogate key vs. a natural key?",
     "back": "Natural Key — uses a real-world attribute that naturally uniquely identifies a row\nExample: Social Security Number, ISBN, License Plate\n\nSurrogate Key — a system-generated artificial ID with no business meaning\nExample: employee_id = 1,2,3,4... (auto-increment)\n\nSurrogate keys are usually preferred because:\n- Natural keys can change (emails, names)\n- Natural keys may be too long\n- Surrogate keys are stable and simple"
-  },
+  }
 ]
