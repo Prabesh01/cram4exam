@@ -1,15 +1,27 @@
 from django.contrib import admin
-from .models import Module, Question, Option, DailyQuestion, UserAnswer, Profile, Bookmark, Upvote, GroupCousework, Team, TeamMembership, Designation
+from .models import Module, Question, Option, DailyQuestion, UserAnswer, Profile, Bookmark, Upvote, GroupCousework, Team, TeamMembership, Designation, Sem
 
 class OptionInline(admin.TabularInline):
     model = Option
     extra = 1
 
+@admin.action(description="Toggle Semester")
+def change_semester(modeladmin, request, queryset):
+    for obj in queryset:
+        if obj.sem == Sem.ONE:
+            obj.sem = Sem.TWO
+        else:
+            obj.sem = Sem.ONE
+        obj.save()
+
+    modeladmin.message_user(request, "Semesters updated successfully for the selections.")
+
 class QuestionAdmin(admin.ModelAdmin):
     list_display = ('qid', 'module', 'question', 'is_mcq', 'is_archived')
-    list_filter = ('module', 'is_mcq', 'is_archived')
+    list_filter = ('module', 'is_mcq', 'sem', 'is_archived')
     search_fields = ('question', 'module__name', 'module__code')
     inlines = [OptionInline]
+    actions = [change_semester]
 
 class ModuleAdmin(admin.ModelAdmin):
     list_display = ('code', 'name', 'year', 'sem', 'year_long')
