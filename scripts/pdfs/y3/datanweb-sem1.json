@@ -332,34 +332,6 @@
     "back": "Step 1: INSTR('FinalYearStudent', 'a', 5) = 9 (finds 'a' starting from position 5 — it finds 'a' in 'Year' at position 9)\n\nStep 2: SUBSTR('FinalYearStudent', 1, 9) = 'FinalYear'\n\nThis demonstrates nesting functions — using INSTR's result as SUBSTR's length argument."
   },
   {
-    "front": "Normalize Fig 1 (Teacher-Module table) to 1NF",
-    "back": "UNF problem: Saul Goodman has 1 address but it's multi-line (multi-valued); Rust Cohle teaches two modules (SG101, TG405) — repeating group of modules per teacher.\n\n1NF (remove repeating groups, ensure atomic values):\nTeacher(SN, TeacherName, Address, Email, ModuleCode, ModuleName, CreditHours)\n\nEach row gets one module. Address needs to be atomic — split into Address1, Address2 if needed. Each row is unique per teacher-module combination."
-  },
-  {
-    "front": "What makes the Teacher-Module table (Fig 1) violate 2NF after reaching 1NF?",
-    "back": "After 1NF, the composite key is (SN, ModuleCode).\n\nPartial dependencies:\n- TeacherName, Address, Email → depend only on SN (not ModuleCode)\n- ModuleName, CreditHours → depend only on ModuleCode (not SN)\n\n2NF fix: Split into:\n- Teacher(SN PK, TeacherName, Address, Email)\n- Module(ModuleCode PK, ModuleName, CreditHours)\n- TeacherModule(SN FK, ModuleCode FK) ← junction table"
-  },
-  {
-    "front": "What is the HNC Flower Arranging scenario (Workshop Q1) in normalized form?",
-    "back": "UNF: Course(CourseCode, CourseName, TutorID, TutorName, {StudentNo, StudentName, DOB, Gender, LastAttendanceDate})\n\n1NF: Separate the student repeating group:\n- Course(CourseCode PK, CourseName, TutorID, TutorName)\n- StudentEnrollment(CourseCode FK, StudentNo PK, StudentName, DOB, Gender, LastAttendanceDate)\n\n2NF: TutorName depends only on TutorID (partial dependency):\n- Course(CourseCode PK, CourseName, TutorID FK)\n- Tutor(TutorID PK, TutorName)\n- Student(StudentNo PK, StudentName, DOB, Gender, LastAttendanceDate, CourseCode FK)\n\n3NF: No transitive dependencies remain — already in 3NF."
-  },
-  {
-    "front": "Normalize the Super Soccer Supplies Invoice (Workshop Q2)",
-    "back": "UNF: Invoice(InvoiceNo, CustomerNo, CustomerName, CustomerAddress, Date, OrderNo, {ProductNo, ProductDesc, Quantity, UnitCost})\n\n1NF: Remove product repeating group:\n- Invoice(InvoiceNo PK, CustomerNo, CustomerName, CustomerAddress, Date, OrderNo)\n- InvoiceLine(InvoiceNo FK, ProductNo, ProductDesc, Quantity, UnitCost)\n\n2NF: CustomerName/Address depend only on CustomerNo; ProductDesc/UnitCost depend only on ProductNo:\n- Customer(CustomerNo PK, CustomerName, CustomerAddress)\n- Invoice(InvoiceNo PK, CustomerNo FK, Date, OrderNo)\n- Product(ProductNo PK, ProductDesc, UnitCost)\n- InvoiceLine(InvoiceNo FK, ProductNo FK, Quantity)\n\n3NF: No transitive dependencies — done."
-  },
-  {
-    "front": "What is the Student table (Workshop Q3) UNF problem?",
-    "back": "TABLE: STUDENT (ID, Name, Address, Faculty, Year, Subject)\n\nUNF problem: Subject is a REPEATING GROUP — each student appears multiple times, once per subject:\n- John appears 3 times (3 subjects)\n- Harry appears 2 times\n- Brad appears 2 times\n\n1NF fix: This table becomes two tables:\n- Student(ID PK, Name, Address, Faculty, Year)\n- StudentSubject(ID FK, Subject) with composite PK (ID, Subject)"
-  },
-  {
-    "front": "What is Fig 2 (Student-Module results) in UNF?",
-    "back": "UNF: The student info (ID, Name, Address) is stored in a header block, and the module results (ModuleCode, ModuleName, AssignmentType, Grade, Status) repeat as a group.\n\nFormatted as:\nStudentResult(StudentID, StudentName, StudentAddress, {ModuleCode, ModuleName, AssignmentType, Grade, Status})\n\nThe outer data (student info) and inner repeating group (assessments per module) must be separated."
-  },
-  {
-    "front": "What does the Cinema Booking normalization (Tutorial Week 7) produce at 2NF?",
-    "back": "After 1NF:\n- Booking(BookingNo PK, BookingDate, NoOfTickets, CustomerNo, CustomerName, CustomerContact, HallNo, MovieNo, MovieTitle, Language, Duration, TotalCharge)\n- BookedSeats(BookingNo FK, SeatNo, SeatCharge)\n\n2NF (composite key BookingNo+SeatNo in BookedSeats — SeatCharge depends on SeatNo alone):\n- Booking (unchanged)\n- Seat(SeatNo PK, SeatCharge)\n- BookedSeats(BookingNo FK, SeatNo FK)\n\nFor main Booking table — check if CustomerName/CustomerContact partially depend on CustomerNo."
-  },
-  {
     "front": "What is functional dependency in the context of normalization?",
     "back": "A functional dependency means that the value of one attribute DETERMINES the value of another.\n\nNotation: A → B (A determines B)\n\nExample: employee_id → first_name\n(Knowing the employee_id tells you exactly one first_name)\n\nFunctional dependencies drive all normalization decisions — you organize tables so each attribute depends on the key, the whole key, and nothing but the key."
   },
@@ -404,32 +376,12 @@
     "back": "Referential integrity is the rule that a foreign key value must match an existing primary key value in the referenced table (or be NULL).\n\nExample: You cannot insert an employee with department_id = 999 if department 999 doesn't exist in the departments table.\n\nEnforced by FOREIGN KEY constraints in the database."
   },
   {
-    "front": "What is the Pet Grooming System 2NF conversion?",
-    "back": "1NF tables:\n- Owner(OwnerId, OwnerName, OwnerAddress, OwnerContact, PetNo, PetName, Breed, Age, Gender)\n- Appointment(AppointmentNo, OwnerId*, AppointmentDate, AppointmentTime, TotalCharge)\n- ServiceAppointment(AppointmentNo, ServiceNo, ServiceType, ServiceCharge)\n\n2NF fix — Owner table has a partial dependency:\n- PetName, Breed, Age, Gender depend on PetNo (not OwnerId)\n\n2NF tables:\n- Owner(OwnerId PK, OwnerName, OwnerAddress, OwnerContact)\n- Pet(PetNo PK, OwnerId FK, PetName, Breed, Age, Gender)\n- Appointment(AppointmentNo PK, PetNo FK, AppointmentDate, AppointmentTime, TotalCharge)\n- ServiceAppointment(AppointmentNo FK, ServiceNo FK, ServiceType, ServiceCharge)"
-  },
-  {
-    "front": "What is the Pet Grooming System 3NF conversion?",
-    "back": "From 2NF ServiceAppointment(AppointmentNo, ServiceNo, ServiceType, ServiceCharge):\n\nTransitive dependency:\n- ServiceType and ServiceCharge depend on ServiceNo (non-key → non-key)\n\n3NF fix:\n- Service(ServiceNo PK, ServiceType, ServiceCharge)\n- ServiceAppointment(AppointmentNo FK, ServiceNo FK) ← junction table only\n\nFinal 3NF tables:\n- Owner(OwnerId PK, OwnerName, OwnerAddress, OwnerContact)\n- Pet(PetNo PK, OwnerId FK, PetName, Breed, Age, Gender)\n- Appointment(AppointmentNo PK, PetNo FK, AppointmentDate, AppointmentTime, TotalCharge)\n- Service(ServiceNo PK, ServiceType, ServiceCharge)\n- ServiceAppointment(AppointmentNo FK, ServiceNo FK)"
-  },
-  {
     "front": "How do you count employees hired in each year?",
     "back": "SELECT EXTRACT(YEAR FROM hire_date) AS hire_year,\n       COUNT(*) AS num_hired\nFROM employees\nGROUP BY EXTRACT(YEAR FROM hire_date)\nORDER BY hire_year;\n\nAlternative using TO_CHAR:\nGROUP BY TO_CHAR(hire_date, 'YYYY')"
   },
   {
     "front": "How do you find departments with NO employees?",
     "back": "Using NOT IN with subquery:\nSELECT * FROM departments\nWHERE department_id NOT IN (\n  SELECT DISTINCT department_id FROM employees\n  WHERE department_id IS NOT NULL\n);\n\nNote: The IS NOT NULL check is critical — if the subquery returns any NULL, NOT IN will return no rows!\n\nAlternative: LEFT JOIN with NULL check."
-  },
-  {
-    "front": "What is the Hospital Patient Bill 3NF result?",
-    "back": "UNF: Invoice(InvoiceNo, AccountNo, InvoiceDate, DueDate, HospitalName, PatientNo, PatientName, DateAdmitted, DateDischarged, {Code, Description, TotalCharge}, TotalChargesDue)\n\n3NF tables:\n- Patient(PatientNo PK, PatientName)\n- Invoice(InvoiceNo PK, AccountNo, InvoiceDate, DueDate, HospitalName, PatientNo FK, DateAdmitted, DateDischarged, TotalChargesDue)\n- ChargeItem(Code PK, Description)\n- InvoiceCharge(InvoiceNo FK, Code FK, TotalCharge)"
-  },
-  {
-    "front": "What is the OpenTable KOT system ER model key entities?",
-    "back": "Key Entities:\n1. Customer(CustomerID PK, Name, Contact, ...)\n2. Table(TableID PK, TableNo, Status, Capacity)\n3. Order/KOT(OrderID PK, CustomerID FK, TableID FK, OrderDate, OrderTime, Status[Pending/Preparing/Served])\n4. MenuItem(MenuItemID PK, Name, Price, Category)\n5. OrderItem(OrderID FK, MenuItemID FK, Quantity, SpecialRequest) ← resolves M:M between Order and MenuItem\n\nM:M relationship: One Order has many MenuItems; one MenuItem appears on many Orders → resolved by OrderItem junction table."
-  },
-  {
-    "front": "What is the Advanced Database course (Fig 3) UNF problem?",
-    "back": "UNF: The Course header (CourseName='Advanced Database', CourseLeader='Chris Brown', CreditHour=30) is stored separately from the repeating class schedule.\n\nProblems:\n- Tutorial has multiple teachers (Prashant KC, Sagun Thapa) — non-atomic!\n- The class schedule (ClassType, Teacher, Time, Day, Room) repeats per class type\n\nThe Course data and Class Schedule data are mixed and need to be separated."
   },
   {
     "front": "What is a junction/bridge/associative table and when is it needed?",
@@ -470,14 +422,6 @@
   {
     "front": "How do you left-pad employee ID with zeros to make it 5 digits?",
     "back": "SELECT LPAD(employee_id, 5, '0') AS padded_id\nFROM employees;\n\nExamples:\n- Employee 45 → '00045'\n- Employee 102 → '00102'\n- Employee 7 → '00007'\n\nReal use: Badge numbers, account numbers, reference codes in reports and exports."
-  },
-  {
-    "front": "What does the Week 3 FYP Tutorial require you to do?",
-    "back": "For your Final Year Project database:\n1. Create one or more tables related to your FYP topic\n2. Write SQL to create a main feature table and a linked table with PRIMARY KEY\n3. Add text and number columns\n4. INSERT at least 3-5 rows of sample data\n5. Write queries to:\n   - Show all data (SELECT *)\n   - Show specific columns\n   - Filter by one condition (WHERE)\n   - Use OR for two conditions\n   - Combine AND/OR conditions"
-  },
-  {
-    "front": "What is the Fig 3 (Advanced Database course schedule) normalization challenge?",
-    "back": "Problem: Course info (name, leader, credit hours) repeats for every class type. Tutorial has multiple teachers — non-atomic.\n\n1NF: Make teacher atomic — create one row per teacher:\n- Course(CourseName PK, CourseLeader, CreditHour)\n- ClassSchedule(CourseName FK, ClassType, TeacherName, Time, Day, Room)\n\nIf Tutorial has multiple teachers, create:\n- ClassTeacher(CourseName FK, ClassType FK, TeacherName) as a separate table\n\n2NF/3NF: Check if ClassType → Room (room might be determined by class type, not the combo key)."
   },
   {
     "front": "What does REPLACE() return if the search string is not found?",
@@ -528,10 +472,6 @@
     "back": "MONTHS_BETWEEN(date1, date2) returns the number of months between two dates as a decimal number.\n\nExample: MONTHS_BETWEEN(SYSDATE, hire_date)\n→ Returns e.g., 14.5 (14 and a half months)\n\nIf date1 > date2, the result is positive.\nIf date1 < date2, the result is negative.\n\nUse TRUNC or FLOOR to get whole months."
   },
   {
-    "front": "What is normalization stage 2NF for the Student-Subject table (Workshop Q3)?",
-    "back": "After 1NF:\n- Student(ID PK, Name, Address, Faculty, Year)\n- StudentSubject(ID FK, Subject PK) ← composite PK\n\n2NF check on StudentSubject(ID, Subject):\n- No non-key attributes → already in 2NF (all attributes are part of the key)\n\n2NF check on Student(ID PK, Name, Address, Faculty, Year):\n- All attributes depend on ID → already in 2NF\n\nBut 3NF: Faculty → Year? (Does Faculty determine Year?) If not a dependency, we're done at 3NF."
-  },
-  {
     "front": "What query lists employees with commission, ordered by commission descending?",
     "back": "SELECT * FROM employees\nWHERE commission_pct IS NOT NULL\nORDER BY commission_pct DESC;\n\nKey points:\n- Use IS NOT NULL (not != NULL) to find non-null values\n- The ORDER BY comes last\n- This filters out all employees without commission"
   },
@@ -550,10 +490,6 @@
   {
     "front": "What does DENSE_RANK vs RANK produce for salary values: 10000, 9000, 9000, 8000?",
     "back": "RANK():\n1 → 10000\n2 → 9000\n2 → 9000\n4 → 8000 (skips 3 because positions 2 and 3 were both used by the tie)\n\nDENSE_RANK():\n1 → 10000\n2 → 9000\n2 → 9000\n3 → 8000 (no gap — consecutive regardless of ties)\n\nUse DENSE_RANK when you need clean sequential rankings."
-  },
-  {
-    "front": "What is the Fig 2 (Student William Ishee) normalized to 3NF?",
-    "back": "UNF: Student info (ID, Name, Address) + repeating group of (ModuleCode, ModuleName, AssignmentType, Grade, Status)\n\n1NF: Separate repeating group:\n- Student(StudentID PK, StudentName, StudentAddress)\n- Result(StudentID FK, ModuleCode, ModuleName, AssignmentType, Grade, Status) ← composite PK (StudentID, ModuleCode, AssignmentType)\n\n2NF: ModuleName depends only on ModuleCode (partial dependency):\n- Module(ModuleCode PK, ModuleName)\n- Result(StudentID FK, ModuleCode FK, AssignmentType, Grade, Status)\n\n3NF: Status depends on Grade? If Grade → Status (A=Pass, F=Fail), extract:\n- GradeStatus(Grade PK, Status)\n- Result(StudentID FK, ModuleCode FK, AssignmentType, Grade FK)"
   },
   {
     "front": "How does the WHERE clause handle NULL values in comparisons?",
@@ -683,8 +619,4 @@
     "front": "What is a surrogate key vs. a natural key?",
     "back": "Natural Key — uses a real-world attribute that naturally uniquely identifies a row\nExample: Social Security Number, ISBN, License Plate\n\nSurrogate Key — a system-generated artificial ID with no business meaning\nExample: employee_id = 1,2,3,4... (auto-increment)\n\nSurrogate keys are usually preferred because:\n- Natural keys can change (emails, names)\n- Natural keys may be too long\n- Surrogate keys are stable and simple"
   },
-  {
-    "front": "What is the weekly FYP Tutorial task for Week 1 per the workshop?",
-    "back": "Week 1 Workshop task:\n1. Verify tasks from Week 1 (completing initial setup and SQL basics)\n2. Research on Apriori Algorithm (association rule mining)\n3. Research on FP-Growth (frequent pattern mining alternative to Apriori)\n\nThis indicates the module covers both database design (SQL) and data mining concepts."
-  }
 ]
