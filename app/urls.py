@@ -21,6 +21,8 @@ urlpatterns = [
     path('leaderboard/', views.leaderboard, name='lb'),
     path('saved/', views.get_saves, name='saves'),
 
+    path('chotto-matte/', views.ad_detected,name='ad_detected'),
+
     path('cwteam/', views.cwteam, name='cwteam'),
     path('cwteam/set-cw-status/', views.set_cw_status, name='set-cw_status'),
 path('cwteam/create/', views.create_team, name='create_team'),

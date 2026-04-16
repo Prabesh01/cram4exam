@@ -15,6 +15,9 @@ from datetime import datetime, time
 
 from collections import defaultdict
 
+def ad_detected(request):
+    return render(request, 'ad.html')
+
 def generate_daily_questions(user):
     existing_questions = DailyQuestion.objects.filter(user=user).values_list('question', flat=True)
 
