@@ -61,7 +61,7 @@
   },
   {
     "front": "What does INSTR() do? What is its syntax?",
-    "back": "INSTR(string, substring, start_pos, occurrence) — returns the position of a substring.\n\nExamples on 'FinalYearStudent':\n- INSTR('FinalYearStudent', 'a') → 4 (first 'a')\n- INSTR('FinalYearStudent', 'a', 5) → 9 (search from position 5)\n- INSTR('FinalYearStudent', 'a', 2, 2) → 9 (2nd occurrence after pos 2)\n\nReturns 0 if not found."
+    "back": "INSTR(string, substring, start_pos, occurrence) — returns the position of a substring.\n\nExamples on 'FinalYearStudent':\n- INSTR('FinalYearStudent', 'a') → 4 (first 'a')\n- INSTR('FinalYearStudent', 'a', 5) → 8 (search from position 5)\n- INSTR('FinalYearStudent', 'a', 2, 2) → 8 (2nd occurrence after pos 2)\n\nReturns 0 if not found."
   },
   {
     "front": "What does the LENGTH() function do?",
@@ -329,7 +329,7 @@
   },
   {
     "front": "What is the output of SUBSTR('FinalYearStudent', 1, INSTR('FinalYearStudent', 'a', 5))?",
-    "back": "Step 1: INSTR('FinalYearStudent', 'a', 5) = 9 (finds 'a' starting from position 5 — it finds 'a' in 'Year' at position 9)\n\nStep 2: SUBSTR('FinalYearStudent', 1, 9) = 'FinalYear'\n\nThis demonstrates nesting functions — using INSTR's result as SUBSTR's length argument."
+    "back": "Step 1: INSTR('FinalYearStudent', 'a', 5) = 8 (finds 'a' starting from position 5 — it finds 'a' in 'Year' at position 8)\n\nStep 2: SUBSTR('FinalYearStudent', 1, 8) = 'FinalYea'\n\nThis demonstrates nesting functions — using INSTR's result as SUBSTR's length argument."
   },
   {
     "front": "What is functional dependency in the context of normalization?",
@@ -537,7 +537,7 @@
   },
   {
     "front": "How does INSTR work with occurrence parameter?",
-    "back": "INSTR(string, substring, start, occurrence)\n\nOn 'FinalYearStudent':\n- INSTR('FinalYearStudent', 'a') → 4 (first 'a', at position 4 in 'Final')\n- INSTR('FinalYearStudent', 'a', 2, 2) → 9 (start from pos 2, find 2nd 'a')\n- INSTR('FinalYearStudent', 'a', 2, 3) → 14 (3rd 'a' from pos 2, found in 'Student')\n\nUseful for parsing structured strings like 'LAST,FIRST,MIDDLE'."
+    "back": "INSTR(string, substring, start, occurrence)\n\nOn 'FinalYearStudent':\n- INSTR('FinalYearStudent', 'a') → 4 (first 'a', at position 4 in 'Final')\n- INSTR('FinalYearStudent', 'a', 2, 2) → 8 (start from pos 2, find 2nd 'a')\n- INSTR('FinalYearStudent', 'a', 2, 3) → 0 (3rd 'a' not found when starting from pos 2)\n\nUseful for parsing structured strings like 'LAST,FIRST,MIDDLE'."
   },
   {
     "front": "What is the practical use of padding functions (LPAD/RPAD) beyond aesthetics?",
