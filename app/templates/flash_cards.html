@@ -191,7 +191,7 @@ used code from:
     <button class="prev">Prev</button>
     <span id="counter">1</span> / {{ questions|length }}
     <button class="next">Next</button>
-
+<br><i id="use-hint">* You can use arrow keys to slide cards and space key to flip.</i>
     <form action="" method="post">
       <input id="qid" type="hidden" name="bookmark_question" value="">
       {% csrf_token %}
@@ -295,6 +295,7 @@ next.addEventListener("click", function(e) {
 go_next();
 });
 function go_next(){
+document.getElementById("use-hint").style.display="none";
   if (currentCard >= cards.length) {
     return;
   }
