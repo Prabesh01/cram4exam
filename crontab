@@ -1,0 +1,4 @@
+0 13 * * * /var/www/ratta/.venv/bin/python3 /var/www/ratta/manage.py streak_remainder
+0 0 * * * /var/www/ratta/.venv/bin/python3 /var/www/ratta/manage.py reset_streak
+0 0 1 7 * /var/www/ratta/.venv/bin/python3 /var/www/ratta/manage.py promote_year
+0 */6 * * * /var/www/ratta/.venv/bin/python3 /var/www/ratta/backup.py
