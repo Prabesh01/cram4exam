@@ -5,11 +5,14 @@
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+from urllib.parse import urlparse
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
 
 env_file=BASE_DIR / ".env"
 load_dotenv(env_file)
+
+domain=urlparse(os.getenv("web_url")).hostname
 
 from django.core.management.base import BaseCommand
 from django.utils import timezone
@@ -58,7 +61,7 @@ class Command(BaseCommand):
                         f"You're on a {user.profile.streak}-day streak, That's amazing!"
                         f"You have {hours_left} hours left to maintain it.\n\n"
                         "Let's study a little everyday. Don't break the chain!\n\n"
-                        "ratta.cote.ws Team"
+                        "{domain} Team"
                     )
 
                     html_message = f"""
@@ -82,7 +85,7 @@ class Command(BaseCommand):
                     </a>
                     
                     <p>Let's study a little everyday. Don't break the chain!</p>
-                    <p>- ratta.cote.ws Team</p>
+                    <p>- {domain} Team</p>
                     """
 
                     #with smtplib.SMTP(os.getenv('smtp_host'), os.getenv('smtp_port')) as server:
